@@ -4,14 +4,16 @@
  * mixed lines
  */
 
+#include <iostream>
 
-void main() {
+using namespace std;
+int main() {
 
     #pragma omp parallel for
-    for (int i = 0; i < 100 < i ++) {
+    for (int i = 0; i < 20; i ++) {
         cout << "Hello from: " << i << endl;
     }
 
-    return;
+    return 0;
 
 }
