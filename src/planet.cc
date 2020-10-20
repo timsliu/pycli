@@ -4,9 +4,10 @@
  *
  */
 
-using namespace std;
 
 #include "planet.h"
+
+using namespace std;
 
 Planet::Planet(size_t longCells, size_t latCells, vector<vector<SurfaceType>> &surface) {
     this->longCells = longCells;
