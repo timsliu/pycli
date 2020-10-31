@@ -42,7 +42,7 @@ public:
            std::map<std::string, float> atmosphere);
 
    // copy constructor
-   Planet(Planet &obj);
+   //Planet(Planet &obj);
   
    // return reference to the surface
    std::vector<std::vector<SurfaceType>>&  getSurface() { return surface; }

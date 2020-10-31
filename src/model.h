@@ -22,7 +22,6 @@ public:
     // constructor for the planet specifying the number of model steps and the planet
     Model(size_t steps, Planet planetStart);
 
-
     // run the model
     void simClimate();
 

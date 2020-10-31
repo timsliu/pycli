@@ -27,19 +27,6 @@ Planet::Planet(size_t longCells,
     calcRadIn();
 }
 
-// copy constructor
-Planet::Planet(Planet &obj) {
-    longCells = obj.getLongCells();
-    latCells = obj.getLatCells();
-
-    cellLongDegrees = LONG_RANGE/longCells;
-    cellLatDegrees = LAT_RANGE/latCells;
-
-    surface = vector<vector<SurfaceType>>(obj.getSurface());
-    temperature = vector<vector<float>>(obj.getTemperature());
-    radIn = vector<float> (obj.getRadIn());
-}
-
 
 // calculate the radiation at each cell
 void Planet::calcRadIn() {
