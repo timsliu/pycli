@@ -9,9 +9,9 @@ CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
 
 all: pycli
 
-model.o: model.h model.cc
+model.o: model.h model.cc constant.h
 
-planet.o: planet.h planet.cc
+planet.o: planet.h planet.cc constant.h
 
 parser.o: parser.cc planet.h model.h
 

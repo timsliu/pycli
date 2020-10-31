@@ -4,26 +4,29 @@
  *
  */
 
+#include "model.h"
 
+using namespace std;
 
-Model::Model(steps, Planet planetStart) {
-
+Model::Model(size_t steps, Planet planetStart): 
+    steps(steps), 
+    currentPlanet(planetStart) {
 }
 
 
 void Model::simClimate() {
 
-    for (int i = 0; i < steps; i++ ) {
-        calcTemps();
+    //for (size_t i = 0; i < steps; i++ ) {
+    //    calcTemps();
 
-        // add current planet to the list of computed planets
-        computedPlanets.push_back(currentPlanet);
+    //    // add copy of current planet to the list of computed planets
+    //    computedPlanets.push_back(Planet(currentPlanet));
 
-        // make a copy of last planet as start for next iteration
-    }
+    //    // make a copy of last planet as start for next iteration
+    //}
 
-    // write out results to a file
-    outputResults();
+    //// write out results to a file
+    //outputResults();
 
 }
 

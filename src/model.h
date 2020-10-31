@@ -14,15 +14,20 @@
 class Model {
 
 private:
+    size_t steps;
     Planet currentPlanet;
-    vector<Planet> computedPlanets;
+    std::vector<Planet> computedPlanets;
 
 public:
     // constructor for the planet specifying the number of model steps and the planet
-    Model(int steps, Planet planetStart);
+    Model(size_t steps, Planet planetStart);
+
 
     // run the model
     void simClimate();
+
+    // fill in the temperatures
+    void calcTemps();
 
     // write out model results to a file
     void outputResults();

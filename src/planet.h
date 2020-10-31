@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <map>
+#include "constant.h"
 
 // types of surfaces
 enum SurfaceType {
@@ -37,20 +38,23 @@ public:
     // constructor
     Planet(size_t longCells, 
            size_t latCells, 
-           std::vector<std::vector<SurfaceType>> &surface
+           std::vector<std::vector<SurfaceType>> &surface,
            std::map<std::string, float> atmosphere);
 
    // copy constructor
+   Planet(Planet &obj);
   
    // return reference to the surface
-   std::vector<std::vector<SurfaceType>>&  getSurface() {
-       return surface;
-   }
+   std::vector<std::vector<SurfaceType>>&  getSurface() { return surface; }
 
    // return reference to the temperature
-   std::vector<std::vector<float>>& getTemperature() {
-        return temperature;
-   }
+   std::vector<std::vector<float>>& getTemperature() { return temperature; }
+
+   size_t getLongCells() { return longCells; }
+
+   size_t getLatCells() { return latCells; }
+
+   std::vector<float>& getRadIn() { return radIn; }
 
    void calcRadIn();
 };

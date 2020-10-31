@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// constructor for a new planet
 Planet::Planet(size_t longCells, 
                size_t latCells, 
                vector<vector<SurfaceType>> &surface,
@@ -24,27 +25,37 @@ Planet::Planet(size_t longCells,
     this->atmosphere = atmosphere;
 
     calcRadIn();
+}
 
+// copy constructor
+Planet::Planet(Planet &obj) {
+    longCells = obj.getLongCells();
+    latCells = obj.getLatCells();
+
+    cellLongDegrees = LONG_RANGE/longCells;
+    cellLatDegrees = LAT_RANGE/latCells;
+
+    surface = vector<vector<SurfaceType>>(obj.getSurface());
+    temperature = vector<vector<float>>(obj.getTemperature());
+    radIn = vector<float> (obj.getRadIn());
 }
 
 
 // calculate the radiation at each cell
-Planet::calcRadIn() {
-    for (int i = 0; i < latCells/2; i++ ) {
-       float topBorderDeg = 90 - i * cellLatDegrees; 
-       float botBorderDeg = 90 - (i + 1) * cellLatDegrees;
+void Planet::calcRadIn() {
+    for (size_t i = 0; i < latCells/2; i++ ) {
+       //float topBorderDeg = 90 - i * cellLatDegrees; 
+       //float botBorderDeg = 90 - (i + 1) * cellLatDegrees;
 
-       float topBorderKm = EARTH_RADIUS * sin(topBorderDeg);
-       float botBorderKm = EARTH_RADIUS * sin(botBorderDeg);
+       //float topBorderKm = EARTH_RADIUS * sin(topBorderDeg);
+       //float botBorderKm = EARTH_RADIUS * sin(botBorderDeg);
 
-       // area from integrating latitudinal slice 
-       float area =  
+       //// area from integrating latitudinal slice 
+       //float area = topBorderDeg 
     }
 
 }
 
-
-// TODO copy constructor
 
 
 
