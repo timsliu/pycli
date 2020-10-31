@@ -14,7 +14,8 @@
 class Model {
 
 private:
-      
+    Planet currentPlanet;
+    vector<Planet> computedPlanets;
 
 public:
     // constructor for the planet specifying the number of model steps and the planet
@@ -22,6 +23,9 @@ public:
 
     // run the model
     void simClimate();
+
+    // write out model results to a file
+    void outputResults();
 
 };
 
