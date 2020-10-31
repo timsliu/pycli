@@ -6,7 +6,7 @@
 
 
 #include "planet.h"
-
+#include <iostream>
 using namespace std;
 
 // constructor for a new planet
@@ -21,6 +21,12 @@ Planet::Planet(size_t longCells,
    cellLongDegrees(LONG_RANGE/longCells),
    cellLatDegrees(LAT_RANGE/latCells),
    radIn(latCells){
+
+   // create empty vector for temperatures
+   for (size_t i = 0; i < longCells; i ++ ) {
+       vector<float> latTemps(longCells); 
+       temperature.push_back(latTemps);
+   }
 
     // call function to fill in the incoming radiation vector
    calcRadIn();
@@ -43,6 +49,17 @@ void Planet::calcRadIn() {
 
 }
 
+void Planet::printPlanet(size_t step) {
 
+    cout << "Temperatures at timestep: " << step << endl;
+    for (size_t i = 0; i < latCells; i++) {
+        for (size_t j = 0; j < longCells; j++) {
+            cout << " " << temperature[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+}
 
 

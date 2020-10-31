@@ -56,6 +56,8 @@ public:
    std::vector<float>& getRadIn() { return radIn; }
 
    void calcRadIn();
+
+   void printPlanet(size_t step);
 };
 
 #endif /* PLANET_H */
