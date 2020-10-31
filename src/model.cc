@@ -9,19 +9,22 @@
 
 using namespace std;
 
-Model::Model(size_t steps, Planet planetStart): 
+Model::Model(size_t steps, Planet planetStart, vector<map<string, float>> atmos): 
     steps(steps), 
-    currentPlanet(planetStart) {
+    currentPlanet(planetStart),
+    allAtmos(atmos){
+}
+
+SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos): 
+    Model(steps, planetStart, atmos) {
 }
 
 
-void Model::simClimate() {
+void SerialModel::simClimate() {
 
     cout << "Starting climate sim" << endl;
     for (size_t i = 0; i < steps; i++ ) {
-        cout << "Model step: " << i << endl; 
         calcTemps();
-        cout << "Temperatures calculated" << endl;
 
         // add copy of current planet to the list of computed planets
         Planet lastPlanet = Planet(currentPlanet);
@@ -36,11 +39,9 @@ void Model::simClimate() {
 
 
 // calculate fill in the temperatures of the planet
-void Model::calcTemps() {
+void SerialModel::calcTemps() {
 
-    cout << "Calculating temperatures" << endl;
     vector<vector<float>>& temps = currentPlanet.getTemperature();
-    cout << "Current step" << endl;
 
     for (size_t i = 0; i < currentPlanet.getLatCells(); i++ ) {
         for (size_t j = 0; j < currentPlanet.getLongCells(); j++) {
@@ -49,7 +50,7 @@ void Model::calcTemps() {
     }
 }
 
-void Model::outputResults() {
+void SerialModel::outputResults() {
 
     cout << "Outputting results" << endl;
     // print all of the planets
