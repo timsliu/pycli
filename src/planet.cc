@@ -13,23 +13,23 @@ using namespace std;
 Planet::Planet(size_t longCells, 
                size_t latCells, 
                vector<vector<SurfaceType>> &surface,
-               map<string, float> atmosphere) {
+               map<string, float> &atmosphere):
+   longCells(longCells),
+   latCells(latCells),
+   surface(surface),
+   atmosphere(atmosphere), 
+   cellLongDegrees(LONG_RANGE/longCells),
+   cellLatDegrees(LAT_RANGE/latCells),
+   radIn(latCells){
 
-    this->longCells = longCells;
-    this->latCells = latCells;
-
-    this->cellLongDegrees = LONG_RANGE/longCells;
-    this->cellLatDegrees = LAT_RANGE/latCells;
-
-    this->surface = surface;
-    this->atmosphere = atmosphere;
-
-    calcRadIn();
+    // call function to fill in the incoming radiation vector
+   calcRadIn();
 }
 
 
 // calculate the radiation at each cell
 void Planet::calcRadIn() {
+    
     for (size_t i = 0; i < latCells/2; i++ ) {
        //float topBorderDeg = 90 - i * cellLatDegrees; 
        //float botBorderDeg = 90 - (i + 1) * cellLatDegrees;

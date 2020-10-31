@@ -15,6 +15,7 @@ class Model {
 
 private:
     size_t steps;
+    size_t currentStep{0};
     Planet currentPlanet;
     std::vector<Planet> computedPlanets;
 

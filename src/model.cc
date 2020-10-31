@@ -22,8 +22,6 @@ void Model::simClimate() {
         // add copy of current planet to the list of computed planets
         Planet lastPlanet = Planet(currentPlanet);
         computedPlanets.push_back(lastPlanet);
-
-        // make a copy of last planet as start for next iteration
     }
 
     // write out results to a file
@@ -34,7 +32,13 @@ void Model::simClimate() {
 
 // calculate fill in the temperatures of the planet
 void Model::calcTemps() {
+    vector<vector<float>> temps = currentPlanet.getTemperature();
 
+    for (size_t i = 0; i < currentPlanet.getLatCells(); i++ ) {
+        for (size_t j = 0; j < currentPlanet.getLongCells(); j++) {
+            temps[i][j] = currentStep;
+        }
+    }
 }
 
 void Model::outputResults() {
