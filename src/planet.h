@@ -53,6 +53,10 @@ public:
 
    size_t getLatCells() { return latCells; }
 
+   void setAtmosphere(std::map<std::string, float> atmo) {
+       atmosphere = atmo;
+   }
+
    std::vector<float>& getRadIn() { return radIn; }
 
    void calcRadIn();

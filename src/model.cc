@@ -24,6 +24,8 @@ void SerialModel::simClimate() {
 
     cout << "Starting climate sim" << endl;
     for (size_t i = 0; i < steps; i++ ) {
+        // set the atmosphere of the planet and calculate temperatures
+        currentPlanet.setAtmosphere(allAtmos[i]);
         calcTemps();
 
         // add copy of current planet to the list of computed planets
@@ -31,10 +33,8 @@ void SerialModel::simClimate() {
         computedPlanets.push_back(lastPlanet);
         currentStep++;
     }
-
     // write out results to a file
     outputResults();
-
 }
 
 
