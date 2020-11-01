@@ -58,3 +58,4 @@ void SerialModel::outputResults() {
         computedPlanets[i].printPlanet(i);
     }
 }
+
