@@ -1,16 +1,21 @@
 
 
 class Atmosphere:
-    def __init__(self):
-        self.o2 = 0
-        self.co2 = 0
-        self.n2 = 0
+    def __init__(self, init_o2, init_co2, init_n2):
+        self.o2 = []
+        self.co2 = []
+        self.n2 = []
 
-    def set_o2(self, o2_val):
-        self.o2 = o2_val
+        self.o2.append(init_o2)
+        self.co2.append(init_co2)
+        self.n2.append(init_n2)
 
-    def set_co2(self, co2_val);
-        self.co2 = co2_val
+    def set_o2(self, o2_val, time):
+        self.o2[time] = o2_val
 
-    def set_n2(self, n2_val):
-        self.n2 = n2_val
+    def set_co2(self, co2_val, time):
+        self.co2[time] = co2_val
+
+    def set_n2(self, n2_val, time):
+        self.n2[time] = n2_val
+

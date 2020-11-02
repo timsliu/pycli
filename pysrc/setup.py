@@ -10,5 +10,4 @@ setup(
     packages=[
         "pycli"
     ]
-    python_requires='>=3.6'
 )
