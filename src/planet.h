@@ -9,14 +9,9 @@
 
 #include <vector>
 #include <map>
+
 #include "constant.h"
 #include "utils.h"
-// types of surfaces
-enum SurfaceType {
-    land,
-    sea,
-    ice
-};
 
 class Planet {
 

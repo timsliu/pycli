@@ -6,8 +6,11 @@
 #include <vector>
 #include <map>
 
+#include "constant.h"
 
 void printTemperature(std::vector<std::vector<float>>& temp);
+
+void printSurface(std::vector<std::vector<SurfaceType>>& inputSurface);
 
 void printAtmosphere(std::map<std::string, float>& atmo);
 

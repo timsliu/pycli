@@ -2,12 +2,13 @@
  *
  */
 
-using namespace std;
-
-#include "utils.h"
 #include <iostream>
 #include <vector>
 #include <map>
+
+#include "utils.h"
+
+using namespace std;
 
 void printTemperature(vector<vector<float>>& temp) {
     size_t latCells = temp.size();
@@ -22,6 +23,17 @@ void printTemperature(vector<vector<float>>& temp) {
     cout << endl;
 }
 
+void printSurface(vector<vector<SurfaceType>>& inputSurface) {
+    int latCells = inputSurface.size(); 
+    int longCells = inputSurface[0].size(); 
+    
+    for (int i = 0; i < latCells; i++ ) {
+        for (int j = 0; j < longCells; j++ ) {
+            cout << inputSurface[i][j];
+        }
+        cout << endl;
+    }
+}
 
 void printAtmosphere(map<string, float>& atmo) {
     

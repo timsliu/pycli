@@ -10,4 +10,12 @@
 #define LONG_RANGE 360      /* range of longitude in degrees */
 #define LAT_RANGE 180       /* range of latitude in degrees */
 #define EARTH_RADIUS 6380   /* radius of earth in kilometers */
+
+// types of surfaces
+enum SurfaceType {
+    land,
+    sea,
+    ice
+};
+
 #endif /* CONSTANT_H */

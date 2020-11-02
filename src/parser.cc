@@ -1,31 +1,27 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-using namespace std;
 
 #include "model.h"
 #include "planet.h"
 #include "utils.h"
+#include "constant.h"
 
+using namespace std;
 
 int main() {
     cout << "Welcome to PyCli!" << endl;
 
     cout << "Creating new planet" << endl;
+    
+    vector<vector<SurfaceType>> inputSurface;
+    vector<map<string, float>> atmosList;
 
-
-    /* declare a sample surface explicitly */
-    vector<SurfaceType> strip1 = {ice, ice, ice, ice};
-    vector<SurfaceType> strip2 = {sea, sea, land, sea};
-    vector<SurfaceType> strip3 = {ice, sea, land, land};
-    vector<SurfaceType> strip4 = {ice, ice, ice, ice};
-
-    vector<vector<SurfaceType>> sampleSurface = {strip1, strip2, strip3, strip4};
+    size_t latCells;
+    size_t longCells;
 
     /* parse the surface from a file */
     ifstream myfile("surface.txt");
-    vector<vector<SurfaceType>> inputSurface;
-
     if (myfile.is_open()) {
         string line;
         while (getline(myfile, line)) {
@@ -40,23 +36,10 @@ int main() {
         }
     }
 
-    /* print out the parsed surface to ensure it looks correct */
-    int latCells = inputSurface.size(); 
-    int longCells = inputSurface[0].size(); 
-    
-    for (int i = 0; i < latCells; i++ ) {
-        for (int j = 0; j < longCells; j++ ) {
-            cout << inputSurface[i][j];
-        }
-        cout << endl;
-    }
+    printSurface(inputSurface);
    
-    /* explicitly define an atmosphere */
-    map<string, float> sampleAtmos = {{"co2", 0.01}, {"o2", 22}, {"n2", 77.99}};
-
     /* parse atmosphere at each step from a file */
     ifstream atmofile("atmos.txt");
-    vector<map<string, float>> atmosList;
 
     if (atmofile.is_open()) {
         string line;
@@ -79,14 +62,14 @@ int main() {
             atmosList.push_back(atmoStep);
         }
     }
+    latCells = inputSurface.size();
+    longCells = inputSurface[0].size();
 
     printAtmosList(atmosList);
 
     /* instantiate the planet and model and run the climate */ 
-    Planet samplePlanet(latCells, longCells, inputSurface, sampleAtmos);
-
+    Planet samplePlanet(latCells, longCells, inputSurface, atmosList[0]);
     SerialModel sampleModel(atmosList.size(), samplePlanet, atmosList);
-
     sampleModel.simClimate();
 
     cout << "Simulation complete!" << endl;

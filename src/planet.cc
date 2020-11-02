@@ -4,8 +4,9 @@
  *
  */
 
-#include "planet.h"
 #include <iostream>
+#include "planet.h"
+
 using namespace std;
 
 // constructor for a new planet
