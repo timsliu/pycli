@@ -14,5 +14,6 @@ def test_write_surface():
         os.makedirs('tests/build')
 
     earth = pycli.new_model("small")
+    earth.gen_random_surface()
     earth.write_surface("tests/build/small_surface.txt")
     assert os.path.exists("tests/build/small_surface.txt")

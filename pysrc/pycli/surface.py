@@ -1,6 +1,9 @@
 
 class Surface:
     def __init__(self, num_lat_gridlines, num_lon_gridlines):
+        self.num_lat_grid = num_lat_gridlines
+        self.num_lon_grid = num_lon_gridlines
+
         self.surface = [[0]*num_lat_gridlines]*num_lon_gridlines
         
     def set_grid_cell_type(self, lat, lon, surface_type):

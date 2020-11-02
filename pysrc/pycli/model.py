@@ -1,6 +1,6 @@
 from pycli.surface import Surface
 from pycli.atmosphere import Atmosphere
-
+import random
 
 class Model:
     def __init__(self, default = True, num_lat_gridlines = None, num_lon_gridlines = None, init_o2 = None, init_co2 = None, init_n2 = None):
@@ -15,6 +15,11 @@ class Model:
                 raise ValueError("Need to specify starting configuration")
             self.surface = Surface(num_lat_gridlines, num_lon_gridlines)
             self.atmosphere = Atmosphere(init_o2, init_co2, init_n2)
+
+    def gen_random_surface(self):
+        for i in range(self.surface.num_lat_grid):
+            for j in range(self.surface.num_lon_grid):
+                self.surface.set_grid_cell_type(i, j, random.randint(0,2))
 
     def set_init_atmosphere(self, element, value):
         if element == "CO2":
