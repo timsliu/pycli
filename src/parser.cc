@@ -5,6 +5,8 @@ using namespace std;
 
 #include "model.h"
 #include "planet.h"
+#include "utils.h"
+
 
 int main() {
     cout << "Welcome to PyCli!" << endl;
@@ -78,12 +80,7 @@ int main() {
         }
     }
 
-    for (size_t i = 0; i < atmosList.size(); i++ ) {
-        for (auto it = atmosList[i].begin(); it != atmosList[i].end(); it++) {
-            cout << it->first << " => " << it->second << " "; 
-        }
-        cout << endl;
-    }
+    printAtmosList(atmosList);
 
     /* instantiate the planet and model and run the climate */ 
     Planet samplePlanet(latCells, longCells, inputSurface, sampleAtmos);

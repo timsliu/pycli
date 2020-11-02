@@ -4,7 +4,6 @@
  *
  */
 
-
 #include "planet.h"
 #include <iostream>
 using namespace std;
@@ -50,16 +49,8 @@ void Planet::calcRadIn() {
 }
 
 void Planet::printPlanet(size_t step) {
-
     cout << "Temperatures at timestep: " << step << endl;
-    for (size_t i = 0; i < latCells; i++) {
-        for (size_t j = 0; j < longCells; j++) {
-            cout << " " << temperature[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-
+    printTemperature(temperature);
 }
 
 

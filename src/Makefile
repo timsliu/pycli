@@ -1,7 +1,7 @@
 #makefile for pycli
 #
 
-OBJS = planet.o model.o parser.o
+OBJS = planet.o model.o parser.o utils.o
 CXX = g++
 CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
 
@@ -9,11 +9,13 @@ CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
 
 all: pycli
 
-model.o: model.h model.cc constant.h
+model.o: model.h model.cc utils.cc constant.h
 
-planet.o: planet.h planet.cc constant.h
+planet.o: planet.h planet.cc utils.cc constant.h
 
-parser.o: parser.cc planet.h model.h
+parser.o: parser.cc planet.h utils.cc model.h
+
+utils.o: utils.cc utils.h
 
 pycli: $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@

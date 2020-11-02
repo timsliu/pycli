@@ -10,7 +10,7 @@
 #define MODEL_H
 
 #include "planet.h"
-
+#include "utils.h"
 class Model {
 
 protected:
