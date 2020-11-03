@@ -44,4 +44,4 @@ on a latitude band and dividing by the number of squares. The total sunlight fal
 is:
 
 ![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
-
+src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">
