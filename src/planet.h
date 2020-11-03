@@ -29,6 +29,9 @@ private:
     std::vector<std::vector<float>> temperature;   // temperature of surface in each cell
     std::vector<float> radIn;        // incoming radiation for each latitude cell
 
+    float planetRadius{EARTH_RADIUS};
+    float calcFluxAntideri(float x);
+
 public:
 
     // constructor
@@ -55,6 +58,7 @@ public:
    std::vector<float>& getRadIn() { return radIn; }
 
    void calcRadIn();
+
 
    void printPlanet(size_t step);
 };
