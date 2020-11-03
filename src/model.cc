@@ -6,6 +6,7 @@
 
 #include "model.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -42,10 +43,11 @@ void SerialModel::simClimate() {
 void SerialModel::calcTemps() {
 
     vector<vector<float>>& temps = currentPlanet.getTemperature();
-
+    vector<float> EinArray = currentPlanet.getRadIn();
     for (size_t i = 0; i < currentPlanet.getLatCells(); i++ ) {
         for (size_t j = 0; j < currentPlanet.getLongCells(); j++) {
-            temps[i][j] = (float) currentStep + 0.01 * (float) i + 0.001 * (float) j;
+            float Ein = EinArray[i]; 
+            temps[i][j] = pow(Ein/SIGMA, 0.25);
         }
     }
 }
