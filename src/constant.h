@@ -22,4 +22,5 @@ enum SurfaceType {
     ice
 };
 
+
 #endif /* CONSTANT_H */

@@ -35,9 +35,7 @@ private:
 public:
 
     // constructor
-    Planet(size_t longCells, 
-           size_t latCells, 
-           std::vector<std::vector<SurfaceType>> &surface,
+    Planet(std::vector<std::vector<SurfaceType>> &surface,
            std::map<std::string, float> &atmosphere);
 
   

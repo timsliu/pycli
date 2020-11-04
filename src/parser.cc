@@ -65,10 +65,13 @@ int main() {
     latCells = inputSurface.size();
     longCells = inputSurface[0].size();
 
+    cout << latCells << endl;
+    cout << longCells << endl;
+
     printAtmosList(atmosList);
 
     /* instantiate the planet and model and run the climate */ 
-    Planet samplePlanet(latCells, longCells, inputSurface, atmosList[0]);
+    Planet samplePlanet(inputSurface, atmosList[0]);
     SerialModel sampleModel(atmosList.size(), samplePlanet, atmosList);
     sampleModel.simClimate();
 

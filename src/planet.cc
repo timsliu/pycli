@@ -12,12 +12,10 @@
 using namespace std;
 
 // constructor for a new planet
-Planet::Planet(size_t longCells, 
-               size_t latCells, 
-               vector<vector<SurfaceType>> &surface,
+Planet::Planet(vector<vector<SurfaceType>> &surface,
                map<string, float> &atmosphere):
-   longCells(longCells),
-   latCells(latCells),
+   longCells(surface[0].size()),
+   latCells(surface.size()),
    surface(surface),
    atmosphere(atmosphere), 
    cellLongDegrees(LONG_RANGE/longCells),
@@ -25,7 +23,7 @@ Planet::Planet(size_t longCells,
    radIn(latCells){
 
    // create empty vector for temperatures
-   for (size_t i = 0; i < longCells; i ++ ) {
+   for (size_t i = 0; i < latCells; i ++ ) {
        vector<float> latTemps(longCells); 
        temperature.push_back(latTemps);
    }
@@ -46,17 +44,8 @@ void Planet::calcRadIn() {
        float topBorderM = planetRadius * sin(topBorderRad);
        float botBorderM = planetRadius * sin(botBorderRad);
 
-       cout << "\nTop border: " << topBorderM << endl;
-       cout << "Bot border: " << botBorderM << endl;
-       cout << "Top border rad: " << topBorderRad << endl;
-       cout << "Bot border rad: " << botBorderRad << endl;
-
        float interceptedArea = calcFluxAntideri(topBorderM) - calcFluxAntideri(botBorderM);
        float surfaceArea = 2 * PI * rSq * (sin(topBorderRad) - sin(botBorderRad));
-
-       cout << "Surface Area: " << surfaceArea << endl;
-       cout << "Intercepted Area: " << interceptedArea << endl;
-
        float radInLat = W_SUN * interceptedArea/surfaceArea;
 
        radIn[i] = radInLat;
