@@ -21,6 +21,9 @@
 #define CO2_HEATING 6285     /* CO2 radiative heating coefficient watts/m^2 */
                              /* multiply by CO2 concentration to get heating */
 
+#define H2O_POWER 2        /* estimated adding heating from water vapor in 
+                                watts/m^2 */
+
 // types of surfaces
 enum SurfaceType {
     land,
