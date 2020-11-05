@@ -6,6 +6,7 @@
 
 #include "model.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -13,6 +14,9 @@ Model::Model(size_t steps, Planet planetStart, vector<map<string, float>> atmos)
     steps(steps), 
     currentPlanet(planetStart),
     allAtmos(atmos){
+    cout << "Starting new model!" << endl;
+    cout << "latCells: " << currentPlanet.getLatCells() << " ";
+    cout << "longCells: " << currentPlanet.getLongCells() << endl;
 }
 
 SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos): 
@@ -42,10 +46,17 @@ void SerialModel::simClimate() {
 void SerialModel::calcTemps() {
 
     vector<vector<float>>& temps = currentPlanet.getTemperature();
+    vector<vector<SurfaceType>>& surface = currentPlanet.getSurface();
+    float co2Level = currentPlanet.getAtmosphere()["co2"];
 
+    vector<float> EinArray = currentPlanet.getRadIn();
     for (size_t i = 0; i < currentPlanet.getLatCells(); i++ ) {
+        float Ein = EinArray[i];
         for (size_t j = 0; j < currentPlanet.getLongCells(); j++) {
-            temps[i][j] = (float) currentStep + 0.01 * (float) i + 0.001 * (float) j;
+            float albedo = albedoMap[surface[i][j]];
+            float radForc = CO2_HEATING * co2Level;  /* radiative forcing from ghg */
+            float rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
+            temps[i][j] = pow(rhs, 0.25);
         }
     }
 }

@@ -37,3 +37,11 @@ The `bin` directory contains compiled binary files.
 This directory contains source code written in Python and contains the PyCli library.
 
 ## Climate Model
+
+#### Input solar energy
+The solar energy falling on each model square is calculated by considering the sunlight falling
+on a latitude band and dividing by the number of squares. The total sunlight falling on the earth
+is:
+
+![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
+src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">

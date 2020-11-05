@@ -10,7 +10,7 @@
 #define MODEL_H
 
 #include "planet.h"
-
+#include "utils.h"
 class Model {
 
 protected:
@@ -32,6 +32,8 @@ public:
 
     // write out model results to a file
     virtual void outputResults() = 0;
+
+    std::map<SurfaceType, float> albedoMap = {{land, 0.2}, {sea, 0.1}, {ice, 0.9}};
 
 };
 

@@ -9,14 +9,9 @@
 
 #include <vector>
 #include <map>
-#include "constant.h"
 
-// types of surfaces
-enum SurfaceType {
-    land,
-    sea,
-    ice
-};
+#include "constant.h"
+#include "utils.h"
 
 class Planet {
 
@@ -34,12 +29,13 @@ private:
     std::vector<std::vector<float>> temperature;   // temperature of surface in each cell
     std::vector<float> radIn;        // incoming radiation for each latitude cell
 
+    float planetRadius{EARTH_RADIUS};
+    float calcFluxAntideri(float x);
+
 public:
 
     // constructor
-    Planet(size_t longCells, 
-           size_t latCells, 
-           std::vector<std::vector<SurfaceType>> &surface,
+    Planet(std::vector<std::vector<SurfaceType>> &surface,
            std::map<std::string, float> &atmosphere);
 
   
@@ -56,10 +52,13 @@ public:
    void setAtmosphere(std::map<std::string, float> atmo) {
        atmosphere = atmo;
    }
+   
+   std::map<std::string, float>& getAtmosphere() { return atmosphere; }
 
    std::vector<float>& getRadIn() { return radIn; }
 
    void calcRadIn();
+
 
    void printPlanet(size_t step);
 };

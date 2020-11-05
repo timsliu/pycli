@@ -4,18 +4,18 @@
  *
  */
 
+#include <iostream>
+#include <cmath>
 
 #include "planet.h"
-#include <iostream>
+
 using namespace std;
 
 // constructor for a new planet
-Planet::Planet(size_t longCells, 
-               size_t latCells, 
-               vector<vector<SurfaceType>> &surface,
+Planet::Planet(vector<vector<SurfaceType>> &surface,
                map<string, float> &atmosphere):
-   longCells(longCells),
-   latCells(latCells),
+   longCells(surface[0].size()),
+   latCells(surface.size()),
    surface(surface),
    atmosphere(atmosphere), 
    cellLongDegrees(LONG_RANGE/longCells),
@@ -23,7 +23,7 @@ Planet::Planet(size_t longCells,
    radIn(latCells){
 
    // create empty vector for temperatures
-   for (size_t i = 0; i < longCells; i ++ ) {
+   for (size_t i = 0; i < latCells; i ++ ) {
        vector<float> latTemps(longCells); 
        temperature.push_back(latTemps);
    }
@@ -37,29 +37,50 @@ Planet::Planet(size_t longCells,
 void Planet::calcRadIn() {
     
     for (size_t i = 0; i < latCells/2; i++ ) {
-       //float topBorderDeg = 90 - i * cellLatDegrees; 
-       //float botBorderDeg = 90 - (i + 1) * cellLatDegrees;
+       float topBorderRad = (90 - i * cellLatDegrees) * PI/180; 
+       float botBorderRad = (90 - (i + 1) * cellLatDegrees) * PI/180;
+       float rSq = planetRadius * planetRadius;
 
-       //float topBorderKm = EARTH_RADIUS * sin(topBorderDeg);
-       //float botBorderKm = EARTH_RADIUS * sin(botBorderDeg);
+       float topBorderM = planetRadius * sin(topBorderRad);
+       float botBorderM = planetRadius * sin(botBorderRad);
 
-       //// area from integrating latitudinal slice 
-       //float area = topBorderDeg 
+       float interceptedArea = calcFluxAntideri(topBorderM) - calcFluxAntideri(botBorderM);
+       float surfaceArea = 2 * PI * rSq * (sin(topBorderRad) - sin(botBorderRad));
+       float radInLat = W_SUN * interceptedArea/surfaceArea;
+
+       radIn[i] = radInLat;
+    }
+
+    // radiation in is mirrored above and below the equator
+    size_t j = 0;
+    for (size_t i = latCells/2; i < latCells; i++) {
+        radIn[i] = radIn[latCells/2 - 1 - j];
+        j++;
+    }
+   
+    for (size_t i = 0; i < latCells; i++) {
+        cout << "Radiation at index: " << i << " " << radIn[i] << endl;
     }
 
 }
 
-void Planet::printPlanet(size_t step) {
+float Planet::calcFluxAntideri(float x) {
+    float xSq = x * x;
+    float rSq = planetRadius * planetRadius;
 
-    cout << "Temperatures at timestep: " << step << endl;
-    for (size_t i = 0; i < latCells; i++) {
-        for (size_t j = 0; j < longCells; j++) {
-            cout << " " << temperature[i][j] << " ";
-        }
-        cout << endl;
+    if (abs((x - planetRadius)/x) < 0.00001 ) {
+        return rSq * PI/2;
     }
-    cout << endl;
 
+    float termOne = x * sqrt(rSq - xSq);
+    float termTwo = rSq * atan(termOne/(xSq - rSq));
+
+    return termOne - termTwo;
+}
+
+void Planet::printPlanet(size_t step) {
+    cout << "Temperatures at timestep: " << step << endl;
+    printTemperature(temperature);
 }
 
 
