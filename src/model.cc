@@ -44,8 +44,17 @@ void Model::simClimate() {
     outputResults();
 }
 
+void Model::outputResults() {
+
+    cout << "Outputting results" << endl;
+    // print all of the planets
+    for (size_t i = 0; i < _computedPlanets.size(); i++) {
+        _computedPlanets[i].printPlanet(i);
+    }
+}
+
 /*
- * Serial model implementations
+ * Serial model computation steps
  *
  */
 
@@ -74,12 +83,36 @@ void SerialModel::calcTemps() {
     }
 }
 
-void SerialModel::outputResults() {
 
-    cout << "Outputting results" << endl;
-    // print all of the planets
-    for (size_t i = 0; i < _computedPlanets.size(); i++) {
-        _computedPlanets[i].printPlanet(i);
+/*
+ * Parallel model computation steps
+ *
+ */
+
+
+AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos): 
+    Model(steps, planetStart, atmos) {
+    cout << "Creating Serial Model" << endl;
+}
+
+
+// calculate fill in the temperatures of the planet
+void AccelModel::calcTemps() {
+
+    vector<vector<float>>& temps = _currentPlanet.getTemperature();
+    vector<vector<SurfaceType>>& surface = _currentPlanet.getSurface();
+    float co2Level = _currentPlanet.getAtmosphere()["co2"];
+
+    vector<float> EinArray = _currentPlanet.getRadIn();
+    for (size_t i = 0; i < _currentPlanet.getLatCells(); i++ ) {
+        float Ein = EinArray[i];
+        for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
+            float albedo = albedoMap[surface[i][j]];
+            float radForc = CO2_HEATING * co2Level + H2O_POWER;  /* radiative forcing from ghg */
+            float rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
+            temps[i][j] = pow(rhs, 0.25);
+        }
     }
 }
+
 

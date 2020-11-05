@@ -27,11 +27,12 @@ public:
     // run the model
     void simClimate();
 
+    // write out model results to a file
+    void outputResults();
+    
     // fill in the temperatures
     virtual void calcTemps() = 0;
 
-    // write out model results to a file
-    virtual void outputResults() = 0;
 
     std::map<SurfaceType, float> albedoMap = {{land, 0.2}, {sea, 0.06}, {ice, 0.6}};
 
@@ -42,14 +43,18 @@ class SerialModel : public Model {
 public:
     SerialModel(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos);
     
-    // run the model
-    //void simClimate() override;
-
-    // fill in the temperatures
+    // fill in the temperatures at one step
     void calcTemps() override;
 
-    // write out model results to a file
-    void outputResults() override;
+};
+
+class AccelModel : public Model {
+
+public:
+    AccelModel(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos);
+    
+    // fill in the temperatures at one step
+    void calcTemps() override;
 
 };
 
