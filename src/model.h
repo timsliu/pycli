@@ -14,18 +14,18 @@
 class Model {
 
 protected:
-    size_t steps;
-    size_t currentStep{0};
-    Planet currentPlanet;
-    std::vector<Planet> computedPlanets;
-    std::vector<std::map<std::string, float>> allAtmos;
+    size_t _steps;
+    size_t _currentStep{0};
+    Planet _currentPlanet;
+    std::vector<Planet> _computedPlanets;
+    std::vector<std::map<std::string, float>> _allAtmos;
 
 public:
     // constructor for the planet specifying the number of model steps and the planet
     Model(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos);
 
     // run the model
-    virtual void simClimate() = 0;
+    void simClimate();
 
     // fill in the temperatures
     virtual void calcTemps() = 0;
@@ -33,7 +33,7 @@ public:
     // write out model results to a file
     virtual void outputResults() = 0;
 
-    std::map<SurfaceType, float> albedoMap = {{land, 0.2}, {sea, 0.1}, {ice, 0.9}};
+    std::map<SurfaceType, float> albedoMap = {{land, 0.2}, {sea, 0.06}, {ice, 0.6}};
 
 };
 
@@ -43,7 +43,7 @@ public:
     SerialModel(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos);
     
     // run the model
-    void simClimate() override;
+    //void simClimate() override;
 
     // fill in the temperatures
     void calcTemps() override;

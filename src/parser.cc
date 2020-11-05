@@ -9,19 +9,24 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
     cout << "Welcome to PyCli!" << endl;
 
-    cout << "Creating new planet" << endl;
-    
-    vector<vector<SurfaceType>> inputSurface;
-    vector<map<string, float>> atmosList;
+    if (argc != 3) {
+        cout << "Expecting 2 arguments ";
+        cout << "- surface text file and atmosphere text file" << endl;
+    }
 
-    size_t latCells;
-    size_t longCells;
+    cout << "Parsing surface file: " << argv[1] << endl;
+
+    vector<vector<SurfaceType>> inputSurface;   // starting surface
+    vector<map<string, float>> atmosList;       // atmosphere at each step
+
+    size_t latCells;       // number of latitude cells (rows)
+    size_t longCells;      // number of longitude cells (cols)
 
     /* parse the surface from a file */
-    ifstream myfile("surface.txt");
+    ifstream myfile(argv[1]);
     if (myfile.is_open()) {
         string line;
         while (getline(myfile, line)) {
@@ -35,11 +40,10 @@ int main() {
             inputSurface.push_back(latSurface);
         }
     }
-
-    printSurface(inputSurface);
-   
+    
+    cout << "Parsing temperature file: " << argv[2] << endl;
     /* parse atmosphere at each step from a file */
-    ifstream atmofile("atmos.txt");
+    ifstream atmofile(argv[2]);
 
     if (atmofile.is_open()) {
         string line;
@@ -62,13 +66,14 @@ int main() {
             atmosList.push_back(atmoStep);
         }
     }
+   
+    // get dimensions of the grid
     latCells = inputSurface.size();
     longCells = inputSurface[0].size();
 
-    cout << latCells << endl;
-    cout << longCells << endl;
-
-    printAtmosList(atmosList);
+    cout << "Number of latCells: " << latCells << endl;
+    cout << "Number of longCells: " << longCells << endl;
+    cout << "Starting simulation..." << endl;
 
     /* instantiate the planet and model and run the climate */ 
     Planet samplePlanet(inputSurface, atmosList[0]);
@@ -76,5 +81,7 @@ int main() {
     sampleModel.simClimate();
 
     cout << "Simulation complete!" << endl;
+
+    return 0;
 
 }
