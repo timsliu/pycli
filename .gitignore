@@ -4,3 +4,9 @@
 bin/*
 !bin/README.md
 Makefile
+pysrc/.pytest_cache
+pysrc/pycli/__pycache__/
+__pycache__/
+pysrc/tests/__pycache__/
+pysrc/tests/build/
+pysrc/pycli.egg-info/

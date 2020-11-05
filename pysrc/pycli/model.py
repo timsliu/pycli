@@ -21,18 +21,38 @@ class Model:
             for j in range(self.surface.num_lon_grid):
                 self.surface.set_grid_cell_type(i, j, random.randint(0,2))
 
-    def set_init_atmosphere(self, element, value):
+    def set_atmosphere(self, element, value, time = None):
+        if time == None:
+            time = self.current_time
+
         if element == "CO2":
-            self.atmosphere.set_co2(value, 0)
+            self.atmosphere.set_co2(value, time)
         elif element == "O2":
-            self.atmosphere.set_o2(value, 0)
+            self.atmosphere.set_o2(value, time)
         elif element == "N2":
-            self.atmosphere.set_n2(value, 0)
+            self.atmosphere.set_n2(value, time)
         else:
             raise ValueError("Element not supported")
 
+    def get_atmosphere(self, element, time = None):
+        if time == None:
+            time = self.current_time
+
+        if element == "CO2":
+            return self.atmosphere.get_co2(time)
+        elif element == "O2":
+            return self.atmosphere.get_o2(time)
+        elif element == "N2":
+            return self.atmosphere.get_n2(time)
+        else:
+            raise ValueError("Element not supported")
+
+    def model_step(self):
+        self.atmosphere.update_atmosphere(self.current_time)
+        self.current_time = self.current_time + 1
+    
     def write_surface(self, filename):
         self.surface.write_to_file(filename)
         
     def write_atmosphere(self, filename):
-        raise NotImplementedError
+        self.atmosphere.write_to_file(filename)
