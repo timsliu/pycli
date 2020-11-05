@@ -52,6 +52,8 @@ public:
    void setAtmosphere(std::map<std::string, float> atmo) {
        atmosphere = atmo;
    }
+   
+   std::map<std::string, float>& getAtmosphere() { return atmosphere; }
 
    std::vector<float>& getRadIn() { return radIn; }
 
