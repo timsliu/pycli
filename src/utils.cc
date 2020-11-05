@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <iomanip>
 
 #include "utils.h"
 
@@ -16,7 +17,7 @@ void printTemperature(vector<vector<float>>& temp) {
 
     for (size_t i = 0; i < latCells; i++) {
         for (size_t j = 0; j < longCells; j++) {
-            cout << " " << temp[i][j] << " ";
+            cout << " " << setprecision(2) << 1.8 * (temp[i][j] - 273) + 32 << " ";
         }
         cout << endl;
     }

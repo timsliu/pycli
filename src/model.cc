@@ -54,7 +54,7 @@ void SerialModel::calcTemps() {
         float Ein = EinArray[i];
         for (size_t j = 0; j < currentPlanet.getLongCells(); j++) {
             float albedo = albedoMap[surface[i][j]];
-            float radForc = CO2_HEATING * co2Level;  /* radiative forcing from ghg */
+            float radForc = CO2_HEATING * co2Level + H2O_POWER;  /* radiative forcing from ghg */
             float rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
             temps[i][j] = pow(rhs, 0.25);
         }
