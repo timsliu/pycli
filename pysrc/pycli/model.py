@@ -19,7 +19,10 @@ class Model:
     def gen_random_surface(self):
         for i in range(self.surface.num_lat_grid):
             for j in range(self.surface.num_lon_grid):
-                self.surface.set_grid_cell_type(i, j, random.randint(0,2))
+                if i <= self.surface.num_lat_grid * 0.1 or i >= self.surface.num_lat_grid * 0.9:
+                    self.surface.set_grid_cell_type(i, j, 2)
+                else:
+                    self.surface.set_grid_cell_type(i, j, random.randint(0,2))
 
     def set_atmosphere(self, element, value, time = None):
         if time == None:
