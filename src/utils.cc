@@ -17,7 +17,7 @@ void printTemperature(vector<vector<float>>& temp) {
 
     for (size_t i = 0; i < latCells; i++) {
         for (size_t j = 0; j < longCells; j++) {
-            cout << " " << setprecision(2) << 1.8 * (temp[i][j] - 273) + 32 << " ";
+            cout << " " << setprecision(3) << 1.8 * (temp[i][j] - 273) + 32 << " ";
         }
         cout << endl;
     }

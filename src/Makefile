@@ -23,7 +23,7 @@ pycli: $(OBJS)
 	mv $@ ../bin
 
 test:
-	./../bin/pycli
+	./../bin/pycli surface.txt atmos.txt
 
 omp: omp_test.cc
 	g++ omp_test.cc -std=c++11 -fopenmp -g -o ../bin/omp_test
