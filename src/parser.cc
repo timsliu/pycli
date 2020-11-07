@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 
     /* instantiate the planet and model and run the climate */ 
     Planet samplePlanet(inputSurface, atmosList[0]);
-    SerialModel sampleModel(atmosList.size(), samplePlanet, atmosList);
+    AccelModel sampleModel(atmosList.size(), samplePlanet, atmosList);
     sampleModel.simClimate();
 
     cout << "Simulation complete!" << endl;

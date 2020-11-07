@@ -80,6 +80,8 @@ float Planet::calcFluxAntideri(float x) {
 
 void Planet::printPlanet(size_t step) {
     cout << "Temperatures at timestep: " << step << endl;
+
+    // TODO update to make a file
     printTemperature(_temperature);
 }
 
