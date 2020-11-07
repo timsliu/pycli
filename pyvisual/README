@@ -1,0 +1,18 @@
+Getting Started follow these steps
+
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py --user
+pip3 install numpy
+pip3 install matplotlib
+wget https://github.com/matplotlib/basemap/archive/v1.2.2rel.tar.gz
+tar -xvf v1.2.2rel.tar.gz
+cd basemap-1.2.2rel
+cd geos-3.3.3
+export GEOS_DIR=~
+./configure --prefix=$GEOS_DIR
+make; make install
+cd ..
+pip3 install -e .    // This step may or may not work right away, had trouble with Tim, if it doesn't work try cleaning your bashrc and running again
+cd ..
+python3 visualization_bm.py
+
