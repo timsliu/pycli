@@ -1,0 +1,115 @@
+\documentclass[12pt]{article} % use larger type; default would be 10pt
+
+%packages
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{ulem}
+\usepackage{soul}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{titling}
+\usepackage{enumerate} 
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[compact]{titlesec}
+
+
+ %put box around figure captions
+\makeatletter
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{\fbox{#1: #2}}%
+  \ifdim \wd\@tempboxa >\hsize
+    \fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{#1: #2}}\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+\makeatother
+
+%reduce space between sections
+\titlespacing{\section}{0pt}{*1}{*0}
+\titlespacing{\subsection}{0pt}{*1}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+
+
+%no indent and modify distance between paragraphs
+\setlength\parindent{0pt}
+\setlength\parskip{12pt}
+
+%set margins and line spacing
+\geometry{margin=1in}
+\linespread{1.2}
+\geometry{letterpaper}
+
+%math operators
+\DeclareMathOperator{\E}{\mathbb{E}}
+
+%set up header and page numbering
+\pagestyle{fancy}
+\lhead{Scientific Appendix}
+\rhead{Timothy Liu}
+\pagenumbering{arabic}
+
+\hypersetup{  %set up url
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+
+
+\title{PyCli Modeling}
+\author{Timothy Liu}
+
+\begin{document}
+
+\maketitle
+
+This document is used to write the equations for the PyCli README.
+
+The solar radiation falling on the entire Earth is:
+
+$$E_{in} = W_{sun} \pi r_{Earth}^2$$
+
+Consider the Earth as a flat disc perpendicular to the direction of the sun. The sunlight falling on a horizontal strip is:
+
+$$E_{in} = 2 W_{sun} \int_{x_0}^{x_f} \sqrt{r_{E}^2 - x^2} dx$$
+
+
+where $x_0$ and $x_f$ are the distances from the equator of the bottom and top of the strip. Integrating to the get the closed form:
+
+$$E_{in} = 2 W_{sun} \frac{1}{2} x \sqrt{r_{E}^2 - x^2} - \frac{1}{2} r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}$$
+
+$$E_{in} = W_{sun} x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}$$
+
+However, the boundaries between the cells are defined by lines of latitude rather than as a distance from the equator of a flat disc. The substitution: 
+
+$$x = r_{E} sin(\theta) $$
+
+where $\theta$ is the line of latitude, is used to convert between $x$ and the line of latitude $\theta$. The incoming solar flux per
+unit area along this strip is the above result divided by the surface area of the strip on a 3D sphere:
+
+$$A_{strip} = \int_{\theta_{0}}^{\theta_{f}} 2 \pi r_{E} \cos{\theta} r d\theta $$
+
+where $2 \pi r_{E} \cos{\theta}$ is the circumference of the earth at a certain latitude and $r d\theta$ is the north-south distance of a differential along the surface of the earth. This can be simplified to:
+
+$$A_{strip} =  2 \pi r_{E}^2 \sin{\theta} $$
+
+The average solar flux falling on a cell is:
+
+$$E_{in} = \frac{flux_{total}}{A_{strip} n_{cells}}$$
+
+$$\boxed{E_{in} = W_{sun}\frac{x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}}{2n \pi r_{E}^2 \sin{\theta}}}$$
+
+
+
+\end{document}

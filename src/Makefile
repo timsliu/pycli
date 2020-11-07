@@ -1,7 +1,35 @@
-# makefile for pycli
+#makefile for pycli
 #
 
+OBJS = planet.o model.o parser.o utils.o
+CXX = g++
+CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
+
+# dependencies
+
+all: pycli
+
+model.o: model.h model.cc utils.cc constant.h
+
+planet.o: planet.h planet.cc utils.cc constant.h
+
+parser.o: parser.cc planet.h utils.cc model.h
+
+utils.o: utils.cc utils.h
+
+pycli: $(OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+	mv *.o ../bin
+	mv $@ ../bin
+
+test:
+	./../bin/pycli surface.txt atmos.txt
 
 omp: omp_test.cc
 	g++ omp_test.cc -std=c++11 -fopenmp -g -o ../bin/omp_test
 	./../bin/omp_test
+
+clean:
+	rm -rf *.o ../bin/*.o ../bin/pycli ../bin/omp_test
+
+.PHONY: all clean
