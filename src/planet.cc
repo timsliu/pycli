@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <cmath>
+#include <fstream>
+#include <iomanip>
 
 #include "planet.h"
 
@@ -82,7 +84,18 @@ void Planet::printPlanet(size_t step) {
     cout << "Temperatures at timestep: " << step << endl;
 
     // TODO update to make a file
-    printTemperature(_temperature);
+    ofstream outFile ("out/temp_" + to_string(step) + ".txt");
+
+    for (size_t i = 0; i < _latCells; i++) {
+        for (size_t j = 0; j < _longCells; j++) {
+            outFile << " " << setprecision(3) << 1.8 * (_temperature[i][j] - 273) + 32 << " ";
+        }
+        outFile << endl;
+    }
+
+    outFile.close();
+
+    // printTemperature(_temperature);
 }
 
 
