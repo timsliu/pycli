@@ -10,9 +10,9 @@
 using namespace std;
 
 void printHelp() {
-    cout << "Expecting arguments " << endl;
+    cout << "\nExpecting arguments: " << endl;
     cout << "<model_dir> path relative to MODEL_IN with atmosphere and surface files" << endl;
-    cout << "this path will be appended to MODEL_OUT and fill with output temps, lat, long files" << endl;
+    cout << "            this arg will be appended to MODEL_OUT and filled with output files" << endl;
     cout << "-v optional verbose flag; default false" << endl;
     cout << "-m <model_name> optional flag specifying model: serial (default), accel" << endl;
 }
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
         SerialModel climateModel(atmosList.size(), samplePlanet, atmosList, verbose, outputDir);
         climateModel.simClimate(); 
     }
-    else if (modelType == "model") {
+    else if (modelType == "accel") {
         AccelModel climateModel(atmosList.size(), samplePlanet, atmosList, verbose, outputDir);
         climateModel.simClimate(); 
     }

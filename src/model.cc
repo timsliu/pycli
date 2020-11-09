@@ -19,6 +19,7 @@ Model::Model(size_t steps, Planet planetStart, vector<map<string, float>> atmos,
     _allAtmos(atmos),
     _verbose(verbose),
     _outputDir(outputDir){
+
     cout << "Starting new model!" << endl;
     cout << "latCells: " << _currentPlanet.getLatCells() << " ";
     cout << "longCells: " << _currentPlanet.getLongCells() << endl;
@@ -63,7 +64,6 @@ void Model::outputResults() {
 
     // print all of the planets
     for (size_t i = 0; i < _computedPlanets.size(); i++) {
-        cout << _outputDir << endl;
         ofstream tempFile(_outputDir + "/temp_" + to_string(i) + ".txt");
         _computedPlanets[i].printPlanet(i, tempFile);
         tempFile.close();
@@ -81,8 +81,8 @@ void Model::outputResults() {
     
     for (int i = 0; i < latCells; i++) {
         for (int j = 0; j < longCells; j++) {
-            latFile << setprecision(4) << (i - LAT_RANGE/2) + i * LAT_RANGE/(latCells+ 1) << " ";
-            longFile << setprecision(4) << (j - LONG_RANGE/2) + j * LONG_RANGE/(longCells + 1) << " ";
+            latFile << setprecision(4) <<  i * LAT_RANGE/(latCells+ 1) - LAT_RANGE/2 << " ";
+            longFile << setprecision(4) << j * LONG_RANGE/(longCells + 1) - LONG_RANGE/2 << " ";
         }
         latFile << endl;
         longFile << endl;
