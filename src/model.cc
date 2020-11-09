@@ -13,10 +13,12 @@
 
 using namespace std;
 
-Model::Model(size_t steps, Planet planetStart, vector<map<string, float>> atmos): 
+Model::Model(size_t steps, Planet planetStart, vector<map<string, float>> atmos, bool verbose, string outputDir): 
     _steps(steps), 
     _currentPlanet(planetStart),
-    _allAtmos(atmos){
+    _allAtmos(atmos),
+    _verbose(verbose),
+    _outputDir(outputDir){
     cout << "Starting new model!" << endl;
     cout << "latCells: " << _currentPlanet.getLatCells() << " ";
     cout << "longCells: " << _currentPlanet.getLongCells() << endl;
@@ -24,7 +26,10 @@ Model::Model(size_t steps, Planet planetStart, vector<map<string, float>> atmos)
 
 void Model::simClimate() {
 
-    cout << "Starting climate sim" << endl;
+    if (_verbose) {
+        cout << "Starting climate sim" << endl;
+    }
+    
     auto start = chrono::system_clock::now();
     for (size_t i = 0; i < _steps; i++ ) {
         // set the atmosphere of the planet and calculate temperatures
@@ -39,24 +44,37 @@ void Model::simClimate() {
     auto end = chrono::system_clock::now();
     
     chrono::duration<double> diff = end - start;
-    cout << "Model completed! Computed " << _steps << " steps ";
-    cout << _currentPlanet.getLatCells() * _currentPlanet.getLongCells() << " cells ";
-    cout << "in " << diff.count() << " s" << endl;
+    
+    if (_verbose) {
+        cout << "Model completed! Computed " << _steps << " steps ";
+        cout << _currentPlanet.getLatCells() * _currentPlanet.getLongCells() << " cells ";
+        cout << "in " << diff.count() << " s" << endl;
+    }
     // write out results to a file
     outputResults();
 }
 
 void Model::outputResults() {
 
-    cout << "Outputting results" << endl;
-    // print all of the planets
-    for (size_t i = 0; i < _computedPlanets.size(); i++) {
-        _computedPlanets[i].printPlanet(i);
+    if (_verbose) {
+        cout << "Outputting results" << endl;
     }
 
-    cout << "Creating long/lat files" << endl;
-    ofstream latFile("out/lat.txt");
-    ofstream longFile("out/long.txt");
+
+    // print all of the planets
+    for (size_t i = 0; i < _computedPlanets.size(); i++) {
+        cout << _outputDir << endl;
+        ofstream tempFile(_outputDir + "/temp_" + to_string(i) + ".txt");
+        _computedPlanets[i].printPlanet(i, tempFile);
+        tempFile.close();
+    }
+
+    if (_verbose) {
+        cout << "Creating long/lat files" << endl;
+    }
+    
+    ofstream latFile(_outputDir + "/lat.txt");
+    ofstream longFile(_outputDir + "/long.txt");
 
     int latCells = _currentPlanet.getLatCells();
     int longCells = _currentPlanet.getLongCells();
@@ -78,8 +96,8 @@ void Model::outputResults() {
  *
  */
 
-SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos): 
-    Model(steps, planetStart, atmos) {
+SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos, bool verbose, string outputDir): 
+    Model(steps, planetStart, atmos, verbose, outputDir) {
     cout << "Creating Serial Model" << endl;
 }
 
@@ -110,8 +128,8 @@ void SerialModel::calcTemps() {
  */
 
 
-AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos): 
-    Model(steps, planetStart, atmos) {
+AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos, bool verbose, string outputDir): 
+    Model(steps, planetStart, atmos, verbose, outputDir) {
     cout << "Creating Accel Model" << endl;
 }
 

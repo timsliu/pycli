@@ -24,6 +24,9 @@
 #define H2O_POWER 3        /* estimated adding heating from water vapor in 
                                 watts/m^2 */
 
+#define MODEL_IN "./../models/"
+#define MODEL_OUT "./out/"
+
 // types of surfaces
 enum SurfaceType {
     land,
