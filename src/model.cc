@@ -8,6 +8,8 @@
 #include <iostream>
 #include <cmath>
 #include <chrono>
+#include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -51,6 +53,24 @@ void Model::outputResults() {
     for (size_t i = 0; i < _computedPlanets.size(); i++) {
         _computedPlanets[i].printPlanet(i);
     }
+
+    cout << "Creating long/lat files" << endl;
+    ofstream latFile("out/lat.txt");
+    ofstream longFile("out/long.txt");
+
+    int latCells = _currentPlanet.getLatCells();
+    int longCells = _currentPlanet.getLongCells();
+    
+    for (int i = 0; i < latCells; i++) {
+        for (int j = 0; j < longCells; j++) {
+            latFile << setprecision(4) << (i - LAT_RANGE/2) + i * LAT_RANGE/(latCells+ 1) << " ";
+            longFile << setprecision(4) << (j - LONG_RANGE/2) + j * LONG_RANGE/(longCells + 1) << " ";
+        }
+        latFile << endl;
+        longFile << endl;
+    }
+    longFile.close();
+    latFile.close();
 }
 
 /*

@@ -83,7 +83,6 @@ float Planet::calcFluxAntideri(float x) {
 void Planet::printPlanet(size_t step) {
     cout << "Temperatures at timestep: " << step << endl;
 
-    // TODO update to make a file
     ofstream outFile ("out/temp_" + to_string(step) + ".txt");
 
     for (size_t i = 0; i < _latCells; i++) {
