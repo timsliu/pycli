@@ -10,6 +10,7 @@
 #include <chrono>
 #include <fstream>
 #include <iomanip>
+#include <omp.h>
 
 using namespace std;
 
@@ -38,8 +39,8 @@ void Model::simClimate() {
         calcTemps();
 
         // add copy of current planet to the list of computed planets
-        Planet lastPlanet = Planet(_currentPlanet);
-        _computedPlanets.push_back(lastPlanet);
+        //Planet lastPlanet = Planet(_currentPlanet);
+        //_computedPlanets.push_back(lastPlanet);
         _currentStep++;
     }
     auto end = chrono::system_clock::now();
@@ -110,6 +111,7 @@ void SerialModel::calcTemps() {
     float co2Level = _currentPlanet.getAtmosphere()["co2"];
 
     vector<float> EinArray = _currentPlanet.getRadIn();
+    
     for (size_t i = 0; i < _currentPlanet.getLatCells(); i++ ) {
         float Ein = EinArray[i];
         for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
@@ -143,13 +145,15 @@ void AccelModel::calcTemps() {
 
     vector<float> EinArray = _currentPlanet.getRadIn();
     float radForc = CO2_HEATING * co2Level + H2O_POWER;
-        
-    #pragma omp parallel for 
-    for (size_t i = 0; i < _currentPlanet.getLatCells(); i++ ) {
-        float Ein = EinArray[i];
-        for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
-            float albedo = albedoMap[surface[i][j]];
 
+    size_t latCells = _currentPlanet.getLatCells();
+    size_t longCells = _currentPlanet.getLongCells();
+ 
+    #pragma omp parallel for 
+    for (size_t i = 0; i < latCells; i++ ) {
+        float Ein = EinArray[i];
+        for (size_t j = 0; j < longCells; j++) {
+            float albedo = albedoMap[surface[i][j]];
             /* greenhouse gas effect */
             float rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
             temps[i][j] = pow(rhs, 0.25);

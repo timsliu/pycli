@@ -3,7 +3,7 @@
 
 OBJS = planet.o model.o parser.o utils.o
 CXX = g++
-CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
+CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror #-O3
 
 # dependencies
 
@@ -26,10 +26,16 @@ test:
 	./../bin/pycli small_test -v -m serial
 
 test_big:
+	./../bin/pycli large_random -v -m serial
 	./../bin/pycli large_random -v -m accel
 
 earth:
+	./../bin/pycli earth -v -m serial
 	./../bin/pycli earth -v -m accel
+
+earth_big:
+	./../bin/pycli earth_big -v -m serial
+	./../bin/pycli earth_big -v -m accel
 
 omp: omp_test.cc
 	g++ omp_test.cc -std=c++11 -fopenmp -g -o ../bin/omp_test
