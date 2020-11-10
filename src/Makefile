@@ -23,7 +23,13 @@ pycli: $(OBJS)
 	mv $@ ../bin
 
 test:
-	./../bin/pycli surface.txt atmos.txt
+	./../bin/pycli small_test -v -m serial
+
+test_big:
+	./../bin/pycli large_random -v -m accel
+
+earth:
+	./../bin/pycli earth -v -m accel
 
 omp: omp_test.cc
 	g++ omp_test.cc -std=c++11 -fopenmp -g -o ../bin/omp_test

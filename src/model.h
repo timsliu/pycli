@@ -19,10 +19,13 @@ protected:
     Planet _currentPlanet;
     std::vector<Planet> _computedPlanets;
     std::vector<std::map<std::string, float>> _allAtmos;
+    bool _verbose{false};
+    std::string _outputDir;
 
 public:
     // constructor for the planet specifying the number of model steps and the planet
-    Model(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos);
+    Model(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos, 
+          bool verbose, std::string outputDir);
 
     // run the model
     void simClimate();
@@ -41,7 +44,8 @@ public:
 class SerialModel : public Model {
 
 public:
-    SerialModel(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos);
+    SerialModel(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos, 
+                bool verbose, std::string outputDir);
     
     // fill in the temperatures at one step
     void calcTemps() override;
@@ -51,7 +55,8 @@ public:
 class AccelModel : public Model {
 
 public:
-    AccelModel(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos);
+    AccelModel(size_t steps, Planet planetStart, std::vector<std::map<std::string, float>> atmos, 
+               bool verbose, std::string outputDir);
     
     // fill in the temperatures at one step
     void calcTemps() override;

@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <map>
+#include <fstream>
 
 #include "constant.h"
 #include "utils.h"
@@ -62,7 +63,7 @@ public:
    void calcRadIn();
 
 
-   void printPlanet(size_t step);
+   void printPlanet(size_t step, std::ofstream& outFile);
 };
 
 #endif /* PLANET_H */
