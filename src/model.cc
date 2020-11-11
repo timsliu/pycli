@@ -39,8 +39,8 @@ void Model::simClimate() {
         calcTemps();
 
         // add copy of current planet to the list of computed planets
-        //Planet lastPlanet = Planet(_currentPlanet);
-        //_computedPlanets.push_back(lastPlanet);
+        Planet lastPlanet = Planet(_currentPlanet);
+        _computedPlanets.push_back(lastPlanet);
         _currentStep++;
     }
     auto end = chrono::system_clock::now();
@@ -65,7 +65,16 @@ void Model::outputResults() {
 
     // print all of the planets
     for (size_t i = 0; i < _computedPlanets.size(); i++) {
-        ofstream tempFile(_outputDir + "/temp_" + to_string(i) + ".txt");
+        
+        string id;
+        if (i == _computedPlanets.size() - 1) {
+            id = "f"; 
+        }
+        else {
+            id = to_string(i);
+        }
+
+        ofstream tempFile(_outputDir + "/temp_" + id + ".txt");
         _computedPlanets[i].printPlanet(i, tempFile);
         tempFile.close();
     }

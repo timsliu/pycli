@@ -26,7 +26,15 @@ if __name__ == "__main__":
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
-    
+
+    # update src
+    os.chdir(os.path.join(PYCLI_ROOT, "src"))
+    subprocess.run([
+        "make",
+        "-j4"
+    ])
+
+    os.chdir(os.path.join(PYCLI_ROOT, "models"))
     # 1) compile the model and generate surface and text
     subprocess.run([
         "python3",
