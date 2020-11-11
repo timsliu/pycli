@@ -1,7 +1,10 @@
 import pycli
 
+# size of model
 earth = pycli.new_model("large")
+# how to fill in the surface
 earth.gen_random_surface()
+# should be way to specify preset models
 earth.set_atmosphere("O2", 22)
 
 co2_emiss = 0.0001
@@ -19,5 +22,6 @@ for i in range(5):
     earth.set_atmosphere("CO2", co2_emiss)
     earth.set_atmosphere("N2", n2_emiss)
 
+# change this to put in a directory with the model name
 earth.write_surface("large_surface.txt")
 earth.write_atmosphere("atmos.txt")
