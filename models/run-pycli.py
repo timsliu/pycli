@@ -16,7 +16,7 @@ import shutil
 
 if __name__ == "__main__":
 
-    model_name = sys.argv[0]
+    model_name = sys.argv[1]
     model_out = os.path.join(PYCLI_ROOT, "src/out/{}".format(model_name))
     model_in = os.path.join(PYCLI_ROOT, "models/{}".format(model_name))
   
@@ -44,6 +44,6 @@ if __name__ == "__main__":
     # 3) run visualization
     subprocess.run([
         "python3",
-        os.path.join(PYCLI_ROOT, "pyvisual/visualization.bm.py"),
+        os.path.join(PYCLI_ROOT, "pyvisual/visualization_bm.py"),
         model_name
     ])

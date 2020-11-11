@@ -3,7 +3,9 @@ from pycli.atmosphere import Atmosphere
 import random
 
 class Model:
-    def __init__(self, default = True, num_lat_gridlines = None, num_lon_gridlines = None, init_o2 = None, init_co2 = None, init_n2 = None):
+    def __init__(self, default = True, num_lat_gridlines = None, 
+                 num_lon_gridlines = None, init_o2 = None, init_co2 = None,
+                 init_n2 = None):
 
         self.current_time = 0
 
