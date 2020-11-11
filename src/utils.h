@@ -8,12 +8,12 @@
 
 #include "constant.h"
 
-void printTemperature(std::vector<std::vector<float>>& temp);
+void printTemperature(std::vector<std::vector<double>>& temp);
 
 void printSurface(std::vector<std::vector<SurfaceType>>& inputSurface);
 
-void printAtmosphere(std::map<std::string, float>& atmo);
+void printAtmosphere(std::map<std::string, double>& atmo);
 
-void printAtmosList(std::vector<std::map<std::string, float>>& atmoList);
+void printAtmosList(std::vector<std::map<std::string, double>>& atmoList);
 
 #endif /* UTILS_H */

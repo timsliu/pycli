@@ -22,43 +22,43 @@ private:
     size_t _latCells;                 // number of cells 180 degrees latitude are broken into
 
     std::vector<std::vector<SurfaceType>> _surface; // type of surface in each cell
-    std::map<std::string, float> _atmosphere;   // mapping between gases and atmosphere concentration
+    std::map<std::string, double> _atmosphere;   // mapping between gases and atmosphere concentration
     
-    float _cellLongDegrees;
-    float _cellLatDegrees;            // dimension of each cells in latitude and long
+    double _cellLongDegrees;
+    double _cellLatDegrees;            // dimension of each cells in latitude and long
 
-    std::vector<std::vector<float>> _temperature;   // temperature of surface in each cell
-    std::vector<float> _radIn;        // incoming radiation for each latitude cell
+    std::vector<std::vector<double>> _temperature;   // temperature of surface in each cell
+    std::vector<double> _radIn;        // incoming radiation for each latitude cell
 
-    float _planetRadius{EARTH_RADIUS};
+    double _planetRadius{EARTH_RADIUS};
    
     // private helper methods
-    float calcFluxAntideri(float x);
+    double calcFluxAntideri(double x);
 
 public:
 
     // constructor
     Planet(std::vector<std::vector<SurfaceType>> &surface,
-           std::map<std::string, float> &atmosphere);
+           std::map<std::string, double> &atmosphere);
 
   
    // return reference to the surface
    std::vector<std::vector<SurfaceType>>&  getSurface() { return _surface; }
 
    // return reference to the temperature
-   std::vector<std::vector<float>>& getTemperature() { return _temperature; }
+   std::vector<std::vector<double>>& getTemperature() { return _temperature; }
 
    size_t getLongCells() { return _longCells; }
 
    size_t getLatCells() { return _latCells; }
 
-   void setAtmosphere(std::map<std::string, float> atmo) {
+   void setAtmosphere(std::map<std::string, double> atmo) {
        _atmosphere = atmo;
    }
    
-   std::map<std::string, float>& getAtmosphere() { return _atmosphere; }
+   std::map<std::string, double>& getAtmosphere() { return _atmosphere; }
 
-   std::vector<float>& getRadIn() { return _radIn; }
+   std::vector<double>& getRadIn() { return _radIn; }
 
    void calcRadIn();
 

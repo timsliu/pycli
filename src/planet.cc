@@ -15,18 +15,18 @@ using namespace std;
 
 // constructor for a new planet
 Planet::Planet(vector<vector<SurfaceType>> &surface,
-               map<string, float> &atmosphere):
+               map<string, double> &atmosphere):
    _longCells(surface[0].size()),
    _latCells(surface.size()),
    _surface(surface),
    _atmosphere(atmosphere), 
-   _cellLongDegrees(LONG_RANGE/_longCells),
-   _cellLatDegrees(LAT_RANGE/_latCells),
+   _cellLongDegrees(LONG_RANGE/static_cast<double>(_longCells)),
+   _cellLatDegrees(LAT_RANGE/static_cast<double>(_latCells)),
    _radIn(_latCells){
 
    // create empty vector for temperatures
    for (size_t i = 0; i < _latCells; i ++ ) {
-       vector<float> latTemps(_longCells); 
+       vector<double> latTemps(_longCells); 
        _temperature.push_back(latTemps);
    }
 
@@ -39,16 +39,16 @@ Planet::Planet(vector<vector<SurfaceType>> &surface,
 void Planet::calcRadIn() {
     
     for (size_t i = 0; i < _latCells/2; i++ ) {
-       float topBorderRad = (90 - i * _cellLatDegrees) * PI/180; 
-       float botBorderRad = (90 - (i + 1) * _cellLatDegrees) * PI/180;
-       float rSq = _planetRadius * _planetRadius;
-
-       float topBorderM = _planetRadius * sin(topBorderRad);
-       float botBorderM = _planetRadius * sin(botBorderRad);
-
-       float interceptedArea = calcFluxAntideri(topBorderM) - calcFluxAntideri(botBorderM);
-       float surfaceArea = 2 * PI * rSq * (sin(topBorderRad) - sin(botBorderRad));
-       float _radInLat = W_SUN * interceptedArea/surfaceArea;
+       double topBorderRad = (90 - i * _cellLatDegrees) * PI/180; 
+       double botBorderRad = (90 - (i + 1) * _cellLatDegrees) * PI/180;
+       double rSq = _planetRadius * _planetRadius;
+       
+       double topBorderM = _planetRadius * sin(topBorderRad);
+       double botBorderM = _planetRadius * sin(botBorderRad);
+       
+       double interceptedArea = calcFluxAntideri(topBorderM) - calcFluxAntideri(botBorderM);
+       double surfaceArea = 2 * PI * rSq * (sin(topBorderRad) - sin(botBorderRad));
+       double _radInLat = W_SUN * interceptedArea/surfaceArea;
 
        _radIn[i] = _radInLat;
     }
@@ -66,16 +66,16 @@ void Planet::calcRadIn() {
 
 }
 
-float Planet::calcFluxAntideri(float x) {
-    float xSq = x * x;
-    float rSq = _planetRadius * _planetRadius;
+double Planet::calcFluxAntideri(double x) {
+    double xSq = x * x;
+    double rSq = _planetRadius * _planetRadius;
 
     if (abs((x - _planetRadius)/x) < 0.00001 ) {
         return rSq * PI/2;
     }
 
-    float termOne = x * sqrt(rSq - xSq);
-    float termTwo = rSq * atan(termOne/(xSq - rSq));
+    double termOne = x * sqrt(rSq - xSq);
+    double termTwo = rSq * atan(termOne/(xSq - rSq));
 
     return termOne - termTwo;
 }

@@ -14,7 +14,7 @@
 
 using namespace std;
 
-Model::Model(size_t steps, Planet planetStart, vector<map<string, float>> atmos, bool verbose, string outputDir): 
+Model::Model(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     _steps(steps), 
     _currentPlanet(planetStart),
     _allAtmos(atmos),
@@ -107,7 +107,7 @@ void Model::outputResults() {
  *
  */
 
-SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos, bool verbose, string outputDir): 
+SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     Model(steps, planetStart, atmos, verbose, outputDir) {
     cout << "Creating Serial Model" << endl;
 }
@@ -116,18 +116,18 @@ SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, fl
 // calculate fill in the temperatures of the planet
 void SerialModel::calcTemps() {
 
-    vector<vector<float>>& temps = _currentPlanet.getTemperature();
+    vector<vector<double>>& temps = _currentPlanet.getTemperature();
     vector<vector<SurfaceType>>& surface = _currentPlanet.getSurface();
-    float co2Level = _currentPlanet.getAtmosphere()["co2"];
+    double co2Level = _currentPlanet.getAtmosphere()["co2"];
 
-    vector<float> EinArray = _currentPlanet.getRadIn();
+    vector<double> EinArray = _currentPlanet.getRadIn();
     
     for (size_t i = 0; i < _currentPlanet.getLatCells(); i++ ) {
-        float Ein = EinArray[i];
+        double Ein = EinArray[i];
         for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
-            float albedo = albedoMap[surface[i][j]];
-            float radForc = CO2_HEATING * co2Level + H2O_POWER;  /* radiative forcing from ghg */
-            float rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
+            double albedo = albedoMap[surface[i][j]];
+            double radForc = CO2_HEATING * co2Level + H2O_POWER;  /* radiative forcing from ghg */
+            double rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
             temps[i][j] = pow(rhs, 0.25);
         }
     }
@@ -140,7 +140,7 @@ void SerialModel::calcTemps() {
  */
 
 
-AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, float>> atmos, bool verbose, string outputDir): 
+AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     Model(steps, planetStart, atmos, verbose, outputDir) {
     cout << "Creating Accel Model" << endl;
 }
@@ -149,23 +149,25 @@ AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, floa
 // calculate fill in the temperatures of the planet
 void AccelModel::calcTemps() {
 
-    vector<vector<float>>& temps = _currentPlanet.getTemperature();
+    vector<vector<double>>& temps = _currentPlanet.getTemperature();
     vector<vector<SurfaceType>>& surface = _currentPlanet.getSurface();
-    float co2Level = _currentPlanet.getAtmosphere()["co2"];
+    double co2Level = _currentPlanet.getAtmosphere()["co2"];
 
-    vector<float> EinArray = _currentPlanet.getRadIn();
-    float radForc = CO2_HEATING * co2Level + H2O_POWER;
+    vector<double> EinArray = _currentPlanet.getRadIn();
+    double radForc = CO2_HEATING * co2Level + H2O_POWER;
 
     size_t latCells = _currentPlanet.getLatCells();
     size_t longCells = _currentPlanet.getLongCells();
+    cout << "cells: " << latCells << endl;
+    cout << "cells: " << longCells << endl;
  
     #pragma omp parallel for 
     for (size_t i = 0; i < latCells; i++ ) {
-        float Ein = EinArray[i];
+        double Ein = EinArray[i];
         for (size_t j = 0; j < longCells; j++) {
-            float albedo = albedoMap[surface[i][j]];
+            double albedo = albedoMap[surface[i][j]];
             /* greenhouse gas effect */
-            float rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
+            double rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
             temps[i][j] = pow(rhs, 0.25);
         }
     }

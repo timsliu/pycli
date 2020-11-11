@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void printTemperature(vector<vector<float>>& temp) {
+void printTemperature(vector<vector<double>>& temp) {
     size_t latCells = temp.size();
     size_t longCells = temp[0].size();
 
@@ -36,7 +36,7 @@ void printSurface(vector<vector<SurfaceType>>& inputSurface) {
     }
 }
 
-void printAtmosphere(map<string, float>& atmo) {
+void printAtmosphere(map<string, double>& atmo) {
     
     for (auto it = atmo.begin(); it != atmo.end(); it++) {
         cout << it->first << " => " << it->second << " "; 
@@ -45,7 +45,7 @@ void printAtmosphere(map<string, float>& atmo) {
 
 }
 
-void printAtmosList(vector<map<string, float>>& atmoList) {
+void printAtmosList(vector<map<string, double>>& atmoList) {
     for (auto a: atmoList) {
         printAtmosphere(a);
     }

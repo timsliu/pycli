@@ -48,6 +48,7 @@ if __name__ == "__main__":
         "./../bin/pycli", 
         model_name, 
         "-v",
+        "-m",
         "accel"
     ])
     os.chdir(PYCLI_ROOT)

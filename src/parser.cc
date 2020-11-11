@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     }
 
     vector<vector<SurfaceType>> inputSurface;   // starting surface
-    vector<map<string, float>> atmosList;       // atmosphere at each step
+    vector<map<string, double>> atmosList;       // atmosphere at each step
 
     size_t latCells;       // number of latitude cells (rows)
     size_t longCells;      // number of longitude cells (cols)
@@ -91,17 +91,17 @@ int main(int argc, char *argv[]) {
         string line;
         while (getline(atmofile, line)) {
             istringstream iss(line);
-            map<string, float> atmoStep;
+            map<string, double> atmoStep;
             int parseIndex = 0;
             string gas;
-            float concentration;
+            double concentration;
 
             while (!iss.eof()) {
                 if (parseIndex % 2 == 0) {
                     iss >> gas;
                 } else {
                     iss >> concentration;
-                    atmoStep.insert(pair<string, float>(gas, concentration));
+                    atmoStep.insert(pair<string, double>(gas, concentration));
                 }
                 parseIndex++;
             }
