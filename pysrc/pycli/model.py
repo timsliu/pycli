@@ -3,7 +3,9 @@ from pycli.atmosphere import Atmosphere
 import random
 
 class Model:
-    def __init__(self, default = True, num_lat_gridlines = None, num_lon_gridlines = None, init_o2 = None, init_co2 = None, init_n2 = None):
+    def __init__(self, default = True, num_lat_gridlines = None, 
+                 num_lon_gridlines = None, init_o2 = None, init_co2 = None,
+                 init_n2 = None):
 
         self.current_time = 0
 
@@ -54,8 +56,8 @@ class Model:
         self.atmosphere.update_atmosphere(self.current_time)
         self.current_time = self.current_time + 1
     
-    def write_surface(self, filename):
-        self.surface.write_to_file(filename)
+    def write_surface(self):
+        self.surface.write_to_file()
         
-    def write_atmosphere(self, filename):
-        self.atmosphere.write_to_file(filename)
+    def write_atmosphere(self):
+        self.atmosphere.write_to_file()

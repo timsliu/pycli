@@ -1,3 +1,14 @@
 Requires python 3
 Install using pip3 install -e .
 Test using python3 -m pytest
+
+python3 large_surface.py
+# TODO update to create files in folder
+# need earth model
+# need stuff
+# need place with predefined surfaces
+
+# script will run above steps
+# script will call climate model step
+
+# read in the temperature file

@@ -1,3 +1,5 @@
+import sys
+import os
 
 class Surface:
     def __init__(self, num_lat_gridlines, num_lon_gridlines):
@@ -9,9 +11,14 @@ class Surface:
     def set_grid_cell_type(self, lat, lon, surface_type):
         self.surface[lat][lon] = surface_type
 
-    def write_to_file(self, filename):
-        with open(filename, "w") as write_file:
+    def write_to_file(self):
+        # get name of the model
+        model_name = sys.argv[0][0:sys.argv[0].find(".")]
+        with open(os.path.join(model_name, "surface.txt"), "w") as write_file:
             for i in range(len(self.surface)):
                 for j in range(len(self.surface[i])):
-                    write_file.write(str(self.surface[i][j]) + " ")
+                    write_file.write(str(self.surface[i][j]))
+                    # only write a space after not the last element
+                    if j != len(self.surface[i]) - 1:
+                        write_file.write(" ")
                 write_file.write("\n")
