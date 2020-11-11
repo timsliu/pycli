@@ -3,7 +3,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-
+import os
+import sys
 """
 ## Map Projections
 
@@ -46,15 +47,6 @@ In the following figure we show an example of the *equidistant cylindrical proje
 Other cylindrical projections are the Mercator (``projection='merc'``) and the cylindrical equal area (``projection='cea'``) projections.
 """
 
-# fig = plt.figure(figsize=(8, 6), edgecolor='w')
-# m = Basemap(projection='cyl', resolution=None,
-#             llcrnrlat=-90, urcrnrlat=90,
-#             llcrnrlon=-180, urcrnrlon=180, )
-# draw_map(m)
-
-
-# plt.savefig("file.png")
-
 
 """
 Temperature overlay
@@ -83,91 +75,64 @@ Note that for this data we specifically chose a divergent colormap, which has a 
 We'll also lightly draw the coastlines over the colors for reference:
 """
 
-# lat generation
 
-a = np.loadtxt("temp_0.txt")
-# land = np.loadtxt("land.txt")
-print(a.shape)
-
-resolution = 1
-
-x = np.ones(180*resolution)
-x = x * -89.0
-
-x1 = x + 2/resolution
-x = np.stack((x,x1))
-
-for i in range(90*resolution-2):
-    x1 = x[-1] + 2/resolution
-    x = np.vstack((x,x1))
-
-lat = x
-
-# lon generation
-x = np.arange(180*resolution)/resolution
-x = x*2.0 - 179.0
-x1 = x
-
-for i in range(90*resolution-1):
-    x = np.vstack((x,x1))
-
-lon = x
+PYCLI_ROOT = os.path.join(os.getcwd(), "..")
+LAT_MAX = 90
+LON_MAX = 180
 
 
-print(lat)
-print(lon)
-print(lat.shape)
-print(lon.shape)
+def gen_lat_lon(res_x, res_y):
+   
+    # generate latitude grid
+    lat = np.ones((1, int(2 * LON_MAX * res_x)))
+    lat = lat * LAT_MAX
+    
+    for i in range(int(2 * LAT_MAX * res_y - 1)):
+        lat_next = lat[-1] - 1/res_y
+        lat = np.vstack((lat, lat_next))
+    
+    # gnerate longitude grid
+    lon = np.arange(int(2 * LON_MAX * res_x))
+    lon = lon / res_x - LON_MAX
+    next_lon = lon
+    
+    for i in range(int(2 * LAT_MAX * res_y-1)):
+        lon = np.vstack((lon, next_lon))
+    
+    return lat, lon
 
 
+def plot_temp(lat, lon, res_y, res_x, temps_array, model_name):
+    
+    minimum = np.amin(temps_array)
+    maximum = np.amax(temps_array)
+    
+    fig = plt.figure(figsize=(20, 16))
+    m = Basemap(projection='cyl', resolution='c',
+                llcrnrlat=-LAT_MAX, urcrnrlat=LAT_MAX,
+                llcrnrlon=-LON_MAX, urcrnrlon=LON_MAX, )
+    m.shadedrelief(scale=0.5)
+    m.pcolormesh(lon, lat, temps_array,
+                 latlon=True, cmap='RdBu_r')
+    plt.clim(minimum, maximum)
+    m.drawcoastlines(color='black')
+    
+    plt.title('{} Global Temperature'.format(model_name))
+    plt.colorbar(label='temperature anomaly (°F)');
+    plt.savefig(os.path.join(PYCLI_ROOT, "models/{}/{}.png".format(model_name, model_name)))
 
-temp_anomaly = np.random.rand(90*resolution,180*resolution)
-temp_anomaly = (temp_anomaly*8)-8
-temp_anomaly = a
-# temp_anomaly = temp_anomaly + (land*8)
-# lon, lat = 15,47
-# xpt, ypt = m( lon, lat )
-# value = m.is_land(xpt,ypt)
-# print(value)
+if __name__ == "__main__":
+   
+    model_name = sys.argv[1]
+    PYCLI_ROOT = sys.argv[2]
+    temp_file = os.path.join(PYCLI_ROOT, "src/out/{}/temp_f.txt".format(model_name))
+    print(temp_file)
+    temps_array = np.loadtxt(temp_file)
 
-minimum = np.amin(a)
-maximum = np.amax(a)
+    lat_points, lon_points = temps_array.shape
+    res_y = lat_points/(2 * LAT_MAX)
+    res_x = lon_points/(2 * LON_MAX)
 
-
-
-
-fig = plt.figure(figsize=(20, 16))
-# m = Basemap(projection='lcc', resolution='c',
-#             width=8E6, height=8E6, 
-#             lat_0=45, lon_0=-100,)
-m = Basemap(projection='cyl', resolution='c',
-            llcrnrlat=-90, urcrnrlat=90,
-            llcrnrlon=-180, urcrnrlon=180, )
-m.shadedrelief(scale=0.5)
-m.pcolormesh(lon, lat, temp_anomaly,
-             latlon=True, cmap='RdBu_r')
-plt.clim(minimum, maximum)
-m.drawcoastlines(color='black')
-
-plt.title('January 2014 Temperature Anomaly')
-plt.colorbar(label='temperature anomaly (°C)');
-
-land = np.zeros((90*resolution,180*resolution))
-
-for i in range(90*resolution):
-    for j in range(180*resolution):
-        xpt, ypt = m( lon[i][j], lat[i][j])
-        if(m.is_land(xpt,ypt)):
-            land[i][j] = 1
-            #plt.plot(xpt, ypt, 'ok', markersize=5)
-            #plt.text(xpt, ypt, ' Seattle', fontsize=20);
-
-
-
-
-# np.savetxt("lon.txt", lon.astype(int), fmt='%i')
-# np.savetxt("lat.txt", lat.astype(int), fmt='%i')
-# np.savetxt("land.txt", land.astype(int), fmt='%i')
-
-plt.savefig("file.png")
+    lat, lon = gen_lat_lon(res_x, res_y)
+    plot_temp(lat, lon, res_y, res_x, temps_array, model_name)
 

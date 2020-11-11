@@ -56,5 +56,6 @@ if __name__ == "__main__":
     subprocess.run([
         "python3",
         os.path.join(PYCLI_ROOT, "pyvisual/visualization_bm.py"),
-        model_name
+        model_name,
+        PYCLI_ROOT
     ])
