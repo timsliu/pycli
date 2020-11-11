@@ -46,14 +46,14 @@ In the following figure we show an example of the *equidistant cylindrical proje
 Other cylindrical projections are the Mercator (``projection='merc'``) and the cylindrical equal area (``projection='cea'``) projections.
 """
 
-fig = plt.figure(figsize=(8, 6), edgecolor='w')
-m = Basemap(projection='cyl', resolution=None,
-            llcrnrlat=-90, urcrnrlat=90,
-            llcrnrlon=-180, urcrnrlon=180, )
-draw_map(m)
+# fig = plt.figure(figsize=(8, 6), edgecolor='w')
+# m = Basemap(projection='cyl', resolution=None,
+#             llcrnrlat=-90, urcrnrlat=90,
+#             llcrnrlon=-180, urcrnrlon=180, )
+# draw_map(m)
 
 
-plt.savefig("file.png")
+# plt.savefig("file.png")
 
 
 """
@@ -85,30 +85,54 @@ We'll also lightly draw the coastlines over the colors for reference:
 
 # lat generation
 
-x = np.ones(180)
+a = np.loadtxt("temp_0.txt")
+# land = np.loadtxt("land.txt")
+print(a.shape)
+
+resolution = 1
+
+x = np.ones(180*resolution)
 x = x * -89.0
 
-x1 = x + 2
+x1 = x + 2/resolution
 x = np.stack((x,x1))
 
-for i in range(88):
-    x1 = x[-1] + 2
+for i in range(90*resolution-2):
+    x1 = x[-1] + 2/resolution
     x = np.vstack((x,x1))
 
 lat = x
 
 # lon generation
-x = np.arange(180)
+x = np.arange(180*resolution)/resolution
 x = x*2.0 - 179.0
 x1 = x
 
-for i in range(89):
+for i in range(90*resolution-1):
     x = np.vstack((x,x1))
 
 lon = x
 
-temp_anomaly = np.random.rand(90,180)
-temp_anomaly = (temp_anomaly*16)-8
+
+print(lat)
+print(lon)
+print(lat.shape)
+print(lon.shape)
+
+
+
+temp_anomaly = np.random.rand(90*resolution,180*resolution)
+temp_anomaly = (temp_anomaly*8)-8
+temp_anomaly = a
+# temp_anomaly = temp_anomaly + (land*8)
+# lon, lat = 15,47
+# xpt, ypt = m( lon, lat )
+# value = m.is_land(xpt,ypt)
+# print(value)
+
+minimum = np.amin(a)
+maximum = np.amax(a)
+
 
 
 
@@ -122,11 +146,28 @@ m = Basemap(projection='cyl', resolution='c',
 m.shadedrelief(scale=0.5)
 m.pcolormesh(lon, lat, temp_anomaly,
              latlon=True, cmap='RdBu_r')
-plt.clim(-8, 8)
+plt.clim(minimum, maximum)
 m.drawcoastlines(color='black')
 
 plt.title('January 2014 Temperature Anomaly')
 plt.colorbar(label='temperature anomaly (°C)');
 
+land = np.zeros((90*resolution,180*resolution))
+
+for i in range(90*resolution):
+    for j in range(180*resolution):
+        xpt, ypt = m( lon[i][j], lat[i][j])
+        if(m.is_land(xpt,ypt)):
+            land[i][j] = 1
+            #plt.plot(xpt, ypt, 'ok', markersize=5)
+            #plt.text(xpt, ypt, ' Seattle', fontsize=20);
+
+
+
+
+# np.savetxt("lon.txt", lon.astype(int), fmt='%i')
+# np.savetxt("lat.txt", lat.astype(int), fmt='%i')
+# np.savetxt("land.txt", land.astype(int), fmt='%i')
 
 plt.savefig("file.png")
+
