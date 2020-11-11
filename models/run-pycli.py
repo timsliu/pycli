@@ -7,12 +7,13 @@
 # where <model_name>.py is the name of the PyCli model holding
 # the climate model
 
-PYCLI_ROOT = "./.."
 
 import subprocess
 import os
 import sys
 import shutil
+
+PYCLI_ROOT = os.path.join(os.getcwd(), "..")
 
 if __name__ == "__main__":
 
@@ -34,12 +35,14 @@ if __name__ == "__main__":
 
 
     # 2) run the C++ climate model
+    os.chdir(os.path.join(PYCLI_ROOT, "src"))
     subprocess.run([
-        os.path.join(PYCLI_ROOT, "bin/pycli"), 
+        "./../bin/pycli", 
         model_name, 
         "-v",
         "accel"
     ])
+    os.chdir(PYCLI_ROOT)
 
     # 3) run visualization
     subprocess.run([

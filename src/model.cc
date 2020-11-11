@@ -73,7 +73,7 @@ void Model::outputResults() {
     if (_verbose) {
         cout << "Creating long/lat files" << endl;
     }
-   
+  
     cout << _outputDir << endl;
     ofstream latFile(_outputDir + "/lat.txt");
     ofstream longFile(_outputDir + "/long.txt");
