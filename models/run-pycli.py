@@ -18,17 +18,20 @@ if __name__ == "__main__":
 
     model_name = sys.argv[0]
     model_out = os.path.join(PYCLI_ROOT, "src/out/{}".format(model_name))
-
+    model_in = os.path.join(PYCLI_ROOT, "models/{}".format(model_name))
+  
+    # make sure there is the needed in and out files
+    for path in [model_in, model_out]:
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        os.mkdir(path)
+    
     # 1) compile the model and generate surface and text
     subprocess.run([
         "python3",
         model_name + ".py",
     ])
 
-    # make sure there's an out file for the model
-    if os.path.exists(model_out):
-        shutil.rmtree(model_out)
-    os.mkdir(model_out)
 
     # 2) run the C++ climate model
     subprocess.run([

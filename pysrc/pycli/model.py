@@ -54,8 +54,8 @@ class Model:
         self.atmosphere.update_atmosphere(self.current_time)
         self.current_time = self.current_time + 1
     
-    def write_surface(self, filename):
-        self.surface.write_to_file(filename)
+    def write_surface(self):
+        self.surface.write_to_file()
         
-    def write_atmosphere(self, filename):
-        self.atmosphere.write_to_file(filename)
+    def write_atmosphere(self):
+        self.atmosphere.write_to_file()

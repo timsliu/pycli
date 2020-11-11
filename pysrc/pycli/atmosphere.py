@@ -1,4 +1,5 @@
-
+import os
+import sys
 
 class Atmosphere:
     def __init__(self, init_o2, init_co2, init_n2):
@@ -33,8 +34,9 @@ class Atmosphere:
         self.co2.append(self.co2[time])
         self.n2.append(self.n2[time])
 
-    def write_to_file(self, filename):
-        with open(filename, "w") as write_file:
+    def write_to_file(self):
+        model_name = sys.argv[0][0:sys.argv[0].find(".")]
+        with open(os.path.join(model_name, "atmosphere.txt"), "w") as write_file:
             for i in range(len(self.co2)):
                 write_file.write("co2 " + str(self.co2[i]))
                 write_file.write(" o2 " + str(self.o2[i]))

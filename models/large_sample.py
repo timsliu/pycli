@@ -23,5 +23,5 @@ for i in range(5):
     earth.set_atmosphere("N2", n2_emiss)
 
 # change this to put in a directory with the model name
-earth.write_surface("large_surface.txt")
-earth.write_atmosphere("atmos.txt")
+earth.write_surface()
+earth.write_atmosphere()
