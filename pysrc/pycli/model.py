@@ -3,14 +3,19 @@ from pycli.atmosphere import Atmosphere
 import random
 
 class Model:
-    def __init__(self, default = True, num_lat_gridlines = None, 
-                 num_lon_gridlines = None, init_o2 = None, init_co2 = None,
-                 init_n2 = None):
+    def __init__(self, default = True, preset_surface = "",
+                 num_lat_gridlines = None, num_lon_gridlines = None, 
+                 init_o2 = None, init_co2 = None, init_n2 = None):
 
         self.current_time = 0
+        self.preset_surface = ""
 
         if default:
             self.surface = Surface(100, 100)
+            self.atmosphere = Atmosphere(0, 0, 0)
+        elif preset_surface != "":
+            self.preset_surface = preset_surface
+            self.surface = Surface(0, 0)
             self.atmosphere = Atmosphere(0, 0, 0)
         else:
             if num_lat_gridlines is None or num_lon_gridlines is None or init_o2 is None or init_co2 is None or init_n2 is None:
@@ -57,7 +62,10 @@ class Model:
         self.current_time = self.current_time + 1
     
     def write_surface(self):
-        self.surface.write_to_file()
+        if self.preset_surface == "":
+            self.surface.write_to_file()
+        else:
+            self.surface.copy_preset(self.preset_surface)
         
     def write_atmosphere(self):
         self.atmosphere.write_to_file()

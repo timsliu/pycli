@@ -1,5 +1,10 @@
 import sys
 import os
+import shutil
+
+# this assumes script is being run from run-cli.py in models directory
+PYCLI_ROOT = os.path.join(os.getcwd(), "..")
+
 
 class Surface:
     def __init__(self, num_lat_gridlines, num_lon_gridlines):
@@ -22,3 +27,10 @@ class Surface:
                     if j != len(self.surface[i]) - 1:
                         write_file.write(" ")
                 write_file.write("\n")
+
+    def copy_preset(self, preset):
+        '''copy a pre generated default surface to the appropriate directory'''
+        model_name = sys.argv[0][0:sys.argv[0].find(".")]
+        src = os.path.join(PYCLI_ROOT, "pysrc/pycli/preset_surfaces/{}.txt".format(preset))
+        dst = os.path.join(PYCLI_ROOT, "models/{}/surface.txt".format(model_name))
+        shutil.copyfile(src, dst)
