@@ -60,10 +60,6 @@ void Planet::calcRadIn() {
         j++;
     }
    
-    //for (size_t i = 0; i < _latCells; i++) {
-    //    cout << "Radiation at index: " << i << " " << _radIn[i] << endl;
-    //}
-
 }
 
 double Planet::calcFluxAntideri(double x) {

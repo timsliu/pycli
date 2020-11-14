@@ -61,9 +61,6 @@ int main(int argc, char *argv[]) {
     vector<vector<SurfaceType>> inputSurface;   // starting surface
     vector<map<string, double>> atmosList;       // atmosphere at each step
 
-    size_t latCells;       // number of latitude cells (rows)
-    size_t longCells;      // number of longitude cells (cols)
-
     /* parse the surface from a file */
     ifstream myfile(surfaceFile);
     if (myfile.is_open()) {
@@ -109,16 +106,6 @@ int main(int argc, char *argv[]) {
         }
     }
    
-    // get dimensions of the grid
-    latCells = inputSurface.size();
-    longCells = inputSurface[0].size();
-
-    if (verbose) {
-        cout << "Number of latCells: " << latCells << endl;
-        cout << "Number of longCells: " << longCells << endl;
-        cout << "Using " << modelType << " model" << endl;
-        cout << "Starting simulation..." << endl;
-    }
 
     /* instantiate the planet and model and run the climate */ 
     Planet samplePlanet(inputSurface, atmosList[0]);

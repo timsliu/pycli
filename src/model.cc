@@ -59,9 +59,8 @@ void Model::simClimate() {
 void Model::outputResults() {
 
     if (_verbose) {
-        cout << "Outputting results" << endl;
+        cout << "Outputting results..." << endl;
     }
-
 
     // print all of the planets
     for (size_t i = 0; i < _computedPlanets.size(); i++) {
@@ -78,28 +77,6 @@ void Model::outputResults() {
         _computedPlanets[i].printPlanet(i, tempFile);
         tempFile.close();
     }
-
-    if (_verbose) {
-        cout << "Creating long/lat files" << endl;
-    }
-  
-    cout << _outputDir << endl;
-    ofstream latFile(_outputDir + "/lat.txt");
-    ofstream longFile(_outputDir + "/long.txt");
-
-    int latCells = _currentPlanet.getLatCells();
-    int longCells = _currentPlanet.getLongCells();
-    
-    for (int i = 0; i < latCells; i++) {
-        for (int j = 0; j < longCells; j++) {
-            latFile << setprecision(4) <<  i * LAT_RANGE/(latCells+ 1) - LAT_RANGE/2 << " ";
-            longFile << setprecision(4) << j * LONG_RANGE/(longCells + 1) - LONG_RANGE/2 << " ";
-        }
-        latFile << endl;
-        longFile << endl;
-    }
-    longFile.close();
-    latFile.close();
 }
 
 /*
@@ -158,8 +135,6 @@ void AccelModel::calcTemps() {
 
     size_t latCells = _currentPlanet.getLatCells();
     size_t longCells = _currentPlanet.getLongCells();
-    cout << "cells: " << latCells << endl;
-    cout << "cells: " << longCells << endl;
  
     #pragma omp parallel for 
     for (size_t i = 0; i < latCells; i++ ) {
