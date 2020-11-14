@@ -106,10 +106,17 @@ $$A_{strip} =  2 \pi r_{E}^2 \sin{\theta} $$
 
 The average solar flux falling on a cell is:
 
-$$E_{in} = \frac{flux_{total}}{A_{strip} n_{cells}}$$
+$$E_{in} = \frac{flux_{total}}{A_{strip}}$$
 
-$$\boxed{E_{in} = W_{sun}\frac{x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}}{2n \pi r_{E}^2 \sin{\theta}}}$$
+$$\boxed{E_{in} = W_{sun}\frac{x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}}{2 \pi r_{E}^2 \sin{\theta}]_{\theta_0}^{\theta^f}}}$$
 
+Please note that the argument of the $\tan^{-1}$ approaches $-\infty$ as $x$ approaches $r_{E}$. The limit of $\tan^{-1}$ approaches $-\frac{\pi}{2}$ so when $x = r_{E}$ the numerator reduces to:
+
+$$x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}(-\infty)$$
+
+$$0 -  r_{E}^2 (-\frac{\pi}{2})$$
+
+$$\frac{r_{E}^2 \pi}{2}$$
 
 
 \end{document}
