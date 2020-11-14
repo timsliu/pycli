@@ -119,6 +119,7 @@ def plot_temp(lat, lon, res_y, res_x, temps_array, model_name):
     
     plt.title('{} Global Temperature'.format(model_name))
     plt.colorbar(label='temperature anomaly (°F)');
+    print("Generating temperature map at models/{}/{}.png".format(model_name, model_name))
     plt.savefig(os.path.join(PYCLI_ROOT, "models/{}/{}.png".format(model_name, model_name)))
 
 if __name__ == "__main__":
@@ -126,7 +127,6 @@ if __name__ == "__main__":
     model_name = sys.argv[1]
     PYCLI_ROOT = sys.argv[2]
     temp_file = os.path.join(PYCLI_ROOT, "src/out/{}/temp_f.txt".format(model_name))
-    print(temp_file)
     temps_array = np.loadtxt(temp_file)
 
     lat_points, lon_points = temps_array.shape
