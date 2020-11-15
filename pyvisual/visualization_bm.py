@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import os
 import sys
+import json
 """
 ## Map Projections
 
@@ -102,7 +103,7 @@ def gen_lat_lon(res_x, res_y):
     return lat, lon
 
 
-def plot_temp(lat, lon, res_y, res_x, temps_array, model_name):
+def plot_temp(lat, lon, res_y, res_x, temps_array, model_name, c_map):
     
     minimum = np.amin(temps_array)
     maximum = np.amax(temps_array)
@@ -113,7 +114,7 @@ def plot_temp(lat, lon, res_y, res_x, temps_array, model_name):
                 llcrnrlon=-LON_MAX, urcrnrlon=LON_MAX, )
     m.shadedrelief(scale=0.5)
     m.pcolormesh(lon, lat, temps_array,
-                 latlon=True, cmap='RdBu_r')
+                 latlon=True, cmap=c_map)
     plt.clim(minimum, maximum)
     m.drawcoastlines(color='black')
     
@@ -122,17 +123,25 @@ def plot_temp(lat, lon, res_y, res_x, temps_array, model_name):
     print("Generating temperature map at models/{}/{}.png".format(model_name, model_name))
     plt.savefig(os.path.join(PYCLI_ROOT, "models/{}/{}.png".format(model_name, model_name)))
 
+def load_prefs(prefs_file):
+    with open(prefs_file) as json_file:
+        return json.load(json_file)
+        
+
 if __name__ == "__main__":
    
     model_name = sys.argv[1]
     PYCLI_ROOT = sys.argv[2]
+    prefs_file = os.path.join(PYCLI_ROOT, "src/out/{}/vis_prefs.json".format(model_name))
     temp_file = os.path.join(PYCLI_ROOT, "src/out/{}/temp_f.txt".format(model_name))
     temps_array = np.loadtxt(temp_file)
+
+    prefs = load_prefs(prefs_file)
 
     lat_points, lon_points = temps_array.shape
     res_y = lat_points/(2 * LAT_MAX)
     res_x = lon_points/(2 * LON_MAX)
 
     lat, lon = gen_lat_lon(res_x, res_y)
-    plot_temp(lat, lon, res_y, res_x, temps_array, model_name)
+    plot_temp(lat, lon, res_y, res_x, temps_array, model_name, prefs["color_map"])
 
