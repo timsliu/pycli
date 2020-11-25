@@ -22,3 +22,5 @@ for i in range(5):
 # change this to put in a directory with the model name
 earth.write_surface()
 earth.write_atmosphere()
+
+pycli.write_preferences()

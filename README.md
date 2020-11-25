@@ -103,7 +103,7 @@ If these steps fail, comment out your entire `<~/.bashrc>` and try again.
 Finally, install the pycli python library:
 
 ```
-cd pysrc/pycli
+cd ../pysrc
 pip3 install -e .
 ```
 
