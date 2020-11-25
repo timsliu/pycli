@@ -74,7 +74,21 @@
 
 \maketitle
 
-This document is used to write the equations for the PyCli README.
+\section{Climate modeling overview}
+PyCli uses a discrete energy balance model for modeling temperatures across the globe. The planet is discretized into a grid with the size of each grid cell a fixed number of degrees latitude and longitude. Since the number of cells at each latitude band is fixed, the cells closer to the poles are smaller than the cells at the equator.
+
+Energy balance models balance the incoming solar radiation with outgoing blackbody radiation to calculate the surface temperature:
+
+$$E_{in} = E_{out}$$
+
+The incoming radiation is determined by the latitude of the cell. The outgoing radiation can be expressed as:
+
+$$E_{out} = \epsilon \sigma T_{S}^{4} \tau _{a}$$
+
+Where $\epsilon$ is the emissivity (roughly 0.97) and $\tau _{a}$ is the infrared transmissivity of the atmosphere. The infrared transmissivity of the atmosphere is determined by the concentration of greenhouse gases. The PyCli climate model computes the temperature at each surface cell using the earth balance model. A 2D convolution is then performed over the grid cells to represent the distribution of heat from air and water circulation.
+
+
+\section{Incoming Solar Radiation}
 
 The solar radiation falling on the entire Earth is:
 
@@ -117,6 +131,28 @@ $$x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}(-\infty)$$
 $$0 -  r_{E}^2 (-\frac{\pi}{2})$$
 
 $$\frac{r_{E}^2 \pi}{2}$$
+
+\section{Infrared transmissivity}
+
+Infrared transmissivity is the fraction of energy radiated by the Earth's surface that escapes into space. On an airless world, the infrared transmissivity should be 1. On a planet with an atmosphere, greenhouse gases block some of the energy.
+
+The energy emitted by the Earth is approximated by blackbody radiation described by Planck's law:
+
+Figure X illustrates Planck's law at different temperatures close to Earth's surface temperature. The energy absorbed by the atmosphere can be calculated by integrating over the absorption spectrum of greenhouse gases. Assume we have a function $A(\lambda)$ that describes the fraction of energy absorbed by the atmosphere at different frequencies. The total fraction of energy absorbed by the atmosphere is then:
+
+$$\frac{\int_{\lambda_0}^{\lambda_f} A(\lambda) B(\lambda, T) d\lambda}{\int_{\lambda_0}^{\lambda_f} B(\lambda, T) d\lambda }$$
+
+Note that we've reformulated Planck's law in terms of wavelength instead of frequency. We can use a Gaussian distribution to approximate the energy distribution from Planck's law. This substitution is valid because at the temperatures we're interested in (Earth's surface temperature) the energy distribution from Planck's law is well approximated by a Gaussian. Since the integral of a Gaussian is 1, this also simplifies our expression to:
+
+$$\int_{\lambda_0}^{\lambda_f} A(\lambda) B'(\lambda, T) d\lambda$$
+
+where $B'$ is the Gaussian approximation of $B(\lambda, T)$. However, note that the function $B`(\lambda, T)$ is dependent on surface temperature, which is the expression we're ultimately trying to solve for! Another approximation made in the PyCli model is that the \textit{normalized} energy emission curve given by Planck's Law at the temperatures we're interested is not strongly temperature dependent.
+
+\subsection{Creating an expression for $A(\lambda)$}
+
+In the previous step we assumed we had an expression for $A(\lambda)$ to calculate the fraction of energy absorbed. This section describes how we actually derive this expression. Figure X gives the fraction of energy absorbed by water vapor and carbon dioxide, the two greenhouse gases considered by PyCli.
+
+In practice we want an expression for absorption dependent on the concentration of carbon dioxide - the concentration of water vapor is assumed to be constant in PyCli\footnote{Note that this is generally not a good assumption. The amount of water vapor in the atmosphere should increase with warmer temperatures}. Figure X shows the absorption bands for carbon dioxide, but the concentration of carbon dioxide is not specified. Wei et. al derived 
 
 
 \end{document}
