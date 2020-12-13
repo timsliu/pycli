@@ -16,4 +16,7 @@ void printAtmosphere(std::map<std::string, double>& atmo);
 
 void printAtmosList(std::vector<std::map<std::string, double>>& atmoList);
 
+template <class T>
+void serialConvolve(std::vector<std::vector<T>>& matrix, std::vector<T>& kernel);
+
 #endif /* UTILS_H */

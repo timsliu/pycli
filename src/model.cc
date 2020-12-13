@@ -80,7 +80,7 @@ void Model::outputResults() {
 }
 
 /*
- * Serial model computation steps
+ * Serial model methods
  *
  */
 
@@ -108,11 +108,13 @@ void SerialModel::calcTemps() {
             temps[i][j] = pow(rhs, 0.25);
         }
     }
+
+    // TODO perform slow convolution
 }
 
 
 /*
- * Parallel model computation steps
+ * Parallel model methods
  *
  */
 
@@ -146,6 +148,7 @@ void AccelModel::calcTemps() {
             temps[i][j] = pow(rhs, 0.25);
         }
     }
+    // TODO perform fast convolution
 }
 
 
