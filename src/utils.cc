@@ -116,5 +116,16 @@ void serialConvolve(vector<vector<T>>& inputMatrix, vector<T>& kernel) {
             inputMatrix[i][j] = sum;
         }
     }
+}
+
+// creates a gaussian, separable filter given the size of the
+// matrix to convolve and the size of the filter as a fraction of
+// the xDimension
+
+template <class T>
+vector<T> makeKernel(int xDim, int yDim, float width) {
+
+    int kernelWidth = xDim * width;
+    vector<T> kernel(kernelWidth);
 
 }

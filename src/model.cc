@@ -109,7 +109,10 @@ void SerialModel::calcTemps() {
         }
     }
 
-    // TODO perform slow convolution
+    // kernel for convolution - update to be dynamic
+    vector<double> kernel = {0.577, 0.577, 0.577};
+    serialConvolve<double>(temps, kernel);
+
 }
 
 
