@@ -3,6 +3,7 @@
 
 # add new object files here 
 OBJS = planet.o model.o parser.o utils.o
+TEST_OBJS = test/conv_test.o 
 CXX = g++
 CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror #-O3
 
@@ -18,6 +19,7 @@ parser.o: parser.cc planet.h utils.cc model.h
 
 utils.o: utils.cc utils.h
 
+test/conv_test.o: test/conv_test.cc
 
 # build rules
 pycli: $(OBJS)
@@ -25,8 +27,8 @@ pycli: $(OBJS)
 	mv *.o ../bin
 	mv $@ ../bin
 
-test:
-	./../bin/pycli small_test -v -m serial
+conv_test: $(TEST_OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
 test_big:
 	./../bin/pycli large_random -v -m serial
@@ -34,7 +36,7 @@ test_big:
 
 earth:
 	./../bin/pycli earth -v -m serial
-	./../bin/pycli earth -v -m accel
+	#./../bin/pycli earth -v -m accel
 
 earth_big:
 	./../bin/pycli earth_big -v -m serial

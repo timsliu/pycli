@@ -110,7 +110,7 @@ void SerialModel::calcTemps() {
     }
 
     // kernel for convolution - update to be dynamic
-    vector<double> kernel = {0.577, 0.577, 0.577};
+    vector<double> kernel = {0.333, 0.333, 0.333};
     serialConvolve<double>(temps, kernel);
 
 }

@@ -2,11 +2,6 @@
  * functions for generic convolution
  *
  */
-/* Performs an in place 2D convolution treating the input matrix as a cylinder:
- * the x-dimension wraps but the y-dimensions does not. The top and bottom edges
- * are handled by repeating the edge values. The convolution kernel MUST be
- * separable and is passed as the vector kernel
- */
 
 #ifndef CONV_H
 #define CONV_H
@@ -16,13 +11,42 @@
 
 using namespace std;
 
+/*
+ * ========= Function prototypes ============
+ */
+
+
+/* Performs an in place 2D convolution treating the input matrix as a cylinder:
+ * the x-dimension wraps but the y-dimensions does not. The top and bottom edges
+ * are handled by repeating the edge values. The convolution kernel MUST be
+ * separable and is passed as the vector kernel
+ */
+
+template <typename T>
+void serialConvolve(vector<vector<T>>& inputMatrix, vector<T>& kernel);
+
+
+/* creates a gaussian, separable filter given the size of the
+ * matrix to convolve and the size of the filter as a fraction of
+ * the xDimension
+ */
+
+template <typename T>
+vector<T> makeKernel(int xDim, int yDim, float width);
+
+
+/*
+ * ============ Function implementations ==============
+ */
+
 template <typename T>
 void serialConvolve(vector<vector<T>>& inputMatrix, vector<T>& kernel) {
     
     int kernelSize = kernel.size();
     int kernelMid = (kernelSize - 1) /2;
 
-    if (kernelSize % 2 != 0) {
+    if (kernelSize % 2 != 1) {
+        cout << "kernel size: " << kernelSize << endl;
         cout << "serialConvolve error: kernel must have odd no. of elements" << endl;
         return;
     }
@@ -75,10 +99,6 @@ void serialConvolve(vector<vector<T>>& inputMatrix, vector<T>& kernel) {
     }
 }
 
-/* creates a gaussian, separable filter given the size of the
- * matrix to convolve and the size of the filter as a fraction of
- * the xDimension
- */
 
 template <typename T>
 vector<T> makeKernel(int xDim, int yDim, float width) {
