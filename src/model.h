@@ -11,6 +11,8 @@
 
 #include "planet.h"
 #include "utils.h"
+#include "conv.h"
+
 class Model {
 
 protected:
