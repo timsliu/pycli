@@ -33,6 +33,7 @@ pycli: $(OBJS)
 
 unit_test: $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
+	mv test/*.o ../bin
 	mv $@ ../bin
 
 test_big:
@@ -52,6 +53,9 @@ omp: omp_test.cc
 	./../bin/omp_test
 
 clean:
-	rm -rf *.o ../bin/*.o test/*.o ../bin/pycli ../bin/omp_test
+	rm -rf *.o
+	cd ../bin
+	rm -f !"README.md"
+	cd -
 
 .PHONY: all clean
