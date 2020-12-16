@@ -3,7 +3,7 @@
 
 # add new object files here 
 OBJS = planet.o model.o parser.o utils.o
-TEST_OBJS = test/conv_test.o 
+TEST_OBJS = test/unit_test.o test/conv_test.o test/omp_test.o
 CXX = g++
 CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror #-O3
 
@@ -19,7 +19,11 @@ parser.o: parser.cc planet.h utils.cc model.h
 
 utils.o: utils.cc utils.h
 
+test/unit_test.o: test/unit_test.cc test/conv_test.cc test/omp_test.cc
+
 test/conv_test.o: test/conv_test.cc
+
+test/omp_test.o: test/omp_test.cc
 
 # build rules
 pycli: $(OBJS)
@@ -27,8 +31,9 @@ pycli: $(OBJS)
 	mv *.o ../bin
 	mv $@ ../bin
 
-conv_test: $(TEST_OBJS)
+unit_test: $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
+	mv $@ ../bin
 
 test_big:
 	./../bin/pycli large_random -v -m serial
@@ -47,6 +52,6 @@ omp: omp_test.cc
 	./../bin/omp_test
 
 clean:
-	rm -rf *.o ../bin/*.o ../bin/pycli ../bin/omp_test
+	rm -rf *.o ../bin/*.o test/*.o ../bin/pycli ../bin/omp_test
 
 .PHONY: all clean

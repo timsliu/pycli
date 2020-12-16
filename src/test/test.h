@@ -11,7 +11,7 @@
 struct testType {
     std::string testName;
     std::string testDescription;
-    int* testFunc;
+    int(*testFunc)();
 };
 
 
