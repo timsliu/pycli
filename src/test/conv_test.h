@@ -2,5 +2,8 @@
  *
  */
 
+#include "./../conv.h"
+
+std::vector<std::vector<float>> make_grid(int size, float val);
 
 int conv_uniform();

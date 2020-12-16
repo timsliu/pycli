@@ -49,7 +49,7 @@ if __name__ == "__main__":
         model_name, 
         "-v",
         "-m",
-        "accel"
+        "serial"
     ])
     os.chdir(PYCLI_ROOT)
 

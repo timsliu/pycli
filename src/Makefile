@@ -35,6 +35,7 @@ unit_test: $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 	mv test/*.o ../bin
 	mv $@ ../bin
+	./../bin/unit_test
 
 test_big:
 	./../bin/pycli large_random -v -m serial
