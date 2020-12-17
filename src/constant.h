@@ -23,7 +23,7 @@
                                 watts/m^2 */
 
 #define MODEL_IN "./../models/"
-#define MODEL_OUT "./out/"
+#define MODEL_OUT "./../models/"
 
 // types of surfaces
 enum SurfaceType {

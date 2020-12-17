@@ -133,7 +133,7 @@ if __name__ == "__main__":
     model_name = sys.argv[1]
     PYCLI_ROOT = sys.argv[2]
     prefs_file = os.path.join(PYCLI_ROOT, "models/{}/vis_prefs.json".format(model_name))
-    temp_file = os.path.join(PYCLI_ROOT, "src/out/{}/temp_f.txt".format(model_name))
+    temp_file = os.path.join(PYCLI_ROOT, "models/{}/out/temp_f.txt".format(model_name))
     temps_array = np.loadtxt(temp_file)
 
     prefs = load_prefs(prefs_file)

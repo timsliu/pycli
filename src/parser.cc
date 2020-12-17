@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
         modelType = "serial";
 
         inputDir = MODEL_IN + allArgs[1];
-        outputDir = MODEL_OUT + allArgs[1];
+        outputDir = MODEL_OUT + allArgs[1] + "/out";
         surfaceFile = inputDir + "/surface.txt";
         atmosFile = inputDir + "/atmosphere.txt";
 

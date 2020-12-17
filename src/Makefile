@@ -1,13 +1,14 @@
 # makefile for pycli
 #
 
-# add new object files here 
+##### Variables #####
+
 OBJS = planet.o model.o parser.o utils.o
 TEST_OBJS = test/unit_test.o test/conv_test.o test/omp_test.o
 CXX = g++
-CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror #-O3
+CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
 
-# dependencies
+##### Dependencies #####
 
 all: pycli
 
@@ -25,18 +26,22 @@ test/conv_test.o: test/conv_test.cc
 
 test/omp_test.o: test/omp_test.cc
 
-# build rules
+##### Build Rules #####
+
+# build pycli
 pycli: $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 	mv *.o ../bin
 	mv $@ ../bin
 
+# build and run all unit tests
 unit_test: $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 	mv test/*.o ../bin
 	mv $@ ../bin
 	./../bin/unit_test
 
+# run certain models
 test_big:
 	./../bin/pycli large_random -v -m serial
 	./../bin/pycli large_random -v -m accel
@@ -49,6 +54,7 @@ earth_big:
 	./../bin/pycli earth_big -v -m serial
 	./../bin/pycli earth_big -v -m accel
 
+# open MP test - will be deprecated
 omp: omp_test.cc
 	g++ omp_test.cc -std=c++11 -fopenmp -g -o ../bin/omp_test
 	./../bin/omp_test

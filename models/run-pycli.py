@@ -18,7 +18,7 @@ PYCLI_ROOT = os.path.join(os.getcwd(), "..")
 if __name__ == "__main__":
 
     model_name = sys.argv[1]
-    model_out = os.path.join(PYCLI_ROOT, "src/out/{}".format(model_name))
+    model_out = os.path.join(PYCLI_ROOT, "models/{}/out".format(model_name))
     model_in = os.path.join(PYCLI_ROOT, "models/{}".format(model_name))
   
     # make sure there is the needed in and out files
