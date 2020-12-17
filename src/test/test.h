@@ -14,6 +14,7 @@
 
 #include <string>
 #include <vector>
+#include <cmath>
 
 #define SMALL_GRID 8
 #define LARGE_GRID 16

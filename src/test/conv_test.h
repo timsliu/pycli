@@ -6,4 +6,8 @@
 
 std::vector<std::vector<float>> make_grid(int size, float val);
 
-int conv_uniform();
+float kernelSum(std::vector<float> kernel);
+
+int convUniform();
+
+int linearKernel();

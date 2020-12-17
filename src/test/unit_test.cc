@@ -12,10 +12,15 @@ using namespace std;
 int main(int argc, char *argv[]) {
 
     /* assemble structs with all tests */
-    struct testType test1 = {"conv_uniform", "convolve a uniform grid", &conv_uniform};
+    struct testType test0 = {"convUniform", 
+                             "convolve a uniform grid", 
+                             &convUniform};
+    struct testType test1 = {"linearKernel",
+                             "Check linear kernel has correct size and normalizes to 1", 
+                             &linearKernel};
 
     /* assemble testType structs into single vector */
-    vector<testType> allTests = {test1};
+    vector<testType> allTests = {test0, test1};
     
     int success = allTests.size();       // counter for number of successful tests
     cout << endl;

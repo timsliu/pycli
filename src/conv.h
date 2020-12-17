@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -32,8 +33,15 @@ void serialConvolve(vector<vector<T>>& inputMatrix, vector<T>& kernel);
  */
 
 template <typename T>
-vector<T> makeKernel(int xDim, int yDim, float width);
+vector<T> makeGaussianKernel(int xDim, int yDim, float width);
 
+/* creates a linear, separable filter given the size of the
+ * matrix to convolve and the size of the filter as a fraction of
+ * the xDimension
+ */
+
+template <typename T>
+vector<T> makeLinearKernel(int xDim, int yDim, float width);
 
 /*
  * ============ Function implementations ==============
@@ -101,10 +109,18 @@ void serialConvolve(vector<vector<T>>& inputMatrix, vector<T>& kernel) {
 
 
 template <typename T>
-vector<T> makeKernel(int xDim, int yDim, float width) {
+vector<T> makeGaussianKernel(int xDim, int yDim, float width) {
 
     int kernelWidth = xDim * width;
     vector<T> kernel(kernelWidth);
+    return kernel;
+}
+
+template <typename T>
+vector<T> makeLinearKernel(int xDim, int yDim, float width) {
+
+    float kernelWidth = round((xDim * width - 1)/2) * 2 + 1;
+    vector<T> kernel(kernelWidth, sqrt(1/(kernelWidth * kernelWidth)));
     return kernel;
 }
 

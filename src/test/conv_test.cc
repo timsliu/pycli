@@ -16,12 +16,27 @@ vector<vector<float>> make_grid(int size, float val) {
     return input;
 }
 
+/* compute the sum of a separable kernel. Compute the dot product of a 
+ * vector representing a kernel with its transpose
+ * 
+ */
+float kernelSum(vector<float> kernel) {
+
+    float sum = 0.0;
+
+    for (size_t i = 0; i < kernel.size(); i++) {
+        for (size_t j = 0; j < kernel.size(); j++) {
+            sum += kernel[i] * kernel[j];
+        }
+    }
+    return sum;
+}
+
 
 /***** Unit test functions *****/
 
 /* convolve a uniform grid - every element should be the same in the result */
-
-int conv_uniform() {
+int convUniform() {
 
     vector<vector<float>> input = make_grid(SMALL_GRID, 1.0);
     vector<float> kernel (1.0, 3);
@@ -45,6 +60,44 @@ int conv_uniform() {
 
     /* return 1 if more than 0 errors, otherwise return 0 */
     return errors > 0 ? 1 : 0;
+}
+
+/*
+ * call makeLinearKernel with different arguments and check the kernel's size and
+ * that the values add to one
+ */
+
+int linearKernel() {
+
+    int error = 0;
+
+    vector<float> kernel1 = makeLinearKernel<float>(100, 100, 0.1);
+    float kernel1Sum = kernelSum(kernel1);
+
+    if (kernel1.size() != 11) {
+        cout << "Error! Expected kernel size 11 got kernel size: " << kernel1.size() << endl;
+        error = 1;
+    }
+
+    if (abs(kernel1Sum - 1.0) > 0.001) {
+        cout << "Error! Kernel sum is: " << kernel1Sum << endl; 
+        error = 1;
+    }
+    
+    vector<float> kernel2 = makeLinearKernel<float>(10, 10, 0.25);
+    float kernel2Sum = kernelSum(kernel2);
+
+    if (kernel2.size() != 3) {
+        cout << "Error! Expected kernel size 3 got kernel size: " << kernel2.size() << endl;
+        error = 1;
+    }
+
+    if (abs(kernel2Sum - 1.0) > 0.001) {
+        cout << "Error! Kernel sum is: " << kernel2Sum << endl; 
+        error = 1;
+    }
+
+    return error;
 }
 
 
