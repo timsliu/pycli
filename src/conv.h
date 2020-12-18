@@ -37,11 +37,13 @@ vector<T> makeGaussianKernel(int xDim, int yDim, float width);
 
 /* creates a linear, separable filter given the size of the
  * matrix to convolve and the size of the filter as a fraction of
- * the xDimension
+ * the xDimension. Filter size is rounded to the nearest odd number.
+ * For example, if xDim = 100 and width = 0.1 then the
+ * filter will be 11 units large
  */
 
 template <typename T>
-vector<T> makeLinearKernel(int xDim, int yDim, float width);
+vector<T> makeLinearKernel(int xDim, int yDim, T width);
 
 /*
  * ============ Function implementations ==============
@@ -117,9 +119,9 @@ vector<T> makeGaussianKernel(int xDim, int yDim, float width) {
 }
 
 template <typename T>
-vector<T> makeLinearKernel(int xDim, int yDim, float width) {
+vector<T> makeLinearKernel(int xDim, int yDim, T width) {
 
-    float kernelWidth = round((xDim * width - 1)/2) * 2 + 1;
+    T kernelWidth = round((xDim * width - 1)/2) * 2 + 1;
     vector<T> kernel(kernelWidth, sqrt(1/(kernelWidth * kernelWidth)));
     return kernel;
 }

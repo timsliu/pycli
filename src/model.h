@@ -13,6 +13,9 @@
 #include "utils.h"
 #include "conv.h"
 
+#define KERNEL_WIDTH 0.1     // size of conv kernel relative to x-dim, meaning cells within
+                             // 5% of the earth will influence temperature of given cell
+
 class Model {
 
 protected:
