@@ -74,7 +74,11 @@
 
 \maketitle
 
-\section{Climate modeling overview}
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
 PyCli uses a discrete energy balance model for modeling temperatures across the globe. The planet is discretized into a grid with the size of each grid cell a fixed number of degrees latitude and longitude. Since the number of cells at each latitude band is fixed, the cells closer to the poles are smaller than the cells at the equator.
 
 Energy balance models balance the incoming solar radiation with outgoing blackbody radiation to calculate the surface temperature:
@@ -86,6 +90,10 @@ The incoming radiation is determined by the latitude of the cell. The outgoing r
 $$E_{out} = \epsilon \sigma T_{S}^{4} \tau _{a}$$
 
 Where $\epsilon$ is the emissivity (roughly 0.97) and $\tau _{a}$ is the infrared transmissivity of the atmosphere. The infrared transmissivity of the atmosphere is determined by the concentration of greenhouse gases. The PyCli climate model computes the temperature at each surface cell using the earth balance model. A 2D convolution is then performed over the grid cells to represent the distribution of heat from air and water circulation.
+
+\section{Atmosphere}
+
+\section{Surface}
 
 
 \section{Incoming Solar Radiation}
@@ -150,9 +158,22 @@ where $B'$ is the Gaussian approximation of $B(\lambda, T)$. However, note that 
 
 \subsection{Creating an expression for $A(\lambda)$}
 
-In the previous step we assumed we had an expression for $A(\lambda)$ to calculate the fraction of energy absorbed. This section describes how we actually derive this expression. Figure X gives the fraction of energy absorbed by water vapor and carbon dioxide, the two greenhouse gases considered by PyCli.
+In the previous step we assumed we had an expression for $A(\lambda)$ to calculate the fraction of energy absorbed. This section describes how we actually derive this expression. Figure~\ref{fig:absorption} gives the fraction of energy absorbed by water vapor and carbon dioxide, the two greenhouse gases considered by PyCli.
 
-In practice we want an expression for absorption dependent on the concentration of carbon dioxide - the concentration of water vapor is assumed to be constant in PyCli\footnote{Note that this is generally not a good assumption. The amount of water vapor in the atmosphere should increase with warmer temperatures}. Figure X shows the absorption bands for carbon dioxide, but the concentration of carbon dioxide is not specified. Wei et. al derived 
+\begin{figure}[H]
+	\makebox[\textwidth][c]{\includegraphics[width=3.8in]{absorption.jpg}}
+	\caption{Fraction of radiation emitted from Earth's surface absorbed by selected gases in the atmosphere.}
+	\label{fig:absorption}
+\end{figure}
 
+The expression $A(\lambda)$ is illustrated in Figure~\ref{fig:absorption}.
+
+The PyCli model treats the atmosphere as a uniform layer above the surface. The atmosphere is transparent to incoming light, but absorbs a fraction of the outgoing infrared energy. The absorption is described by the function $A(\lambda)$. Half of the infrared energy absorbed by the atmosphere is emitted upwards into space while the other half is emitted downwards to the surface.
+
+The concentration of greenhouse gases is taken into account in two ways. Gases that are approximated as having fixed concentration (water vapor, oxygen) are included in the shell atmosphere model. Carbon dioxide is treated with varying concentration, and its effect is described by the empirical equation from Myhre et al. (1998):
+
+$$\Delta Q (CO_2) = 5.35 W m^{-2} ln \frac{[CO_2]}{280ppm}$$
+
+The contribution from carbon dioxide is directly calculated using this formula and added to the downward radiation.
 
 \end{document}
