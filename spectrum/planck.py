@@ -6,7 +6,7 @@ from constants import *
 LU_MAX = 0.1        # lowest wavelength considered (100 nm)
 LU_MIN = 40         # longest wavelength considered (40 um)
 
-SPECIES = ["O2", "H20", "O3"]
+SPECIES = ["O2", "H2O", "O3"]
 
 def planck(temp, plot=False):
     '''plot planck's distribution at a given temperature. Returns two numpy
@@ -57,11 +57,42 @@ def get_transmittance(specie, lu):
         trans_v_wave.append([wavelength, transmittance])
 
     trans_v_wave.sort(key=lambda x:x[0]) # sort by wavelength
-    print(trans_v_wave)
 
-    return
+    # return array of transmittance values
+    
+    print(np.array([get_trans_value(x, trans_v_wave) for x in lu]))
+
+    return np.array([get_trans_value(x, trans_v_wave) for x in lu])
+
+def get_trans_value(wavelength, trans_v_wave):
+    '''returns the transmittance of a certain wavelength given the
+    wavelength (single float) and a sorted array with the [lu, transmittance]
+    values'''
+
+    # iterate through transmittance array, looking for the two wavelengths
+    # around the passed value
+    for i in range(len(trans_v_wave)):
+        # exact match
+        if wavelength == trans_v_wave[i][0]:
+            return trans_v_wave[i][1]
+        # reached end of array - use last value
+        if i == len(trans_v_wave) - 1:
+            return trans_v_wave[-1][1]
+        # found two elements around passed wavelength 
+        if wavelength > trans_v_wave[i][0] and wavelength < trans_v_wave[i+1][0]:
+            # interpolate
+            x1 = trans_v_wave[i][0]
+            x2 = trans_v_wave[i+1][0]
+            y1 = trans_v_wave[i][1]
+            y2 = trans_v_wave[i+1][1]
+            m = (y2 - y1)/(x2 - x1)     # slope between two array points
+
+            # interpolate transmittance at wavelength and return
+            return m * (wavelength - x1) + y1
 
 
 if __name__ == "__main__":
-    get_transmittance("O2", [])
-
+    lu = np.arange(1, 20, 0.1)
+    trans = get_transmittance("O3", lu)
+    plt.plot(lu, trans)
+    plt.show()
