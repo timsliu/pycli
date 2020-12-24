@@ -3,23 +3,25 @@ import matplotlib.pyplot as plt
 
 from constants import *
 
-LU_MAX = 0.1        # lowest wavelength considered (100 nm)
-LU_MIN = 40         # longest wavelength considered (40 um)
+LU_MIN = 0.1        # lowest wavelength considered (100 nm)
+LU_MAX = 40         # longest wavelength considered (40 um)
+LU_STEP = 0.1       # increment between wavelengths
+DEFAULT_TEMP = 300  # temperature in Kelvin
 
-SPECIES = ["O2", "H2O", "O3"]
+#SPECIES = ["O2", "H2O", "O3"]
+SPECIES = ["H2O"]
 
-def planck(temp, plot=False):
-    '''plot planck's distribution at a given temperature. Returns two numpy
-    arrays with the b (spectral radiance) and l (wavelength) values
+def planck(temp, lu, plot=False):
+    '''plot planck's distribution at a given temperature. 
+    inputs: temperature (float)
+            lu (array) list of wavelengths (in um) to calculate
+    output: b_norm(array) - normalized spectral radiance at each lu value
     '''
-    lu_start = LU_MIN
-    lu_stop  = LU_MAX
-    lu_step  = 0.1
 
-
-    lu = np.arange(lu_start, lu_stop, lu_step)   # wavelength in micrometers
+    lu_step = lu[1] - lu[0]
     l = lu/1e6                                   # wavelength in meters (MKS)
     b = 2 * h * c ** 2 / l ** 5 * 1/(np.exp(h*c/(l * Kb * temp)) - 1)
+
 
     # normalize so total adds to 1
     total_flux = sum(b) * lu_step                # approx integral of flux
@@ -29,7 +31,7 @@ def planck(temp, plot=False):
         plt.plot(lu, b_norm)
         plt.show()
 
-    return b_norm, lu
+    return b_norm
 
 
 def get_transmittance(specie, lu):
@@ -60,8 +62,6 @@ def get_transmittance(specie, lu):
 
     # return array of transmittance values
     
-    print(np.array([get_trans_value(x, trans_v_wave) for x in lu]))
-
     return np.array([get_trans_value(x, trans_v_wave) for x in lu])
 
 def get_trans_value(wavelength, trans_v_wave):
@@ -90,9 +90,33 @@ def get_trans_value(wavelength, trans_v_wave):
             # interpolate transmittance at wavelength and return
             return m * (wavelength - x1) + y1
 
+def total_absorbance(lu):
+    '''calculates the total absorbance of a collection of gas species
+    inputs: lu (array) - wavelengths to calculate absorbance at in um
+    outputs: total_absorbance (array) absorbance at each wavelength'''
+
+    total_absorbance = [0 for x in range(len(lu))]  # total abs. of all specie
+    for specie in SPECIES:
+        transmittance = get_transmittance(specie, lu)
+        # convert transmittance to absorbance
+        absorbance = [1 - x for x in transmittance]
+        # sum absorbances and put ceiling at 1
+        for i in range(len(total_absorbance)):
+            total_absorbance[i] += absorbance[i]
+        total_absorbance = [min(x, 1) for x in total_absorbance]
+
+    return total_absorbance
+
+
 
 if __name__ == "__main__":
-    lu = np.arange(1, 20, 0.1)
-    trans = get_transmittance("O3", lu)
-    plt.plot(lu, trans)
-    plt.show()
+    lu = np.arange(LU_MIN, LU_MAX, LU_STEP)   # wavelength in micrometers
+    total_abs = total_absorbance(lu)
+    b_norm = planck(DEFAULT_TEMP, lu)
+    avg_absorb = 0
+
+    for i in range(len(total_abs)):
+        avg_absorb += LU_STEP * total_abs[i] * b_norm[i]
+
+    print("Average absorbance: {}".format(avg_absorb))
+
