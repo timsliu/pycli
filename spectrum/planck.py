@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 from constants import *
 
-LU_MIN = 0.1        # lowest wavelength considered (100 nm)
-LU_MAX = 40         # longest wavelength considered (40 um)
+LU_MIN = 1        # lowest wavelength considered (100 nm)
+LU_MAX = 15         # longest wavelength considered (40 um)
 LU_STEP = 0.1       # increment between wavelengths
 DEFAULT_TEMP = 300  # temperature in Kelvin
 
@@ -90,33 +90,45 @@ def get_trans_value(wavelength, trans_v_wave):
             # interpolate transmittance at wavelength and return
             return m * (wavelength - x1) + y1
 
-def total_absorbance(lu):
-    '''calculates the total absorbance of a collection of gas species
+def total_transmittance(lu):
+    '''calculates the total transmittance of a collection of gas species
     inputs: lu (array) - wavelengths to calculate absorbance at in um
-    outputs: total_absorbance (array) absorbance at each wavelength'''
+    outputs: total_transmittance (array) transmittance at each wavelength'''
 
-    total_absorbance = [0 for x in range(len(lu))]  # total abs. of all specie
+    total_trans = [1 for x in range(len(lu))]  # total trans. of all specie
     for specie in SPECIES:
         transmittance = get_transmittance(specie, lu)
-        # convert transmittance to absorbance
-        absorbance = [1 - x for x in transmittance]
-        # sum absorbances and put ceiling at 1
-        for i in range(len(total_absorbance)):
-            total_absorbance[i] += absorbance[i]
-        total_absorbance = [min(x, 1) for x in total_absorbance]
+        # transmitttance of multiple species is product of ind. transmittance 
+        for i in range(len(total_trans)):
+            total_trans[i] *= transmittance[i]
+        total_trans = [min(x, 1) for x in total_trans]
 
-    return total_absorbance
-
+    return total_trans
 
 
 if __name__ == "__main__":
     lu = np.arange(LU_MIN, LU_MAX, LU_STEP)   # wavelength in micrometers
-    total_abs = total_absorbance(lu)
+
+    plt.figure(1)
+    for specie in SPECIES:
+        trans = get_transmittance(specie, lu)
+        print(specie)
+        print(trans)
+        plt.plot(lu, trans)
+        plt.title(specie)
+    
     b_norm = planck(DEFAULT_TEMP, lu)
-    avg_absorb = 0
+    plt.figure(2) 
+    plt.plot(lu, b_norm)
 
-    for i in range(len(total_abs)):
-        avg_absorb += LU_STEP * total_abs[i] * b_norm[i]
+    plt.show()
+    #total_trans = total_transmittance(lu)
+    #b_norm = planck(DEFAULT_TEMP, lu)
+    #avg_trans = 0
 
-    print("Average absorbance: {}".format(avg_absorb))
+    ## riemann sum product of transmittance and intensity at each wavelength
+    #for i in range(len(total_trans)):
+    #    avg_trans += LU_STEP * total_trans[i] * b_norm[i]
+
+    #print("Average transmittance: {}".format(avg_trans))
 
