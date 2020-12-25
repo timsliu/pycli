@@ -3,13 +3,12 @@ import matplotlib.pyplot as plt
 
 from constants import *
 
-LU_MIN = 1        # lowest wavelength considered (100 nm)
+LU_MIN = 1          # lowest wavelength considered (100 nm)
 LU_MAX = 15         # longest wavelength considered (40 um)
 LU_STEP = 0.1       # increment between wavelengths
 DEFAULT_TEMP = 300  # temperature in Kelvin
 
-#SPECIES = ["O2", "H2O", "O3"]
-SPECIES = ["H2O"]
+SPECIES = ["H2O", "O3"]
 
 def planck(temp, lu, plot=False):
     '''plot planck's distribution at a given temperature. 
@@ -48,7 +47,7 @@ def get_transmittance(specie, lu):
         print("Specie {} not recognized".format(specie))
         return []
 
-    with open("{}_points.txt".format(specie), "r") as f:
+    with open("{}_linear_points.txt".format(specie), "r") as f:
         trans_data_raw = f.readlines()   # get strings with "wavelength, trans"
 
     trans_v_wave = []                    # build list of transmittance v lambda
@@ -121,14 +120,14 @@ if __name__ == "__main__":
     plt.figure(2) 
     plt.plot(lu, b_norm)
 
+    total_trans = total_transmittance(lu)
+    b_norm = planck(DEFAULT_TEMP, lu)
+    avg_trans = 0
+
+    # riemann sum product of transmittance and intensity at each wavelength
+    for i in range(len(total_trans)):
+        avg_trans += LU_STEP * total_trans[i] * b_norm[i]
+
+    print("Average transmittance: {}".format(avg_trans))
     plt.show()
-    #total_trans = total_transmittance(lu)
-    #b_norm = planck(DEFAULT_TEMP, lu)
-    #avg_trans = 0
-
-    ## riemann sum product of transmittance and intensity at each wavelength
-    #for i in range(len(total_trans)):
-    #    avg_trans += LU_STEP * total_trans[i] * b_norm[i]
-
-    #print("Average transmittance: {}".format(avg_trans))
 
