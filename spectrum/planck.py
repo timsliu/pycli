@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 from constants import *
 
-LU_MIN = 1          # lowest wavelength considered (100 nm)
-LU_MAX = 15         # longest wavelength considered (40 um)
+LU_MIN = 1          # lowest wavelength considered (um)
+LU_MAX = 30         # longest wavelength considered (um)
 LU_STEP = 0.1       # increment between wavelengths
 DEFAULT_TEMP = 300  # temperature in Kelvin
 

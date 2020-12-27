@@ -78,40 +78,91 @@
 
 \newpage
 
+% Introduction
 \section{Introduction}
 PyCli uses a discrete energy balance model for modeling temperatures across the globe. The planet is discretized into a grid with the size of each grid cell a fixed number of degrees latitude and longitude. Since the number of cells at each latitude band is fixed, the cells closer to the poles are smaller than the cells at the equator.
 
-Energy balance models balance the incoming solar radiation with outgoing blackbody radiation to calculate the surface temperature:
+This document describes the PyCli backend climate model. Several versions of the model are implemented in C++ in the \textbf{src} folder. This document focuses on the physics of the model, and does not elaborate on how it is actually implemented.
 
-$$E_{in} = E_{out}$$
+The energy balance models described in \hyperref[sec:model]{Section 2} balances the incoming solar radiation with outgoing radiation to calculate the surface temperature. The incoming radiation is determined by the latitude of the cell, and the calculations for finding the incoming radiation for each cell is described in \hyperref[sec:radiation]{Section 3}.  The surface is treated as having one of several types: ocean, land, and ice. Each of the surface types has an associated albedo, and more details can be found in \hyperref[sec:surface]{Section 3}. The atmosphere is the most complex piece of the model, and is described in \hyperref[sec:atmos]{Section 4}. The greenhouse gas is calculated by considering the infrared transmissivity of the atmosphere, combined with the adding radiation forcing of carbon dioxide. Finally, a crude model for heat distribution between cells based on a 2D convolution is described in \hyperref[sec:heatflow]{Section 5}.
 
-The incoming radiation is determined by the latitude of the cell. The outgoing radiation can be expressed as:
+% Two Layer Energy Balance Model
+\newpage
+\section{Energy Balance Model}
+\label{sec:model}
 
-$$E_{out} = \epsilon \sigma T_{S}^{4} \tau _{a}$$
+\subsection{Two Layer Energy Balance Model}
 
-Where $\epsilon$ is the emissivity (roughly 0.97) and $\tau _{a}$ is the infrared transmissivity of the atmosphere. The infrared transmissivity of the atmosphere is determined by the concentration of greenhouse gases. The PyCli climate model computes the temperature at each surface cell using the earth balance model. A 2D convolution is then performed over the grid cells to represent the distribution of heat from air and water circulation.
+PyCli uses a fairly simple variation of the two layer energy balance model to calculate temperatures at each element in the grid. The same set of calculations are performed for each grid element, with the albedo and incoming solar radiation dependent on each individual element. The energy balance model is illustrated in Figure~\ref{fig:2layer}. Note that the PyCli model uses a variation of the two layer model described in this subsection - the modification is described in the next section.
 
-\section{Atmosphere}
+\begin{figure}[H]
+	\makebox[\textwidth][c]{\includegraphics[width=4in]{2layer.png}}
+	\caption{Two layer energy balance model. Note that the radiation forcing from carbon dioxide is not included in the model.}
+	\label{fig:2layer}
+\end{figure}
 
-\section{Surface}
+The atmosphere is modeled as a single layer that is transparent to incoming solar radiation. The solar radiation is partly reflected (not illustrated) and the remaining absorbed solar radiation is re-emitted as infrared radiation. The emission from the surface is modeled by Planck's law as blackbody radiation. The atmosphere is partially opaque to the outgoing infrared radiation. The absorbed radiation is then re-emitted, with half of the radiation emitted into space and the other half emitted back to the surface.
+
+The energy balance at the top of the atmosphere is described by:
+
+$$E_{in}(1-A)  = (1-f) \sigma T_0^4 + f \sigma T_1^4$$
+
+where $f$ is the fraction of infrared energy absorbed by the atmosphere, $A$ is the albedo of the surface, and $E_{in}$ is the average power per unit area of the surface. This equation balances the incoming solar radiation that is not reflected with the outgoing infrared energy emitted by the surface that passes through the atmosphere and the infrared energy emitted by the atmosphere, respectively. Note that in Figure~\ref{fig:2layer} the incoming energy is expressed as $\frac{1}{4}$ the sun's radiation while in the equation we have simplified this to the average power across all times of day.
+
+The energy balance at the atmosphere layer is: 
+$$2f\sigma T_1^4 = f\sigma T_o^4$$
+
+which balances the infrared energy emitted by the atmosphere with the energy emitted by the surface absorbed by the atmosphere.
+
+Combining these equations gives us equations for the temperature at the surface and the atmosphere:
+
+$$T_0 = \bigg( \frac{(1-A)E_{in}}{\sigma(1-\frac{f}{2})}  \bigg)^{\frac{1}{4}}$$
+
+$$T_1 =  2^{-\frac{1}{4}} T_0 $$
+
+\subsection{Modified Two Layer Energy Balance Model}
+
+The two layer energy balance model requires a fraction $f$ that describes the fraction of infrared radiation absorbed by the atmosphere. Specifically, the model demands an expression for $f$ in terms of the concentrations of different greenhouse gases, primarily carbon dioxide, water vapor, and ozone. However, computing this function is non-trivial, and the PyCli model makes a simplification that divides greenhouse gases into two categories.
+
+Water vapor and ozone are considered ``constant greenhouse gases" whose concentration is fixed. The value of $f$ for just these two constant greenhouse gases is described in \hyperref[sec:atmos]{Section 4}. Carbon dioxide is considered a ``varying greenhouse gas" whose concentration can be changed and is an input to the model. Rather than calculating carbon dioxides contribution to $f$, the PyCli model uses the following empirical equation from Myhre et al. (1998):
+
+$$ E_{CO_2} = 5.35 W m^{-2} ln \frac{[CO_2]}{280ppm}$$
+
+The contribution from carbon dioxide is directly calculated using this formula and added to the downward emitted from the atmosphere towards the ground.
 
 
+The energy balance at the top of the atmosphere remains the same:
+
+$$ E_{in}(1-A)  = (1-f) \sigma T_0^4 + f \sigma T_1^4$$
+
+While the energy balance between the surface and the atmosphere becomes:
+
+The energy balance at the atmosphere layer is: 
+$$2f\sigma T_1^4 + E_{CO_2} = f\sigma T_o^4$$
+
+Combining these two equations again gives us expressions for the surface temperature:
+
+$$\boxed{T_0 = \bigg[ \bigg((1-A)E_{in} + \frac{E_{CO_2}}{2}\bigg)\bigg(\frac{1}{\sigma(1-\frac{f}{2})}\bigg)\bigg] ^{\frac{1}{4}}}$$
+
+% Incoming Solar Radiation
+\newpage
 \section{Incoming Solar Radiation}
+\label{sec:radiation}
 
 The solar radiation falling on the entire Earth is:
 
-$$E_{in} = W_{sun} \pi r_{Earth}^2$$
+$$E_{total} = E_{sun} \pi r_{Earth}^2$$
 
 Consider the Earth as a flat disc perpendicular to the direction of the sun. The sunlight falling on a horizontal strip is:
 
-$$E_{in} = 2 W_{sun} \int_{x_0}^{x_f} \sqrt{r_{E}^2 - x^2} dx$$
+$$E_{strip} = 2 E_{sun} \int_{x_0}^{x_f} \sqrt{r_{E}^2 - x^2} dx$$
 
 
 where $x_0$ and $x_f$ are the distances from the equator of the bottom and top of the strip. Integrating to the get the closed form:
 
-$$E_{in} = 2 W_{sun} \frac{1}{2} x \sqrt{r_{E}^2 - x^2} - \frac{1}{2} r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}$$
+$$E_{strip} = 2 E_{sun} \frac{1}{2} x \sqrt{r_{E}^2 - x^2} - \frac{1}{2} r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}$$
 
-$$E_{in} = W_{sun} x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}$$
+$$E_{strip} = W_{sun} x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}$$
 
 However, the boundaries between the cells are defined by lines of latitude rather than as a distance from the equator of a flat disc. The substitution: 
 
@@ -124,13 +175,13 @@ $$A_{strip} = \int_{\theta_{0}}^{\theta_{f}} 2 \pi r_{E} \cos{\theta} r d\theta 
 
 where $2 \pi r_{E} \cos{\theta}$ is the circumference of the earth at a certain latitude and $r d\theta$ is the north-south distance of a differential along the surface of the earth. This can be simplified to:
 
-$$A_{strip} =  2 \pi r_{E}^2 \sin{\theta} $$
+$$A_{strip} =  2 \pi r_{E}^2 \sin{\theta}\bigg]_{x_0}^{x_f} $$
 
-The average solar flux falling on a cell is:
+The average solar flux falling on a cell in a strip bound by $\theta_0$ and $\theta_f$ is:
 
-$$E_{in} = \frac{flux_{total}}{A_{strip}}$$
+$$E_{in} = \frac{E_{strip}}{A_{strip}}$$
 
-$$\boxed{E_{in} = W_{sun}\frac{x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{x_0}^{x_f}}{2 \pi r_{E}^2 \sin{\theta}]_{\theta_0}^{\theta^f}}}$$
+$$\boxed{E_{in} = E_{sun}\frac{x \sqrt{r_{E}^2 - x^2} -  r_{E}^2 \tan^{-1}\bigg({\frac{x \sqrt{r_{E}^2 - x^2}}{x^2 - r_{E}^2 }}\bigg)\bigg]_{r_{E}\sin(\theta_0)}^{r_{E}\sin(\theta_f)}}{2 \pi r_{E}^2 \sin{\theta}]_{\theta_0}^{\theta^f}}}$$
 
 Please note that the argument of the $\tan^{-1}$ approaches $-\infty$ as $x$ approaches $r_{E}$. The limit of $\tan^{-1}$ approaches $-\frac{\pi}{2}$ so when $x = r_{E}$ the numerator reduces to:
 
@@ -140,7 +191,19 @@ $$0 -  r_{E}^2 (-\frac{\pi}{2})$$
 
 $$\frac{r_{E}^2 \pi}{2}$$
 
-\section{Infrared transmissivity}
+% Surface
+\newpage
+\section{Surface}
+\label{sec:surface}
+
+
+% Atmosphere
+\newpage
+\section{Atmosphere}
+\label{sec:atmos}
+
+
+\subsection{Infrared transmissivity}
 
 Infrared transmissivity is the fraction of energy radiated by the Earth's surface that escapes into space. On an airless world, the infrared transmissivity should be 1. On a planet with an atmosphere, greenhouse gases block some of the energy.
 
@@ -170,10 +233,31 @@ The expression $A(\lambda)$ is illustrated in Figure~\ref{fig:absorption}.
 
 The PyCli model treats the atmosphere as a uniform layer above the surface. The atmosphere is transparent to incoming light, but absorbs a fraction of the outgoing infrared energy. The absorption is described by the function $A(\lambda)$. Half of the infrared energy absorbed by the atmosphere is emitted upwards into space while the other half is emitted downwards to the surface.
 
-The concentration of greenhouse gases is taken into account in two ways. Gases that are approximated as having fixed concentration (water vapor, oxygen) are included in the shell atmosphere model. Carbon dioxide is treated with varying concentration, and its effect is described by the empirical equation from Myhre et al. (1998):
+The concentration of greenhouse gases is taken into account in two ways. Gases that are approximated as having fixed concentration (water vapor, oxygen) are included in the shell atmosphere model. 
+%heat flow
+\newpage
+\section{Heat Flow}
+\label{sec:heatflow}
 
-$$\Delta Q (CO_2) = 5.35 W m^{-2} ln \frac{[CO_2]}{280ppm}$$
+%Appendix 1
+\newpage
+\section{Appendix 1: Variable names}
 
-The contribution from carbon dioxide is directly calculated using this formula and added to the downward radiation.
+\begin{center}
+\begin{tabular}{|m{2 cm}| m{6 cm}| m{6 cm}|} \hline
+\textbf{Variable} & \textbf{Description} & \textbf{Units}\\ \hline
+$E_in$ & Incoming solar radiation & watts per square meter\\ \hline
+$A$ & Albedo & fraction\\ \hline
+$f$  & fraction of outgoing infrared radiation absorbed by atmosphere & fraction \\ \hline
+\end{tabular}
+\end{center}
+
+
+% references
+\newpage
+\section{References}
+\label{sec:references}
+
+
 
 \end{document}
