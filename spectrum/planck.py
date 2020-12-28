@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 from constants import *
 
 LU_MIN = 1          # lowest wavelength considered (um)
-LU_MAX = 30         # longest wavelength considered (um)
+LU_MAX = 40         # longest wavelength considered (um)
 LU_STEP = 0.1       # increment between wavelengths
-DEFAULT_TEMP = 300  # temperature in Kelvin
+DEFAULT_TEMP = 288  # temperature in Kelvin
 
 SPECIES = ["H2O", "O3"]
 
@@ -27,8 +27,7 @@ def planck(temp, lu, plot=False):
     b_norm = b/total_flux
     
     if plot:
-        plt.plot(lu, b_norm)
-        plt.show()
+        plt.plot(lu, b_norm, label = "{} K".format(temp))
 
     return b_norm
 
@@ -121,6 +120,10 @@ if __name__ == "__main__":
     plt.plot(lu, b_norm)
 
     total_trans = total_transmittance(lu)
+    plt.figure(3)
+    plt.plot(lu, total_trans)
+    plt.xlabel("Wavelength (um)")
+    plt.ylabel("Fraction energy transmitted")
     b_norm = planck(DEFAULT_TEMP, lu)
     avg_trans = 0
 
@@ -128,6 +131,13 @@ if __name__ == "__main__":
     for i in range(len(total_trans)):
         avg_trans += LU_STEP * total_trans[i] * b_norm[i]
 
+    plt.figure(4)
+    for temp in [270, 285, 300, 315]:
+        planck(temp, lu, plot=True)
+
+    plt.legend()
+    plt.xlabel("Wavelength (um)")
+    plt.ylabel("Spectral Radiance")
     print("Average transmittance: {}".format(avg_trans))
     plt.show()
 

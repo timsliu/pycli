@@ -5,8 +5,9 @@
 \contentsline {section}{\numberline {3}Incoming Solar Radiation}{7}{section.3}
 \contentsline {section}{\numberline {4}Surface}{9}{section.4}
 \contentsline {section}{\numberline {5}Atmosphere}{10}{section.5}
-\contentsline {subsection}{\numberline {5.1}Infrared transmissivity}{10}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.1}Infrared Absorption}{10}{subsection.5.1}
 \contentsline {subsection}{\numberline {5.2}Creating an expression for $A(\lambda )$}{11}{subsection.5.2}
-\contentsline {section}{\numberline {6}Heat Flow}{12}{section.6}
-\contentsline {section}{\numberline {7}Appendix 1: Variable names}{13}{section.7}
-\contentsline {section}{\numberline {8}References}{14}{section.8}
+\contentsline {subsection}{\numberline {5.3}Value of $f$}{12}{subsection.5.3}
+\contentsline {section}{\numberline {6}Heat Flow}{14}{section.6}
+\contentsline {section}{\numberline {7}Appendix 1: Variable names}{15}{section.7}
+\contentsline {section}{\numberline {8}References}{16}{section.8}

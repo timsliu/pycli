@@ -196,48 +196,89 @@ $$\frac{r_{E}^2 \pi}{2}$$
 \section{Surface}
 \label{sec:surface}
 
+In the PyCli model, the surface can be one of three types: land, sea, and ice. Each of the three types has a different albedo:
+
+\begin{center}
+\begin{tabular}{|m{4 cm}| m{2 cm}|} \hline
+\textbf{Type} & \textbf{Albedo} \\ \hline
+Land & 0.2\\ \hline
+Sea & 0.06\\ \hline
+Ice & 0.6\\ \hline
+\end{tabular}
+\end{center}
+
+Regardless of the calculated temperature, the surface types do not change.
+
 
 % Atmosphere
 \newpage
 \section{Atmosphere}
 \label{sec:atmos}
 
+The PyCli atmosphere is uniform around the globe. It is modeled as a single layer that is transparent to incoming visible light but partially absorbs outgoing infrared light. The subsections below describe how the fraction of infrared energy absorbed by the atmosphere $f$ is calculated, which is then input into the energy balance model.
 
-\subsection{Infrared transmissivity}
+Only some gases are considered. Nitrogen and oxygen are both included in the model, but are considered inert. There is a fixed amount of ozone and water vapor, which both contribute a constant amount to infrared absorption. Finally, the level of carbon dioxide can be changed by the user. Carbon dioxide does not contribute to the infrared absorption of the atmosphere; instead, the radiative forcing from $CO_2$ is directly added to the energy balance model.
 
-Infrared transmissivity is the fraction of energy radiated by the Earth's surface that escapes into space. On an airless world, the infrared transmissivity should be 1. On a planet with an atmosphere, greenhouse gases block some of the energy.
+
+\subsection{Infrared Absorption}
+
+Some of the infrared energy radiated by the Earth's surface is absorbed by the atmosphere. The presence of greenhouse gases contributes to how much of the infrared energy is absorbed.
 
 The energy emitted by the Earth is approximated by blackbody radiation described by Planck's law:
 
-Figure X illustrates Planck's law at different temperatures close to Earth's surface temperature. The energy absorbed by the atmosphere can be calculated by integrating over the absorption spectrum of greenhouse gases. Assume we have a function $A(\lambda)$ that describes the fraction of energy absorbed by the atmosphere at different frequencies. The total fraction of energy absorbed by the atmosphere is then:
+\begin{figure}[H]
+	\makebox[\textwidth][c]{\includegraphics[width=3in]{planck_law.png}}
+	\caption{Spectral radiance as a function of wavelength and temperature.}
+	\label{fig:planck_law}
+\end{figure}
+
+Figure~\ref{fig:planck} illustrates Planck's law at different temperatures close to Earth's surface temperature. The energy absorbed by the atmosphere can be calculated by integrating over the absorption spectrum of greenhouse gases. 
+
+\begin{figure}[H]
+	\makebox[\textwidth][c]{\includegraphics[width=5in]{planck.png}}
+	\caption{Spectral radiance as a function of wavelength and temperature.}
+	\label{fig:planck}
+\end{figure}
+
+Assume we have a function $A(\lambda)$ that describes the fraction of energy absorbed by the atmosphere at different frequencies. The total fraction of energy absorbed by the atmosphere is then:
 
 $$\frac{\int_{\lambda_0}^{\lambda_f} A(\lambda) B(\lambda, T) d\lambda}{\int_{\lambda_0}^{\lambda_f} B(\lambda, T) d\lambda }$$
 
-Note that we've reformulated Planck's law in terms of wavelength instead of frequency. We can use a Gaussian distribution to approximate the energy distribution from Planck's law. This substitution is valid because at the temperatures we're interested in (Earth's surface temperature) the energy distribution from Planck's law is well approximated by a Gaussian. Since the integral of a Gaussian is 1, this also simplifies our expression to:
-
-$$\int_{\lambda_0}^{\lambda_f} A(\lambda) B'(\lambda, T) d\lambda$$
-
-where $B'$ is the Gaussian approximation of $B(\lambda, T)$. However, note that the function $B`(\lambda, T)$ is dependent on surface temperature, which is the expression we're ultimately trying to solve for! Another approximation made in the PyCli model is that the \textit{normalized} energy emission curve given by Planck's Law at the temperatures we're interested is not strongly temperature dependent.
+Note that we've reformulated Planck's law in terms of wavelength instead of frequency. However, note that the expression for $B$ is dependent on surface temperature, which is the value we're ultimately trying to solve for! As an approximation, we choose a temperature of 288 K, which is close to Earth's average surface temperature, as an input into Planck's law to create the distribution of emitted energy.
 
 \subsection{Creating an expression for $A(\lambda)$}
 
-In the previous step we assumed we had an expression for $A(\lambda)$ to calculate the fraction of energy absorbed. This section describes how we actually derive this expression. Figure~\ref{fig:absorption} gives the fraction of energy absorbed by water vapor and carbon dioxide, the two greenhouse gases considered by PyCli.
+In the previous step we assumed we had an expression for $A(\lambda)$ to calculate the fraction of infrared energy absorbed by the atmosphere. This subsection describes how this expression is actually derived. The PyCli model considers two constant greenhouse gases that contribute to $f$, the fraction of light absorbed by the atmosphere: ozone and water vapor.  Figure~\ref{fig:absorb} shows how much IR these two gases absorb.
 
 \begin{figure}[H]
-	\makebox[\textwidth][c]{\includegraphics[width=3.8in]{absorption.jpg}}
-	\caption{Fraction of radiation emitted from Earth's surface absorbed by selected gases in the atmosphere.}
-	\label{fig:absorption}
+	\makebox[\textwidth][c]{\includegraphics[width=5in]{absorb.png}}
+	\caption{Fraction of IR absorbed by ozone and water vapor as a function of wavelength. Note that the y-axis is inverted.}
+	\label{fig:absorb}
 \end{figure}
 
-The expression $A(\lambda)$ is illustrated in Figure~\ref{fig:absorption}.
+The IR light that is not absorbed is transmitted. The combined transmittance of multiple gases is the product of the transmittance of the individual species. By combining the absorption of the constant greenhouse gases, Figure~\ref{fig:combine_absorb} gives the absorption of the atmosphere as a function of wavelength, $A(\lambda)$.
 
-The PyCli model treats the atmosphere as a uniform layer above the surface. The atmosphere is transparent to incoming light, but absorbs a fraction of the outgoing infrared energy. The absorption is described by the function $A(\lambda)$. Half of the infrared energy absorbed by the atmosphere is emitted upwards into space while the other half is emitted downwards to the surface.
+\begin{figure}[H]
+	\makebox[\textwidth][c]{\includegraphics[width=5in]{combine_absorb.png}}
+	\caption{Fraction of IR absorbed by the constant greenhouse gases in PyCli as a function of wavelength.}
+	\label{fig:combine_absorb}
+\end{figure}
 
-The concentration of greenhouse gases is taken into account in two ways. Gases that are approximated as having fixed concentration (water vapor, oxygen) are included in the shell atmosphere model. 
+\subsection{Value of $f$}
+The value of $f$ can be calculated by integrating the fraction of energy absorbed multiplied by the fraction of energy emitted as a function of wavelength. This is the same as integrating the product of Figure~\ref{fig:combine_absorb} and Figure~\ref{fig:planck}. The limits of integration is the range of wavelengths where a significant amount of energy is emitted. 
+
+$$\frac{\int_{\lambda_0}^{\lambda_f} A(\lambda) B(\lambda, T) d\lambda}{\int_{\lambda_0}^{\lambda_f} B(\lambda, T) d\lambda }$$
+
+Integrating numerically gives a final value for $f$ of \textbf{0.665} with $\lambda_0 = 1um$ and $\lambda_f = 40 um$.
+
 %heat flow
 \newpage
 \section{Heat Flow}
 \label{sec:heatflow}
+
+A simple model is used to simulate how heat moves between adjacent squares. After the temperatures are calculated using the energy balance model, a 2D convolution is applied over the surface. The convolution uses a Gaussian kernel with a width that is equal to 10\% of the circumference of the planet. For example, if the surface is 900 squares wide then the kernel has 90 elements.
+
+The grid is treated as if it's wrapped around a cylinder in the convolution. Grid elements on the far right edge of the grid are considered to be adjacent to the elements on the far left edge. The top and bottom (north and south) edges do not wrap over the poles; instead, the top and bottom most boundary values are repeated in the convolution.
 
 %Appendix 1
 \newpage

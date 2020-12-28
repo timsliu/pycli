@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  26 DEC 2020 21:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  28 DEC 2020 14:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -712,63 +712,90 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 75.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (./pycli.toc)
+) (./pycli.toc
+[1
+
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}])
 \tf@toc=\write4
 \openout4 = `pycli.toc'.
 
 
-[1
-
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2] [3] <2layer.png, id=87, 524.96124pt x 277.035pt>
+[2] [3] <2layer.png, id=92, 524.96124pt x 277.035pt>
 File: 2layer.png Graphic file (type png)
  <use 2layer.png>
 Package pdftex.def Info: 2layer.png used on input line 99.
 (pdftex.def)             Requested size: 289.07999pt x 152.55994pt.
- [4 <./2layer.png>] [5] [6] [7] [8] [9]
+ [4 <./2layer.png>] [5] [6] [7] [8] [9] <planck_law.png, id=131, 752.8125pt x 6
+30.355pt>
+File: planck_law.png Graphic file (type png)
+
+<use planck_law.png>
+Package pdftex.def Info: planck_law.png used on input line 230.
+(pdftex.def)             Requested size: 216.81pt x 181.53825pt.
+ <planck.png, id=133, 827.4915pt x 295.94565pt>
+File: planck.png Graphic file (type png)
+
+<use planck.png>
+Package pdftex.def Info: planck.png used on input line 238.
+(pdftex.def)             Requested size: 361.34999pt x 129.23656pt.
+ [10 <./planck_law.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 222.
+(hyperref)                removing `math shift' on input line 249.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\lambda' on input line 222.
+(hyperref)                removing `\lambda' on input line 249.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 222.
+(hyperref)                removing `math shift' on input line 249.
 
-[10] <absorption.jpg, id=132, 251.3461pt x 130.46974pt>
-File: absorption.jpg Graphic file (type jpg)
- <use absorption.jpg>
-Package pdftex.def Info: absorption.jpg used on input line 227.
-(pdftex.def)             Requested size: 274.6262pt x 142.55359pt.
+<absorb.png, id=142, 1023.825pt x 453.695pt>
+File: absorb.png Graphic file (type png)
+ <use absorb.png>
+Package pdftex.def Info: absorb.png used on input line 254.
+(pdftex.def)             Requested size: 361.34999pt x 160.1248pt.
+ [11 <./planck.png>] <combine_absorb.png, id=150, 827.4915pt x 295.5843pt>
+File: combine_absorb.png Graphic file (type png)
 
-[11 <./absorption.jpg>] [12] [13]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 263.
- [14]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 263.
+<use combine_absorb.png>
+Package pdftex.def Info: combine_absorb.png used on input line 262.
+(pdftex.def)             Requested size: 361.34999pt x 129.07877pt.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 267.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 267.
+
+[12 <./absorb.png> <./combine_absorb.png>] [13] [14] [15]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 304.
+ [16]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 304.
  (./pycli.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 263.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 263.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 304.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 304.
 Package rerunfilecheck Info: File `pycli.out' has not changed.
-(rerunfilecheck)             Checksum: 537079E369B904772A1C1B4F3F9FA73A;721.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 263.
+(rerunfilecheck)             Checksum: 7DC97951388126CBA5BC633147EBD461;777.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 304.
  ) 
 Here is how much of TeX's memory you used:
- 8973 strings out of 493089
- 129573 string characters out of 6134842
- 236086 words of memory out of 5000000
- 12298 multiletter control sequences out of 15000+600000
- 13169 words of font info for 51 fonts, out of 8000000 for 9000
+ 8995 strings out of 493089
+ 129931 string characters out of 6134842
+ 236415 words of memory out of 5000000
+ 12313 multiletter control sequences out of 15000+600000
+ 12822 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,12n,43p,990b,329s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,12n,43p,990b,340s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
@@ -779,12 +806,11 @@ ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loc
 al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/
 texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/tex
 live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
-ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on pycli.pdf (14 pages, 543025 bytes).
+ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on pycli.pdf (16 pages, 943105 bytes).
 PDF statistics:
- 200 PDF objects out of 1000 (max. 8388607)
- 167 compressed objects within 2 object streams
- 29 named destinations out of 1000 (max. 500000)
- 107 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 223 PDF objects out of 1000 (max. 8388607)
+ 182 compressed objects within 2 object streams
+ 35 named destinations out of 1000 (max. 500000)
+ 130 words of extra memory for PDF output out of 10000 (max. 10000000)
 
