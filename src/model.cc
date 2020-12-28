@@ -21,7 +21,10 @@ inline double radForceTemp(double Ein, double albedo, double co2Level) {
 }
 
 inline double singleLayerTemp(double Ein, double albedo, double co2Level) {
-    return 0.0;
+    double ECo2 = CO2_CONST * log(co2Level/CO2_DENOM);
+    double term1 = (1-albedo) * Ein + ECo2/2;
+    double term2 = 1/SIGMA/(1-F/2);
+    return pow(term1 * term2, 0.25);
 }
 
 Model::Model(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
@@ -114,7 +117,7 @@ void SerialModel::calcTemps() {
         double Ein = EinArray[i];
         for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
             double albedo = albedoMap[surface[i][j]];
-            temps[i][j] = radForceTemp(Ein, albedo, co2Level);
+            temps[i][j] = singleLayerTemp(Ein, albedo, co2Level);
         }
     }
 
@@ -154,7 +157,7 @@ void AccelModel::calcTemps() {
         double Ein = EinArray[i];
         for (size_t j = 0; j < longCells; j++) {
             double albedo = albedoMap[surface[i][j]];
-            temps[i][j] = radForceTemp(Ein, albedo, co2Level);
+            temps[i][j] = singleLayerTemp(Ein, albedo, co2Level);
         }
     }
     // TODO perform fast convolution

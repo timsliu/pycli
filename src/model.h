@@ -16,6 +16,10 @@
 #define KERNEL_WIDTH 0.1     // size of conv kernel relative to x-dim, meaning cells within
                              // 5% of the earth will influence temperature of given cell
 
+#define CO2_CONST 5.35       // constant for co2 radiative forcing empirical equation
+#define CO2_DENOM 280        // denominator for co2 radiative forcing
+#define F         0.665      // fraction of IR absorbed by atmosphere
+
 /*
  * Helper functions related to calculating temperatres
  *
