@@ -16,6 +16,22 @@
 #define KERNEL_WIDTH 0.1     // size of conv kernel relative to x-dim, meaning cells within
                              // 5% of the earth will influence temperature of given cell
 
+/*
+ * Helper functions related to calculating temperatres
+ *
+ */
+
+inline double radForceTemp(double Ein, double albedo, double co2Level);
+
+inline double singleLayerTemp(double Ein, double albedo, double co2Level);
+
+
+
+/*
+ * Model base case for climate models
+ *
+ */
+
 class Model {
 
 protected:

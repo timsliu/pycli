@@ -14,6 +14,16 @@
 
 using namespace std;
 
+inline double radForceTemp(double Ein, double albedo, double co2Level) {
+    double radForc = CO2_HEATING * co2Level + H2O_POWER;  /* radiative forcing from ghg */
+    double rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
+    return pow(rhs, 0.25);
+}
+
+inline double singleLayerTemp(double Ein, double albedo, double co2Level) {
+    return 0.0;
+}
+
 Model::Model(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     _steps(steps), 
     _currentPlanet(planetStart),
@@ -73,6 +83,7 @@ void Model::outputResults() {
             id = to_string(i);
         }
 
+        cout << _outputDir << endl;
         ofstream tempFile(_outputDir + "/temp_" + id + ".txt");
         _computedPlanets[i].printPlanet(i, tempFile);
         tempFile.close();
@@ -103,9 +114,7 @@ void SerialModel::calcTemps() {
         double Ein = EinArray[i];
         for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
             double albedo = albedoMap[surface[i][j]];
-            double radForc = CO2_HEATING * co2Level + H2O_POWER;  /* radiative forcing from ghg */
-            double rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
-            temps[i][j] = pow(rhs, 0.25);
+            temps[i][j] = radForceTemp(Ein, albedo, co2Level);
         }
     }
 
@@ -136,7 +145,6 @@ void AccelModel::calcTemps() {
     double co2Level = _currentPlanet.getAtmosphere()["co2"];
 
     vector<double> EinArray = _currentPlanet.getRadIn();
-    double radForc = CO2_HEATING * co2Level + H2O_POWER;
 
     size_t latCells = _currentPlanet.getLatCells();
     size_t longCells = _currentPlanet.getLongCells();
@@ -146,9 +154,7 @@ void AccelModel::calcTemps() {
         double Ein = EinArray[i];
         for (size_t j = 0; j < longCells; j++) {
             double albedo = albedoMap[surface[i][j]];
-            /* greenhouse gas effect */
-            double rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
-            temps[i][j] = pow(rhs, 0.25);
+            temps[i][j] = radForceTemp(Ein, albedo, co2Level);
         }
     }
     // TODO perform fast convolution

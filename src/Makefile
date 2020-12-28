@@ -28,7 +28,7 @@ test/omp_test.o: test/omp_test.cc
 
 ##### Build Rules #####
 
-# build pycli
+# build pycli - does not run model
 pycli: $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 	mv *.o ../bin
