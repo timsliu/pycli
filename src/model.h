@@ -17,7 +17,7 @@
                              // 5% of the earth will influence temperature of given cell
 
 #define CO2_CONST 5.35       // constant for co2 radiative forcing empirical equation
-#define CO2_DENOM 280        // denominator for co2 radiative forcing
+#define CO2_DENOM 280E-6     // denominator for co2 radiative forcing
 #define F         0.665      // fraction of IR absorbed by atmosphere
 
 /*
@@ -60,6 +60,9 @@ public:
     
     // fill in the temperatures
     virtual void calcTemps() = 0;
+
+    // calculate average surface temperature
+    virtual void averageTemp() = 0;
 
 
     std::map<SurfaceType, double> albedoMap = {{land, 0.2}, {sea, 0.06}, {ice, 0.6}};

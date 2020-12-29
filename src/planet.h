@@ -31,7 +31,9 @@ private:
     std::vector<double> _radIn;        // incoming radiation for each latitude cell
 
     double _planetRadius{EARTH_RADIUS};
-   
+
+    float _averageTemp;                // average surface temperature (K)
+
     // private helper methods
     double calcFluxAntideri(double x);
 
@@ -62,8 +64,11 @@ public:
 
    void calcRadIn();
 
-
    void printPlanet(size_t step, std::ofstream& outFile);
+
+   float getAverageTemp() { return _averageTemp; }
+
+   void setAverageTemp(void temp);
 };
 
 #endif /* PLANET_H */

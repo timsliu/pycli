@@ -24,6 +24,7 @@ inline double singleLayerTemp(double Ein, double albedo, double co2Level) {
     double ECo2 = CO2_CONST * log(co2Level/CO2_DENOM);
     double term1 = (1-albedo) * Ein + ECo2/2;
     double term2 = 1/SIGMA/(1-F/2);
+
     return pow(term1 * term2, 0.25);
 }
 
@@ -121,7 +122,7 @@ void SerialModel::calcTemps() {
         }
     }
 
-    // kernel for convolution - update to be dynamic
+    // kernel for convolution
     vector<double> kernel = makeLinearKernel<double>(_currentPlanet.getLongCells(), _currentPlanet.getLatCells(), 0.1);
     serialConvolve<double>(temps, kernel);
 
