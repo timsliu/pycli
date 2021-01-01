@@ -4,6 +4,7 @@
 
 #include "test.h"
 #include "conv_test.h"
+#include "util_test.h"
 #include "omp_test.h"
 
 using namespace std;

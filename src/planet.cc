@@ -87,4 +87,6 @@ void Planet::printPlanet(size_t step, ofstream& outFile) {
     }
 }
 
-
+void setAverageTemp(float temp) {
+    _averageTemp = temp;
+}

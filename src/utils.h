@@ -16,5 +16,6 @@ void printAtmosphere(std::map<std::string, double>& atmo);
 
 void printAtmosList(std::vector<std::map<std::string, double>>& atmoList);
 
+float stripArea(int startIndex, float cellLatDegrees, float planetRadius);
 
 #endif /* UTILS_H */

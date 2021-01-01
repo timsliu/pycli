@@ -15,9 +15,10 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <iostream>
 
-#define SMALL_GRID 8
-#define LARGE_GRID 16
+#include "./../constant.h"
+
 #define MAX_ERRORS 10
 
 struct testType {

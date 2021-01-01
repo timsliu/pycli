@@ -128,6 +128,25 @@ void SerialModel::calcTemps() {
 
 }
 
+float SerialModel::averageTemp() {
+
+    vector<vector<<double>>& temps = _currentPlanet.getTemperature();
+
+    float areaTempProduct = 0.0;       /* product of area and temperature */
+    for (size_t i = 0; i < _currentPlanet.getLatCells(); i++ ){
+        float latAverage = 0.0;       /* average temperature of latitude band */
+
+        for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
+            latAverage += current
+        }
+
+    }
+
+    /* divide area temperature product by earth surface area to get avg temp */
+    return areaTempProduct / (4/3*PI*pow(EARTH_RADIUS, 3));
+
+}
+
 
 /*
  * Parallel model methods

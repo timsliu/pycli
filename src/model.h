@@ -62,7 +62,7 @@ public:
     virtual void calcTemps() = 0;
 
     // calculate average surface temperature
-    virtual void averageTemp() = 0;
+    virtual float averageTemp() = 0;
 
 
     std::map<SurfaceType, double> albedoMap = {{land, 0.2}, {sea, 0.06}, {ice, 0.6}};
