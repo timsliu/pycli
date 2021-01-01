@@ -20,7 +20,7 @@ parser.o: parser.cc planet.h utils.cc model.h
 
 utils.o: utils.cc utils.h
 
-test/unit_test.o: test/unit_test.cc test/conv_test.cc test/omp_test.cc utils.cc
+test/unit_test.o: test/unit_test.cc test/conv_test.cc test/omp_test.cc test/util_test.cc utils.cc
 
 test/conv_test.o: test/conv_test.cc
 

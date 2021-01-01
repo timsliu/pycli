@@ -20,8 +20,16 @@ int main(int argc, char *argv[]) {
                              "Check linear kernel has correct size and normalizes to 1", 
                              &linearKernel};
 
+    struct testType test2 = {"areaStripSymmetry",
+                             "Check area of strip above and below equator are the same",
+                             &areaStripSymmetry};
+    
+    struct testType test3 = {"areaStripSumEqual",
+                             "Sum of the area of strips should equal area of a sphere",
+                             &areaStripSumEqual};
+
     /* assemble testType structs into single vector */
-    vector<testType> allTests = {test0, test1};
+    vector<testType> allTests = {test0, test1, test2, test3};
     
     int success = allTests.size();       // counter for number of successful tests
     cout << endl;

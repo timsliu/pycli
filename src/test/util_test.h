@@ -4,7 +4,7 @@
 #ifndef UTIL_TEST_H
 #define UTIL_TEST_H
 
-#include "utils.h"
+#include "./../utils.h"
 
 #define TEST_RADIUS 100
 
