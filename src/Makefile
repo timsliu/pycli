@@ -4,7 +4,7 @@
 ##### Variables #####
 
 OBJS = planet.o model.o parser.o utils.o
-TEST_OBJS = test/unit_test.o test/conv_test.o test/omp_test.o test/util_test.o
+TEST_OBJS = test/unit_test.o test/conv_test.o test/omp_test.o test/util_test.o utils.o
 CXX = g++
 CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
 
@@ -20,11 +20,11 @@ parser.o: parser.cc planet.h utils.cc model.h
 
 utils.o: utils.cc utils.h
 
-test/unit_test.o: test/unit_test.cc test/conv_test.cc test/omp_test.cc
+test/unit_test.o: test/unit_test.cc test/conv_test.cc test/omp_test.cc utils.cc
 
 test/conv_test.o: test/conv_test.cc
 
-test/util_test.o: test/util_test.cc utils.cc
+test/util_test.o: utils.cc test/util_test.cc
 
 test/omp_test.o: test/omp_test.cc
 
