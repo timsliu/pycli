@@ -9,18 +9,24 @@
 using namespace std;
 
 
+/* returns if two values are "close" to each other */
+bool close(float a, float b) {
+    return abs(a - b)/a < 0.00001;
+}
+
+
 /***** Unit test functions *****/
 
 /* check that the area of strips above and below the equator are the same */
 int areaStripSymmetry() {
     int error = 0;
     
-    if (stripArea(0, 10, TEST_RADIUS) != stripArea(17, 10, TEST_RADIUS)) {
+    if (!close(stripArea(0, 10, TEST_RADIUS), stripArea(17, 10, TEST_RADIUS))) {
         error = 1; 
         cout << "Error! Strips at index 0 and 17 should have equal size" << endl;
     }
     
-    if (stripArea(24, 3.6, TEST_RADIUS) != stripArea(25, 3.6, TEST_RADIUS)) {
+    if (!close(stripArea(24, 3.6, TEST_RADIUS), stripArea(25, 3.6, TEST_RADIUS))) {
         error = 1; 
         cout << "Error! Strips at index 24 and 25 should have equal size" << endl;
     }
@@ -40,14 +46,14 @@ int areaStripSumEqual() {
 
     /* calculate area by summing the strips */
     for (int i = 0; i < numStrips; i++) {
-        stripTotalArea += stripArea(i, LAT_RANGE, TEST_RADIUS); 
+        stripTotalArea += stripArea(i, LAT_RANGE/numStrips, TEST_RADIUS); 
     }
 
     /* calculate area of the sphere */
-    float sphereArea = 4/3 * PI * pow(TEST_RADIUS, 3);
+    float sphereArea = 4.0 * PI * pow(TEST_RADIUS, 2);
 
     /* call error if the areas are not the same*/
-    if (abs(stripTotalArea - sphereArea)/sphereArea > 0.0001) {
+    if (!close(sphereArea, stripTotalArea)) {
         error = 1;
         cout << "Error! Area of sphere: " << sphereArea;
         cout << "  does not much sum of strips: " << stripTotalArea << endl;

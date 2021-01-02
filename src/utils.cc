@@ -56,12 +56,15 @@ void printAtmosList(vector<map<string, double>>& atmoList) {
 
 /* print the area of a latitude strip */
 float stripArea(int startIndex, float cellLatDegrees, float planetRadius) {
+
        /* top and bottom borders of the strip in radians*/ 
        float topBorderRad = (90 - startIndex * cellLatDegrees) * PI/180; 
        float botBorderRad = (90 - (startIndex + 1) * cellLatDegrees) * PI/180;
-    
+   
+
        /* surface area of the strip */
        float surfaceArea = 2 * PI * pow(planetRadius, 2) * (sin(topBorderRad) - sin(botBorderRad));
+
 
        return surfaceArea;
 

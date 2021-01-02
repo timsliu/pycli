@@ -8,6 +8,8 @@
 
 #define TEST_RADIUS 100
 
+bool close(float a, float b);
+
 int areaStripSymmetry();
 
 int areaStripSumEqual();
