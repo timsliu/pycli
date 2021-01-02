@@ -14,6 +14,10 @@
 
 using namespace std;
 
+/* Helper functions with different methods for calculating surface 
+ * temperature 
+ */
+
 inline double radForceTemp(double Ein, double albedo, double co2Level) {
     double radForc = CO2_HEATING * co2Level + H2O_POWER;  /* radiative forcing from ghg */
     double rhs = (((1 - albedo) * Ein) + radForc) /SIGMA;
@@ -27,6 +31,10 @@ inline double singleLayerTemp(double Ein, double albedo, double co2Level) {
 
     return pow(term1 * term2, 0.25);
 }
+
+/*
+ * Model base class
+ */
 
 Model::Model(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     _steps(steps), 
@@ -50,12 +58,15 @@ void Model::simClimate() {
     for (size_t i = 0; i < _steps; i++ ) {
         // set the atmosphere of the planet and calculate temperatures
         _currentPlanet.setAtmosphere(_allAtmos[i]);
+        /* calculate temperatures and the average temperature */ 
         calcTemps();
+        _currentPlanet.setAverageTemp(averageTemp());
 
         // add copy of current planet to the list of computed planets
         Planet lastPlanet = Planet(_currentPlanet);
         _computedPlanets.push_back(lastPlanet);
         _currentStep++;
+
     }
     auto end = chrono::system_clock::now();
     
@@ -77,6 +88,7 @@ void Model::outputResults() {
     }
 
     // print all of the planets
+    ofstream allTemp(_outputDir + "/allTemp.txt");
     for (size_t i = 0; i < _computedPlanets.size(); i++) {
         
         string id;
@@ -87,11 +99,15 @@ void Model::outputResults() {
             id = to_string(i);
         }
 
-        cout << _outputDir << endl;
+        /* output file with all temperatures */
         ofstream tempFile(_outputDir + "/temp_" + id + ".txt");
         _computedPlanets[i].printPlanet(i, tempFile);
         tempFile.close();
+
+        /* output average temperature at this step */
+        allTemp << "Step: " << i << " Average Temp: " << _computedPlanets[i].getAverageTemp() << endl;
     }
+    allTemp.close();
 }
 
 /*
@@ -130,20 +146,26 @@ void SerialModel::calcTemps() {
 
 float SerialModel::averageTemp() {
 
-    vector<vector<<double>>& temps = _currentPlanet.getTemperature();
+    Planet P = _currentPlanet;
+
+    vector<vector<double>>& temps = P.getTemperature();
 
     float areaTempProduct = 0.0;       /* product of area and temperature */
-    for (size_t i = 0; i < _currentPlanet.getLatCells(); i++ ){
+    for (size_t i = 0; i < P.getLatCells(); i++ ){
         float latAverage = 0.0;       /* average temperature of latitude band */
 
-        for (size_t j = 0; j < _currentPlanet.getLongCells(); j++) {
-            latAverage += current
+        for (size_t j = 0; j < P.getLongCells(); j++) {
+            latAverage += temps[i][j];
         }
+        /* get average temperature for this latitude band */
+        latAverage /= P.getLongCells();
 
+        /* multiply average temp by area of the strip */
+        areaTempProduct += latAverage * stripArea(i, P.getCellLatDegrees(), P.getPlanetRadius());
     }
 
     /* divide area temperature product by earth surface area to get avg temp */
-    return areaTempProduct / (4/3*PI*pow(EARTH_RADIUS, 3));
+    return areaTempProduct / (4 * PI * pow(EARTH_RADIUS, 2));
 
 }
 
@@ -183,4 +205,9 @@ void AccelModel::calcTemps() {
     // TODO perform fast convolution
 }
 
+// average temperature
+float AccelModel::averageTemp() {
+    cout << "Accel Model method average temp not yet implemented" << endl; 
 
+    return 0.0;
+}

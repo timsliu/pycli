@@ -78,6 +78,8 @@ public:
     // fill in the temperatures at one step
     void calcTemps() override;
 
+    /* set the average temperature of the planet */
+    float averageTemp();
 };
 
 class AccelModel : public Model {
@@ -88,6 +90,8 @@ public:
     
     // fill in the temperatures at one step
     void calcTemps() override;
+
+    float averageTemp();
 
 };
 

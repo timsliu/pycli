@@ -47,6 +47,7 @@ void Planet::calcRadIn() {
        double botBorderM = _planetRadius * sin(botBorderRad);
        
        double interceptedArea = calcFluxAntideri(topBorderM) - calcFluxAntideri(botBorderM);
+
        double surfaceArea = 2 * PI * rSq * (sin(topBorderRad) - sin(botBorderRad));
        double _radInLat = W_SUN * interceptedArea/surfaceArea;
 
@@ -87,6 +88,6 @@ void Planet::printPlanet(size_t step, ofstream& outFile) {
     }
 }
 
-void setAverageTemp(float temp) {
+void Planet::setAverageTemp(float temp) {
     _averageTemp = temp;
 }

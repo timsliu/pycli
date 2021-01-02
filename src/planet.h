@@ -54,6 +54,11 @@ public:
 
    size_t getLatCells() { return _latCells; }
 
+   double getCellLongDegrees() { return _cellLongDegrees; }
+   double getCellLatDegrees() { return _cellLatDegrees; }
+
+   double getPlanetRadius() { return _planetRadius; }
+
    void setAtmosphere(std::map<std::string, double> atmo) {
        _atmosphere = atmo;
    }
@@ -68,7 +73,7 @@ public:
 
    float getAverageTemp() { return _averageTemp; }
 
-   void setAverageTemp(void temp);
+   void setAverageTemp(float temp);
 };
 
 #endif /* PLANET_H */
