@@ -33,7 +33,7 @@ inline double singleLayerTemp(double Ein, double albedo, double co2Level) {
 }
 
 /*
- * Model base class
+ * ******************* Model base class *******************
  */
 
 Model::Model(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
@@ -48,6 +48,12 @@ Model::Model(size_t steps, Planet planetStart, vector<map<string, double>> atmos
     cout << "longCells: " << _currentPlanet.getLongCells() << endl;
 }
 
+/* 
+ * Method for simulating the climate. Repeatedly calls methods to calculate the temperature
+ * of the planet based on the specified atmosphere. Calls method to output the results to
+ * text files.
+ */
+
 void Model::simClimate() {
 
     if (_verbose) {
@@ -60,7 +66,7 @@ void Model::simClimate() {
         _currentPlanet.setAtmosphere(_allAtmos[i]);
         /* calculate temperatures and the average temperature */ 
         calcTemps();
-        _currentPlanet.setAverageTemp(averageTemp());
+        calcAverageTemp();
 
         // add copy of current planet to the list of computed planets
         Planet lastPlanet = Planet(_currentPlanet);
@@ -80,6 +86,11 @@ void Model::simClimate() {
     // write out results to a file
     outputResults();
 }
+
+/*
+ * Output calculated temperatures at each step to text file and output file with
+ * average planet temperature at each step.
+ */
 
 void Model::outputResults() {
 
@@ -110,9 +121,14 @@ void Model::outputResults() {
     allTemp.close();
 }
 
+
 /*
- * Serial model methods
- *
+ * ******************* Serial moodel class implementations *******************
+ */
+
+
+/*
+ * Serial model constructor
  */
 
 SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
@@ -121,7 +137,10 @@ SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, do
 }
 
 
-// calculate fill in the temperatures of the planet
+/*
+ * Calculate temperatures of the planet serially using the single layer temperature model
+ */
+
 void SerialModel::calcTemps() {
 
     vector<vector<double>>& temps = _currentPlanet.getTemperature();
@@ -144,9 +163,16 @@ void SerialModel::calcTemps() {
 
 }
 
-float SerialModel::averageTemp() {
+/*
+ * Calculate the average temperature of the surface and set the average
+ * temperature attribute of the current planet
+ *
+ */
 
-    Planet P = _currentPlanet;
+
+void SerialModel::calcAverageTemp() {
+
+    Planet& P = _currentPlanet;
 
     vector<vector<double>>& temps = P.getTemperature();
 
@@ -165,16 +191,19 @@ float SerialModel::averageTemp() {
     }
 
     /* divide area temperature product by earth surface area to get avg temp */
-    return areaTempProduct / (4 * PI * pow(EARTH_RADIUS, 2));
+    P.setAverageTemp(areaTempProduct / (4 * PI * pow(EARTH_RADIUS, 2)));
 
 }
 
 
 /*
- * Parallel model methods
- *
+ * ******************* Accelerated moodel class implementations *******************
  */
 
+
+/*
+ * Accelerated model constructor
+ */
 
 AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     Model(steps, planetStart, atmos, verbose, outputDir) {
@@ -206,8 +235,6 @@ void AccelModel::calcTemps() {
 }
 
 // average temperature
-float AccelModel::averageTemp() {
+void AccelModel::calcAverageTemp() {
     cout << "Accel Model method average temp not yet implemented" << endl; 
-
-    return 0.0;
 }

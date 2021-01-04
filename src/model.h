@@ -62,7 +62,7 @@ public:
     virtual void calcTemps() = 0;
 
     // calculate average surface temperature
-    virtual float averageTemp() = 0;
+    virtual void calcAverageTemp() = 0;
 
 
     std::map<SurfaceType, double> albedoMap = {{land, 0.2}, {sea, 0.06}, {ice, 0.6}};
@@ -79,7 +79,7 @@ public:
     void calcTemps() override;
 
     /* set the average temperature of the planet */
-    float averageTemp();
+    void calcAverageTemp() override;
 };
 
 class AccelModel : public Model {
@@ -91,7 +91,7 @@ public:
     // fill in the temperatures at one step
     void calcTemps() override;
 
-    float averageTemp();
+    void calcAverageTemp() override;
 
 };
 
