@@ -13,6 +13,11 @@ class Surface:
     set to a surface type (land, sea, or ice)'''
 
     def __init__(self, num_lat_gridlines, num_lon_gridlines):
+
+        if num_lat_gridlines % 2 != 0 or num_lon_gridlines % 2 != 0\
+            or num_lat_gridlines < 0 or num_lon_gridlines < 0:
+            raise ValueError("Num_late_gridlines/num_lon_gridlines must be even positive integers!")
+        
         self.num_lat_grid = num_lat_gridlines
         self.num_lon_grid = num_lon_gridlines
         

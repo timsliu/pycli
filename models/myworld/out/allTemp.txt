@@ -1,0 +1,6 @@
+Step: 0 Average Temp: 270.542
+Step: 1 Average Temp: 270.652
+Step: 2 Average Temp: 270.752
+Step: 3 Average Temp: 270.843
+Step: 4 Average Temp: 270.927
+Step: 5 Average Temp: 271.004

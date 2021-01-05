@@ -18,30 +18,42 @@ PYCLI_ROOT = os.path.join(os.getcwd(), "..")
 if __name__ == "__main__":
 
     model_name = sys.argv[1]
+   
+    if model_name.find(".py") != -1:
+        print("Argument to run-pycli.py should be model name without .py extension")
+        exit()
+
     model_out = os.path.join(PYCLI_ROOT, "models/{}/out".format(model_name))
     model_in = os.path.join(PYCLI_ROOT, "models/{}".format(model_name))
   
-    # make sure there is the needed in and out files
+    # 1) make sure there is the needed in and out files
     for path in [model_in, model_out]:
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
 
-    # update src
+
+    os.chdir(os.path.join(PYCLI_ROOT, "models"))
+    # 2) compile the model and generate surface and atmosphere files
+    try:
+        subprocess.run([
+            "python3",
+            model_name + ".py",
+        ], check=True)
+
+    except subprocess.CalledProcessError:
+        print("\nPyCli execution halted due to invalid argument/configuration") 
+        exit()
+
+    
+    # 3) update src
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
     subprocess.run([
         "make",
         "-j4"
     ])
-
-    os.chdir(os.path.join(PYCLI_ROOT, "models"))
-    # 1) compile the model and generate surface and text
-    subprocess.run([
-        "python3",
-        model_name + ".py",
-    ])
-
-    # 2) run the C++ climate model
+    
+    # 4) run the C++ climate model
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
     subprocess.run([
         "./../bin/pycli", 
@@ -52,7 +64,7 @@ if __name__ == "__main__":
     ])
     os.chdir(PYCLI_ROOT)
 
-    # 3) run visualization
+    # 5) run visualization
     subprocess.run([
         "python3",
         os.path.join(PYCLI_ROOT, "pyvisual/visualization_bm.py"),

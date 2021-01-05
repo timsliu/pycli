@@ -75,13 +75,13 @@ class Preferences:
         for key in pref_dic.keys():
             # preference is invalid
             if key not in ALLOWED.keys():
-                print("Preference: '{}' not in allowed preferences".format(key))
-                print("List of allowed preferences: ", ALLOWED.keys())
+                print("List of allowed preferences: ", list(ALLOWED.keys()))
+                raise ValueError("Preference: '{}' not in allowed preferences".format(key))
             else:
                 # setting not an allowed value for the preference
                 if pref_dic[key] not in ALLOWED[key]:
-                    print("Setting {} not compatible for preference '{}'")
-                    print("List of allowed settings for preference '{}': ".format(key), ALLOWED[key])
+                    print("List of allowed settings for preference '{}':\n {}".format(key, ALLOWED[key]))
+                    raise ValueError("Setting '{}' not compatible for preference '{}'".format(pref_dic[key], key))
                 # valid key value preference 
                 else:
                     good_prefs[key] = pref_dic[key]
@@ -90,7 +90,7 @@ class Preferences:
 
     def write_preferences(self):
         '''save all preferences to a json file'''
-        # find the name of the model - TODO check this works
+        # find the name of the model
         model_name = sys.argv[0][0:sys.argv[0].find(".")]
 
         # write to json file
