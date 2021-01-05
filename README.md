@@ -192,8 +192,37 @@ This directory contains the installation of the `basemap` library used for
 generating temperature maps. This folder also has the visualization suite
 responsible for parsing temperature files and generating temperature maps.
 
+## Planned features and TODO
+
+### Python Frontend
+
+* Improved random surface generation using random "islands" that grow in 
+each direction based on some probability
+* Use Python operator overloading to allow setting atmospheric gas
+concentrations without calling methods
+* Allow input to be either CO2 levels or annual net emissions
+* Conditional statements based on temperature
+
+### Backend climate model
+* Fix convolution wrapping around vertical edge of map
+* Update convolution so that grid cells over the poles are adjacent
+* Add accelerated convolution and average temp calculation so accelerated
+model can be used
+* Add tilt to the planet
+* Make temperature at each timestep influenced by previous timestep - currently
+each timestep is independent
+* Change surfaces so that ice can melt and water can freeze depending on temperature
+* Spawn additional threads to output temperature files in parallel with calculations
+
+### Visualization suite
+* Remove basemap and build TKinter/matplotlib drawing mechanism
+* Line chart of average temperature
+
+### Additional features
+* OSX compatibility (there are no plans to make PyCli Windows compatible)
 
 ## Contributors and Contact
 PyCli is an open source project created by Kalhan Koul, Timothy Liu, and
 Jack Melchert at Stanford. This project originated from a [CS343D: Domain Specific
-Programming Models and Compilers](https://cs343d.github.io/)  course assignment.
+Programming Models and Compilers](https://cs343d.github.io/)  course assignment
+and is currently maintained and updated by Timothy Liu.
