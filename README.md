@@ -213,10 +213,13 @@ model can be used
 each timestep is independent
 * Change surfaces so that ice can melt and water can freeze depending on temperature
 * Spawn additional threads to output temperature files in parallel with calculations
+* Optionally output intermediate temperature files
 
 ### Visualization suite
 * Remove basemap and build TKinter/matplotlib drawing mechanism
 * Line chart of average temperature
+* Stitch temperature files into a gif
+
 
 ### Additional features
 * OSX compatibility (there are no plans to make PyCli Windows compatible)
