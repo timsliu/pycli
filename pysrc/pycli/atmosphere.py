@@ -49,6 +49,15 @@ class Atmosphere:
             self.gases[gas].append(concentration)
         return 
 
+    def get_atmosphere(self):
+        '''return a dictionary with the concentration of gases at the latest step'''
+        gases = {}
+        for gas in self.gases.keys():
+            # look up last concentration of gas
+            gases[gas] = self.gases[gas][-1]
+
+        return gases
+
     def fill_steps(self, gas, target_len):
         '''fill in the concentrations of a gas that isn't specified for all time
         with the last value so that the gas concentration is the right length.

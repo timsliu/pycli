@@ -16,7 +16,7 @@ DEFAULT = {"backend_model": "simple",
 
 
 # list of allowed preferences
-ALLOWED = {"backend_model": ["simple", "accel"],           # backend climate model
+ALLOWED = {"backend_model": ["simple"],                    # backend climate model
          "save_intermeds": [True, False],                  # save intermediate temps
          "verbose": [True, False],                         # verbose mode
          "colors":                                         # color schemes 

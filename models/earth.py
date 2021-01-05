@@ -1,29 +1,22 @@
 import pycli
 
-# size of model
-earth = pycli.new_model("earth")
+# generate a planet and preference object
+earth, prefs = pycli.new_model("earth")
 
-# setup starting atmosphere
-earth.set_atmosphere("O2", 22)
+# optional - modify preferences
 
-co2_emiss = 0.0001
-earth.set_atmosphere("CO2", co2_emiss)
-
-n2_emiss = 77.99
-earth.set_atmosphere("N2", n2_emiss)
+# optional - setup starting concentration of CO2 in ppm
+# if not defined in initialization
+earth.set_atmosphere("CO2", 0.00028)
 
 # schedule 5 model steps
 for i in range(5):
+    # increment model step 
     earth.model_step()
+  
+    # annual CO2 emissions in gigatons
+    earth.set_atmosphere("CO2", 0.0003)
 
-    co2_emiss += 0.0001
-    n2_emiss -= 0.01
-   
-    # change CO2 concentration at each step
-    earth.set_atmosphere("CO2", co2_emiss)
-    earth.set_atmosphere("N2", n2_emiss)
-
-# save surface, atmosphere, and configuration files
-earth.write_surface()
-earth.write_atmosphere()
-pycli.write_preferences()
+# write out the configuration for the planet and the configurations
+earth.write_config()
+prefs.write_preferences()
