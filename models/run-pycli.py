@@ -41,7 +41,6 @@ if __name__ == "__main__":
         model_name + ".py",
     ])
 
-
     # 2) run the C++ climate model
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
     subprocess.run([

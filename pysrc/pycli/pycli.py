@@ -12,9 +12,9 @@ import os
 import sys
 
 # list of names for models
-ALLOWED_NAMES = ["default", "small", "large", "earth_big", "earth"] 
+ALLOWED_NAMES = ["small", "large", "earth_big", "earth"] 
 
-def new_model(name):
+def new_model(name = None, num_lat_gridlines = None, num_lon_gridlines = None, init_atmos = None):
     '''this function should be called at the top of a new PyCli model config file. Function
     creates a model instance and a preference instance based on the passed name.
     The passed name MUST be in the list allowed_names
@@ -24,30 +24,49 @@ def new_model(name):
             prefs - instance of preferences class '''
  
     # list for holding the newly instantiated model
-    model = []
+    model = None
    
     # default setting
-    if name == "default":
-        model.append(Model(default = True))
+    if name is None:
+        model = Model()
+    
     # small random world 
     elif name == "small":
-        model.append(Model(default = False, num_lat_gridlines = 16, num_lon_gridlines = 4, 
-                     init_o2 = 0, init_co2 = 0, init_n2 = 0))
+        model = Model(num_lat_gridlines = 16, num_lon_gridlines = 4)
+    
     # large random world 
     elif name == "large":
-        model.append(Model(default = False, num_lat_gridlines = 1000, 
-                     num_lon_gridlines = 1000, init_o2 = 10, init_co2 = 10, init_n2 = 10))
+        model = Model(num_lat_gridlines = 1000, num_lon_gridlines = 1000)
+    
     # large earth - predefined map 
     elif name == "earth_big":
-        model.append(Model(default = False, preset_surface = "earth_big"))
+        model = Model(preset_surface = "earth_big")
     
     # small earth - predefined map 
     elif name == "earth":
-        model.append(Model(default = False, preset_surface = "earth"))
+        model = Model(preset_surface = "earth")
+
+    # custom user defined map and atmosphere
+    elif name == "custom":
+        
+        # not enough arguments are specified
+        if num_lat_gridlines is None or num_lon_gridlines is None:
+            raise ValueError("Dimenstions must be specified to use custom model init")
+       
+        # sufficient args
+        else:
+            # no specified atmosphere - use model default 
+            if init_atmos is None:
+                model = Model(num_lat_gridlines=num_lat_gridlines,
+                              num_lon_gridlines=num_lon_gridlines)
+            # atmosphere specified - pass it 
+            else:
+                model = Model(num_lat_gridlines=num_lat_gridlines,
+                              num_lon_gridlines=num_lon_gridlines, init_atmos=init_atmos)
     else:
         print("Model name not in allowed list: ", ALLOWED_NAMES)
         raise NotImplementedError
 
     # return the model and the model and a preference instance
-    return model[0], Preferences()
+    return model, Preferences()
 

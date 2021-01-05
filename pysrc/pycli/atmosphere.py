@@ -15,7 +15,7 @@ class Atmosphere:
         self.gases = {}
 
         # check that passed argument is a dictionary
-        if !isinstance(start_atmos, dict):
+        if not isinstance(start_atmos, dict):
             raise ValueError("Atmosphere classe expects dictionary in initializer")
 
         # check that gas is in the allowed list
@@ -24,7 +24,7 @@ class Atmosphere:
                 print("Gas: {} not in list of allowed gases: {}".format(gas, ALLOWED_GASES))
             # permitted gas - add to the dictionary 
             else:
-                self.gases[gas] = start_atmos[gas]
+                self.gases[gas] = [start_atmos[gas]]
 
 
     def update_atmosphere(self, gas, value, step):
@@ -40,34 +40,44 @@ class Atmosphere:
 
         # TODO convert gas value to concentration
         concentration = value
-        # update new concentration 
-        self.gases[gas].append(concentration)
+
+        # update an existing concentration on the most recent timestep 
+        if len(self.gases[gas]) - 1 == step:
+            self.gases[gas][step] = concentration
+        else:
+            # write in a new concentration
+            self.gases[gas].append(concentration)
         return 
 
-    def fill_steps(self, gas, step):
+    def fill_steps(self, gas, target_len):
         '''fill in the concentrations of a gas that isn't specified for all time
-        with the last value so that the gas concentration is the right length. 
-        Ex: A step value of 4 (0 indexed, the fifth step after initialization)
-            will make the gas have a length of 5'''
+        with the last value so that the gas concentration is the right length.
+        inputs: gas (str) name of gas to fill in
+                step (int) - desired length of the gas list
+        Ex: A step value of 4 (0 indexed, the fifth step)
+            will make the gas have a length of 4'''
 
-        while len(self.gases[gas]) - 1 < step:
+        while len(self.gases[gas]) < target_len:
             self.gases[gas].append(self.gases[gas][-1])
 
         return
 
-    def write_to_file(self):
-        # find longest gas list
-        max_len = max([len(self.gases[gas]) for gas in self.gases.keys()]) 
-        
+    def write_to_file(self, model_step):
+        '''output the atmosphere file. If there are gases that have fewer than
+        model_step + 1 concentrations, the lists are filled so that they are
+        model_step + 1 length long
+        inputs: model_step(int) - index of last model step (0 indexed)'''
+       
+        # fill in gas concentrations to match highest model step
         for gas in self.gases.keys():
-            self.fill_steps(gas, max_len - 1)
+            self.fill_steps(gas, model_step + 1)
 
         # find model name 
         model_name = sys.argv[0][0:sys.argv[0].find(".")]
 
         # create the atmosphere file and write out concentration at each step
         with open(os.path.join(model_name, "atmosphere.txt"), "w") as f:
-            for i in range(max_len):
+            for i in range(model_step + 1):
                 for gas in self.gases.keys():
-                    f.write(gas + str(self.gases[gas][i])
+                    f.write("{} {} ".format(gas, str(self.gases[gas][i])))
                 f.write("\n")

@@ -145,7 +145,7 @@ void SerialModel::calcTemps() {
 
     vector<vector<double>>& temps = _currentPlanet.getTemperature();
     vector<vector<SurfaceType>>& surface = _currentPlanet.getSurface();
-    double co2Level = _currentPlanet.getAtmosphere()["co2"];
+    double co2Level = _currentPlanet.getAtmosphere()["CO2"];
 
     vector<double> EinArray = _currentPlanet.getRadIn();
     

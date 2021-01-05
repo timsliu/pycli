@@ -41,3 +41,17 @@ class Surface:
         src = os.path.join(PYCLI_ROOT, "pysrc/pycli/preset_surfaces/{}.txt".format(preset))
         dst = os.path.join(PYCLI_ROOT, "models/{}/surface.txt".format(model_name))
         shutil.copyfile(src, dst)
+        
+
+    # TODO
+    def gen_random_surface(self):
+        '''randomly generate a surface
+        inputs: seed (int) - random seed for surface; same seed generates same
+                surface'''
+
+        for i in range(self.surface.num_lat_grid):
+            for j in range(self.surface.num_lon_grid):
+                if i <= self.surface.num_lat_grid * 0.1 or i >= self.surface.num_lat_grid * 0.9:
+                    self.surface.set_grid_cell_type(i, j, 2)
+                else:
+                    self.surface.set_grid_cell_type(i, j, random.randint(0,2))

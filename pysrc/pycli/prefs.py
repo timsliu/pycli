@@ -4,15 +4,21 @@
 # for specifying model parameters
 
 
+import sys
+import os
+import json
+
 # default preference dictionary 
 DEFAULT = {"backend_model": "simple",
            "save_intermeds": True,
-           "colors": "RdBu_r"}
+           "colors": "RdBu_r",
+           "verbose": True}
 
 
 # list of allowed preferences
 ALLOWED = {"backend_model": ["simple", "accel"],           # backend climate model
          "save_intermeds": [True, False],                  # save intermediate temps
+         "verbose": [True, False],                         # verbose mode
          "colors":                                         # color schemes 
             ['Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
             'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
@@ -82,13 +88,13 @@ class Preferences:
 
         self.prefs = {**self.prefs, **good_prefs}
 
-    def write_preferences():
+    def write_preferences(self):
         '''save all preferences to a json file'''
         # find the name of the model - TODO check this works
         model_name = sys.argv[0][0:sys.argv[0].find(".")]
 
         # write to json file
-        with open(os.path.join(model_name, "vis_prefs.json"), "w") as outfile:
+        with open(os.path.join(model_name, "prefs.json"), "w") as outfile:
             json.dump(self.prefs, outfile)
 
 
