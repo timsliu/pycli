@@ -210,8 +210,11 @@ AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, doub
     cout << "Creating Accel Model" << endl;
 }
 
+/*
+ * Calculate the temperature of the grid in parallel and use the fast convolution
+ * method.
+ */
 
-// calculate fill in the temperatures of the planet
 void AccelModel::calcTemps() {
 
     vector<vector<double>>& temps = _currentPlanet.getTemperature();
@@ -234,7 +237,9 @@ void AccelModel::calcTemps() {
     // TODO perform fast convolution
 }
 
-// average temperature
+/*
+ * Calculate the average temperature across the surface - not yet implemented
+ */
 void AccelModel::calcAverageTemp() {
     cout << "Accel Model method average temp not yet implemented" << endl; 
 }

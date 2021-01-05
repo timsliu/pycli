@@ -1,40 +1,65 @@
+# atmosphere.py
+#
+# Class that describes the composition of the atmosphere at each state
+# only gases whos concentrations are input into the model are considered
+
+
 import os
 import sys
 
+# list of gases that can be modified
+ALLOWED_GASES = ["CO2"]
+
 class Atmosphere:
-    def __init__(self, init_o2, init_co2, init_n2):
-        self.o2 = []
-        self.co2 = []
-        self.n2 = []
+    def __init__(self, start_atmos):
+        self.gases = {}
 
-        self.o2.append(init_o2)
-        self.co2.append(init_co2)
-        self.n2.append(init_n2)
+        # check that passed argument is a dictionary
+        if !isinstance(start_atmos, dict):
+            print("Atmosphere class must be initialized with a dictionary")
 
-    def set_o2(self, o2_val, time):
-        self.o2[time] = o2_val
+        # check that gas is in the allowed list
+        for gas in start_atmos.keys():
+            if gas not in ALLOWED_GASES:
+                print("Gas: {} not in list of allowed gases: {}".format(gas, ALLOWED_GASES))
+            # permitted gas - add to the dictionary 
+            else:
+                self.gases[gas] = start_atmos[gas]
 
-    def set_co2(self, co2_val, time):
-        self.co2[time] = co2_val
 
-    def set_n2(self, n2_val, time):
-        self.n2[time] = n2_val
+    def update_atmosphere(self, gas, value, step):
+        '''update the atmosphere with the given gas with with the specified amount
+        and timestep
+        inputs: gas (str) - name of gas
+                value (float) - mass of gas
+                step (int) - model timestep '''
 
-    def get_o2(self, time):
-        return self.o2[time]
+        # if gas isn't specified for all timesteps, fill in the intermediate
+        # timesteps with the most recent concentration
+        self.fill_steps(gas, step)
+        while len(self.gases[gas]) - 1 < step:
+            self.gases[gas].append(self.gases[gas][-1])
 
-    def get_co2(self, time):
-        return self.co2[time]
+        # TODO convert gas value to concentration
+        concentration = value
+        # update new concentration 
+        self.gases[gas].append(concentration)
+        return 
 
-    def get_n2(self, time):
-        return self.n2[time]
+    def fill_steps(self, gas, step):
+        '''fill in the concentrations of a gas that isn't specified for all time
+        with the last value so that the gas concentration is the right length'''
 
-    def update_atmosphere(self, time):
-        self.o2.append(self.o2[time])
-        self.co2.append(self.co2[time])
-        self.n2.append(self.n2[time])
+        while len(self.gases[gas]) - 1 < step:
+            self.gases[gas].append(self.gases[gas][-1])
 
     def write_to_file(self):
+        # find longest gas list
+        last_step = max([len(self.gases[gas]) for gas in self.gases.keys()]) 
+        
+        for gas in self.gases.keys():
+            self.fill_steps(gas, last_step + 1)
+
         model_name = sys.argv[0][0:sys.argv[0].find(".")]
         with open(os.path.join(model_name, "atmosphere.txt"), "w") as write_file:
             for i in range(len(self.co2)):

@@ -2,7 +2,10 @@ from pycli.surface import Surface
 from pycli.atmosphere import Atmosphere
 import random
 
+
 class Model:
+    '''The model class defines the starting surface of the climate
+    being simulated and the atmosphere at each model step'''
     def __init__(self, default = True, preset_surface = "",
                  num_lat_gridlines = None, num_lon_gridlines = None, 
                  init_o2 = None, init_co2 = None, init_n2 = None):
