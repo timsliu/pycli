@@ -38,15 +38,12 @@ class Atmosphere:
         # timesteps with the most recent concentration
         self.fill_steps(gas, step)
 
-        # TODO convert gas value to concentration
-        concentration = value
-
         # update an existing concentration on the most recent timestep 
         if len(self.gases[gas]) - 1 == step:
-            self.gases[gas][step] = concentration
+            self.gases[gas][step] = value
         else:
             # write in a new concentration
-            self.gases[gas].append(concentration)
+            self.gases[gas].append(value)
         return 
 
     def get_atmosphere(self):

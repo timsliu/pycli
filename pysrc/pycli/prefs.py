@@ -12,13 +12,15 @@ import json
 DEFAULT = {"backend_model": "simple",
            "save_intermeds": True,
            "colors": "RdBu_r",
-           "verbose": True}
+           "verbose": True,
+           "atmospere_type": "concentration"}
 
 
 # list of allowed preferences
 ALLOWED = {"backend_model": ["simple"],                    # backend climate model
          "save_intermeds": [True, False],                  # save intermediate temps
          "verbose": [True, False],                         # verbose mode
+         "atmos_type": ["concentration", "emission"],      # what atmosphere values specify
          "colors":                                         # color schemes 
             ['Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
             'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
