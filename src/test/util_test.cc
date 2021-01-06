@@ -8,13 +8,6 @@
 
 using namespace std;
 
-
-/* returns if two values are "close" to each other */
-bool close(float a, float b) {
-    return abs(a - b)/a < 0.00001;
-}
-
-
 /***** Unit test functions *****/
 
 /* check that the area of strips above and below the equator are the same */

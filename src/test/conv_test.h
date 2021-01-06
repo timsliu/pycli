@@ -19,4 +19,6 @@ int convUniform();
 
 int linearKernel();
 
+int convVerticalEdge();
+
 #endif /* CONV_TEST_H */

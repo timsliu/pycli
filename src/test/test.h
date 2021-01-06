@@ -21,6 +21,9 @@
 
 #define MAX_ERRORS 10
 
+/* returns if two values are "close" to each other */
+bool close(float a, float b);
+
 struct testType {
     std::string testName;
     std::string testDescription;

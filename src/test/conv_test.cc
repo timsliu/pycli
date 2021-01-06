@@ -11,14 +11,12 @@ using namespace std;
 /***** Helper functions *****/
 
 /* create a SMALL_GRID x SMALL_GRID  2D vector with the same value */
-vector<vector<float>> make_grid(int size, float val) {
+vector<vector<float>> makeGrid(int size, float val) {
     vector<vector<float>> input(size, vector<float>(size, val));
     return input;
 }
 
-/* compute the sum of a separable kernel. Compute the dot product of a 
- * vector representing a kernel with its transpose
- * 
+/* compute the sum of a separable kernel
  */
 float kernelSum(vector<float> kernel) {
 
@@ -38,7 +36,7 @@ float kernelSum(vector<float> kernel) {
 /* convolve a uniform grid - every element should be the same in the result */
 int convUniform() {
 
-    vector<vector<float>> input = make_grid(SMALL_GRID, 1.0);
+    vector<vector<float>> input = makeGrid(SMALL_GRID, 1.0);
     vector<float> kernel (1.0, 3);
     serialConvolve<float>(input, kernel);
 
@@ -71,14 +69,17 @@ int linearKernel() {
 
     int error = 0;
 
+    /* create a linear kernel that is 0.1 * 100 wide*/
     vector<float> kernel1 = makeLinearKernel<float>(100, 100, 0.1);
     float kernel1Sum = kernelSum(kernel1);
 
+    /* check size of kernel is expected */
     if (kernel1.size() != 11) {
         cout << "Error! Expected kernel size 11 got kernel size: " << kernel1.size() << endl;
         error = 1;
     }
 
+    /* check the sum of the kernel */
     if (abs(kernel1Sum - 1.0) > 0.001) {
         cout << "Error! Kernel sum is: " << kernel1Sum << endl; 
         error = 1;
@@ -101,3 +102,50 @@ int linearKernel() {
 }
 
 
+/*
+ * Perform a convolution on a matrix with all zeros and one value on the 
+ * rightmost edge - check that the values are correct given the left and
+ * right edge should be treated as contiguous
+ */
+
+int convVerticalEdge() {
+    int gridSize = 10;
+    int error = 0;
+
+    /* get an empty grid */
+    vector<vector<float>> input = makeGrid(gridSize, 0.0);
+
+    /* set value on the far right edge to 1.0 */
+    input[5][9] = 1.0;
+
+    /* create 3x3 linear kernel and convolve the grid */
+    vector<float> kernel = makeLinearKernel<float>(gridSize, gridSize, 0.3333);
+    serialConvolve<float>(input, kernel); 
+
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            if (i > 3 and i < 6 and (j > 7 or j == 0)) {
+                /* value should be 1/9 */
+                if (!close(input[i][j], 0.111111)) {
+                    cout << "convVerticalEdge error! ";
+                    cout << "Expected 0.1111 at position: " << i << " " << j;
+                    cout << " Got: " << input[i][j] << endl;
+                    error += 1;
+                }
+            }
+
+            else {
+                /* value should be 0 */
+                if (input[i][j] != 0) {
+                    cout << "convVerticalEdge error! ";
+                    cout << "Expected 0 at position: " << i << " " << j;
+                    cout << " Got: " << input[i][j] << endl;
+                    error += 1; 
+                }
+            }
+        }
+    }
+    /* return 1 if more than 0 errors, otherwise return 0 */
+    return error > 0 ? 1 : 0;
+
+}
