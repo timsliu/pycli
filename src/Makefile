@@ -47,17 +47,17 @@ unit_test: $(TEST_OBJS)
 	./../bin/unit_test
 
 # run certain models
-test_big:
-	./../bin/pycli large_random -v -m serial
-	./../bin/pycli large_random -v -m accel
+default:
+	./../bin/pycli default -v -m serial
+	#./../bin/pycli default -v -m accel
 
 earth:
 	./../bin/pycli earth -v -m serial
 	#./../bin/pycli earth -v -m accel
 
-earth_big:
+large:
 	./../bin/pycli earth_big -v -m serial
-	./../bin/pycli earth_big -v -m accel
+	#./../bin/pycli earth_big -v -m accel
 
 # open MP test - will be deprecated
 omp: omp_test.cc
