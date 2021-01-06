@@ -2,6 +2,8 @@
  * Functions for testing convolution.h functions
  */
 
+#include <iomanip>
+
 #include "conv_test.h"
 #include "test.h"
 
@@ -28,6 +30,23 @@ float kernelSum(vector<float> kernel) {
         }
     }
     return sum;
+}
+
+/*
+ * print out a 2D grid
+ */
+
+void printGrid(vector<vector<float>> grid) {
+   int xDim = grid[0].size();
+   int yDim = grid.size();
+
+    for (int i = 0; i < yDim; i++) {
+        for (int j = 0; j < xDim; j++) {
+            cout << setprecision(3) << grid[i][j] << " ";
+        }
+        cout << endl;
+    }
+
 }
 
 
@@ -113,33 +132,61 @@ int convVerticalEdge() {
     int error = 0;
 
     /* get an empty grid */
-    vector<vector<float>> input = makeGrid(gridSize, 0.0);
+    vector<vector<float>> inputRight = makeGrid(gridSize, 0.0);
+    vector<vector<float>> inputLeft = makeGrid(gridSize, 0.0);
 
     /* set value on the far right edge to 1.0 */
-    input[5][9] = 1.0;
-
+    inputRight[5][9] = 1.0;
+    /* set value on the far left edge to 1.0 */
+    inputLeft[5][0] = 1.0;
+    
     /* create 3x3 linear kernel and convolve the grid */
     vector<float> kernel = makeLinearKernel<float>(gridSize, gridSize, 0.3333);
-    serialConvolve<float>(input, kernel); 
+    serialConvolve<float>(inputRight, kernel); 
+    serialConvolve<float>(inputLeft, kernel); 
 
     for (int i = 0; i < gridSize; i++) {
         for (int j = 0; j < gridSize; j++) {
-            if (i > 3 and i < 6 and (j > 7 or j == 0)) {
+            if (i > 3 and i < 7 and (j > 7 or j == 0)) {
                 /* value should be 1/9 */
-                if (!close(input[i][j], 0.111111)) {
+                if (!close(inputRight[i][j], 0.111111)) {
                     cout << "convVerticalEdge error! ";
                     cout << "Expected 0.1111 at position: " << i << " " << j;
-                    cout << " Got: " << input[i][j] << endl;
+                    cout << " Got: " << inputRight[i][j] << endl;
                     error += 1;
                 }
             }
 
             else {
                 /* value should be 0 */
-                if (input[i][j] != 0) {
+                if (inputRight[i][j] != 0) {
                     cout << "convVerticalEdge error! ";
                     cout << "Expected 0 at position: " << i << " " << j;
-                    cout << " Got: " << input[i][j] << endl;
+                    cout << " Got: " << inputRight[i][j] << endl;
+                    error += 1; 
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            if (i > 3 and i < 7 and (j < 2 or j == 9)) {
+                /* value should be 1/9 */
+                if (!close(inputLeft[i][j], 0.111111)) {
+                    cout << "convVerticalEdge error! ";
+                    cout << "Expected 0.1111 at position: " << i << " " << j;
+                    cout << " Got: " << inputLeft[i][j] << endl;
+                    error += 1;
+                }
+            }
+
+            else {
+                /* value should be 0 */
+                if (inputLeft[i][j] != 0) {
+                    cout << "convVerticalEdge error! ";
+                    cout << "Expected 0 at position: " << i << " " << j;
+                    cout << " Got: " << inputLeft[i][j] << endl;
                     error += 1; 
                 }
             }
