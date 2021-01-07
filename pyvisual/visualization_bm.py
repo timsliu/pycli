@@ -88,6 +88,7 @@ def get_coast(surface_array):
 
                     lines.add(((x1, x2), (y1, y2)))
     print("Number of lines: ", len(lines))
+    print(lines)
 
     return lines
 
