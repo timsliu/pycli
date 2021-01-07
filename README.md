@@ -205,7 +205,7 @@ concentrations without calling methods (v 0.2)
 
 ### Backend climate model
 * Fix convolution wrapping around vertical edge of map (v 0.1) **Done**
-* Update convolution so that grid cells over the poles are adjacent (v 0.1) 
+* Update convolution so that grid cells over the poles are adjacent (v 0.1) **Done** 
 * Add accelerated convolution and average temp calculation so accelerated
 model can be used (v 0.2)
 * Add tilt to the planet (v 0.4)
