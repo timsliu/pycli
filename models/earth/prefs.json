@@ -1,1 +1,1 @@
-{"atmospere_type": "concentration", "verbose": true, "backend_model": "simple", "colors": "RdBu_r", "save_intermeds": true}
+{"backend_model": "simple", "verbose": true, "atmospere_type": "concentration", "save_intermeds": true, "colors": "RdBu_r"}

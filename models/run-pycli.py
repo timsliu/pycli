@@ -62,12 +62,12 @@ if __name__ == "__main__":
         "-m",
         "serial"
     ])
-    os.chdir(PYCLI_ROOT)
-
+    
+    os.chdir(os.path.join(PYCLI_ROOT, "vis"))
     # 5) run visualization
     subprocess.run([
         "python3",
-        os.path.join(PYCLI_ROOT, "pyvisual/visualization_bm.py"),
+        os.path.join(PYCLI_ROOT, "vis/graphics.py"),
         model_name,
         PYCLI_ROOT
     ])
