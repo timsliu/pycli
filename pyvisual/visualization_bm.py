@@ -57,7 +57,7 @@ def get_coast(surface_array):
     for i in range(yDim):
         for j in range(xDim):
             # skip ocean tiles - only look for land touching ocean
-            if surface_array[i, j] == 1:
+            if surface_array[i, j] == 0:
                 continue
             center = np.array([i, j])
 
@@ -86,7 +86,7 @@ def get_coast(surface_array):
                         x1 = center[1]
                         x2 = center[1] + 1
 
-                lines.add(((x1, x2), (y1, y2)))
+                    lines.add(((x1, x2), (y1, y2)))
     print("Number of lines: ", len(lines))
 
     return lines
