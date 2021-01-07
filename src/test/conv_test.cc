@@ -3,6 +3,7 @@
  */
 
 #include <iomanip>
+#include <algorithm>
 
 #include "conv_test.h"
 #include "test.h"
@@ -48,6 +49,52 @@ void printGrid(vector<vector<float>> grid) {
     }
 
 }
+
+/*
+ * Check if a grid has the expected values. Assumes that the values are either zero
+ * or a specified nonzero value. Grid must be a square 
+ *
+ * inputs: testGrid - 2D grid being tested
+ *         nonZero - vector of points on grid that are nonzero in row*rowSize + col form
+ *         value - expected nonzero value
+ */
+
+int checkGrid(vector<vector<float>>& testGrid, vector<int> nonZero, float value) {
+
+    int error = 0;                      /* total number of incorrect values */
+    int gridSize = testGrid.size();     /* size of the grid - must be square */
+   
+    /* iterate through grid */
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            /* check if point is in expected nonzero list */
+            auto it = find(nonZero.begin(), nonZero.end(), gridSize * i + j);
+            if (it != nonZero.end()) {
+                /* check if correct value */
+                if (!close(testGrid[i][j], value)) {
+                    cout << "convVerticalEdge error! ";
+                    cout << "Expected " << value << " at position: " << i << " " << j;
+                    cout << " Got: " << testGrid[i][j] << endl;
+                    error += 1;
+                }
+            }
+
+            else {
+                /* value should be 0 */
+                if (testGrid[i][j] != 0) {
+                    cout << "convVerticalEdge error! ";
+                    cout << "Expected 0 at position: " << i << " " << j;
+                    cout << " Got: " << testGrid[i][j] << endl;
+                    error += 1; 
+                }
+            }
+        }
+    }
+
+    return error;
+
+}
+
 
 
 /***** Unit test functions *****/
@@ -135,64 +182,60 @@ int convVerticalEdge() {
     vector<vector<float>> inputRight = makeGrid(gridSize, 0.0);
     vector<vector<float>> inputLeft = makeGrid(gridSize, 0.0);
 
-    /* set value on the far right edge to 1.0 */
-    inputRight[5][9] = 1.0;
-    /* set value on the far left edge to 1.0 */
-    inputLeft[5][0] = 1.0;
+    /* set value on the far right edge to 9.0 */
+    inputRight[5][9] = 9.0;
+    /* set value on the far left edge to 9.0 */
+    inputLeft[5][0] = 9.0;
     
     /* create 3x3 linear kernel and convolve the grid */
     vector<float> kernel = makeLinearKernel<float>(gridSize, gridSize, 0.3333);
     serialConvolve<float>(inputRight, kernel); 
     serialConvolve<float>(inputLeft, kernel); 
 
-    for (int i = 0; i < gridSize; i++) {
-        for (int j = 0; j < gridSize; j++) {
-            if (i > 3 and i < 7 and (j > 7 or j == 0)) {
-                /* value should be 1/9 */
-                if (!close(inputRight[i][j], 0.111111)) {
-                    cout << "convVerticalEdge error! ";
-                    cout << "Expected 0.1111 at position: " << i << " " << j;
-                    cout << " Got: " << inputRight[i][j] << endl;
-                    error += 1;
-                }
-            }
+    /* indices of points expected to be nonzero in the form gridSize * i + j */
+    vector<int> rightExpected = {40, 48, 49, 50, 58, 59, 60, 68, 69};
+    vector<int> leftExpected = {40, 41, 49, 50, 51, 59, 60, 61, 69};
 
-            else {
-                /* value should be 0 */
-                if (inputRight[i][j] != 0) {
-                    cout << "convVerticalEdge error! ";
-                    cout << "Expected 0 at position: " << i << " " << j;
-                    cout << " Got: " << inputRight[i][j] << endl;
-                    error += 1; 
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < gridSize; i++) {
-        for (int j = 0; j < gridSize; j++) {
-            if (i > 3 and i < 7 and (j < 2 or j == 9)) {
-                /* value should be 1/9 */
-                if (!close(inputLeft[i][j], 0.111111)) {
-                    cout << "convVerticalEdge error! ";
-                    cout << "Expected 0.1111 at position: " << i << " " << j;
-                    cout << " Got: " << inputLeft[i][j] << endl;
-                    error += 1;
-                }
-            }
-
-            else {
-                /* value should be 0 */
-                if (inputLeft[i][j] != 0) {
-                    cout << "convVerticalEdge error! ";
-                    cout << "Expected 0 at position: " << i << " " << j;
-                    cout << " Got: " << inputLeft[i][j] << endl;
-                    error += 1; 
-                }
-            }
-        }
-    }
+    /* check the values in the grids */
+    error += checkGrid(inputRight, rightExpected, 1);
+    error += checkGrid(inputLeft, leftExpected, 1);
+    
     /* return 1 if more than 0 errors, otherwise return 0 */
+    return error > 0 ? 1 : 0;
+
+}
+
+/*
+ * Perform a convolution over the north and south poles (the upper and lower
+ * edges)
+ */
+
+int convOverPoles() {
+    int gridSize = 10;
+    int error = 0;
+
+    /* get an empty grid */
+    vector<vector<float>> inputNorth = makeGrid(gridSize, 0.0);
+    vector<vector<float>> inputSouth = makeGrid(gridSize, 0.0);
+
+    /* set value on the upper edge to 9.0 */
+    inputNorth[0][3] = 9.0;
+    /* set value on the lower edge to 9.0 */
+    inputSouth[9][9] = 9.0;
+    
+    /* create 3x3 linear kernel and convolve the grid */
+    vector<float> kernel = makeLinearKernel<float>(gridSize, gridSize, 0.3333);
+    serialConvolve<float>(inputNorth, kernel); 
+    serialConvolve<float>(inputSouth, kernel);
+
+    /* indices of points expected to be nonzero in the form gridSize * i + j */
+    vector<int> northExpected = {2, 3, 4, 7, 8, 9, 12, 13, 14};
+    vector<int> southExpected = {80, 88, 89, 90, 93, 94, 95, 98, 99};
+
+    /* check the values in the grids */
+    error += checkGrid(inputNorth, northExpected, 1);
+    error += checkGrid(inputSouth, southExpected, 1);
+
     return error > 0 ? 1 : 0;
 
 }

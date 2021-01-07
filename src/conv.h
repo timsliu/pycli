@@ -92,17 +92,21 @@ void serialConvolve(vector<vector<T>>& inputMatrix, vector<T>& kernel) {
             T sum = 0;
             for (int k = 0; k < kernelSize; k++) {
                 int offset = k - kernelMid;
-                int neighbor = i + offset;
+                int neighborRow = i + offset;
+                int neighborCol = j;
 
-                // clamp at the edges
-                if (neighbor < 0) {
-                    neighbor = 0;
+                /* reflect off edges and use x value on opposite side of cylinder */
+                /* represents going over the poles */
+                if (neighborRow < 0) {
+                    neighborRow = neighborRow * -1 - 1;
+                    neighborCol = (neighborCol + xDim/2) % xDim;
                 }
-                if (neighbor > yDim - 1) {
-                    neighbor = yDim - 1;
+                if (neighborRow > yDim - 1) {
+                    neighborRow = yDim - (neighborRow - yDim + 1);
+                    neighborCol = (neighborCol + xDim/2) % xDim;
                 }
 
-                sum += kernel[k] * interMatrix[neighbor][j]; 
+                sum += kernel[k] * interMatrix[neighborRow][neighborCol]; 
             }
             inputMatrix[i][j] = sum;
         }

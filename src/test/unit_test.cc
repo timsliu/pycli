@@ -33,8 +33,12 @@ int main(int argc, char *argv[]) {
                              "Chceck convolution across left right edge is correct",
                              &convVerticalEdge};
 
+    struct testType test5 = {"convOverPoles",
+                             "Chceck convolution across the upper/lower edge is correct",
+                             &convOverPoles};
+
     /* assemble testType structs into single vector */
-    vector<testType> allTests = {test0, test1, test2, test3, test4};
+    vector<testType> allTests = {test0, test1, test2, test3, test4, test5};
     
     int success = allTests.size();       // counter for number of successful tests
     cout << endl;
