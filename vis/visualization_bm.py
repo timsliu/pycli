@@ -33,7 +33,7 @@ def plot_map(temps, color_map, model_name, coastlines):
         x2 = line[0][1]
         y1 = line[1][0]
         y2 = line[1][1]
-        plt.plot([x1, x2], [y1, y2], color='black', linewidth=1)
+        plt.plot([x1, x2], [y1, y2], color='lime', linewidth=1)
     plt.clim(minimum, maximum)
     plt.savefig(os.path.join(PYCLI_ROOT, "models/{}/{}.png".format(model_name, model_name)))
         
@@ -66,8 +66,8 @@ def get_coast(surface_array):
                 candidate = center + side     # coordinates of candidate tile
 
                 # point is off the edge - skip
-                if candidate[0] < 0 or candidate[0] >= yDim - 1\
-                    or candidate[1] < 0 or candidate[1] >= xDim - 1:
+                if candidate[0] < 0 or candidate[0] > yDim - 1\
+                    or candidate[1] < 0 or candidate[1] > xDim - 1:
                     continue
                 
                 # check if adjacent tile is ocean
@@ -75,16 +75,16 @@ def get_coast(surface_array):
                     x1, x2, y1, y2 = None, None, None, None 
                     # on the same row 
                     if candidate[0] == center[0]:
-                        y1 = center[0]
-                        y2 = center[0] + 1
+                        y1 = center[0] - 0.5
+                        y2 = center[0] + 0.5
                         x1 = (center[1] + candidate[1])/2
                         x2 = x1
                     # on the same col 
                     else:
                         y1 = (center[0] + candidate[0])/2
                         y2 = y1
-                        x1 = center[1]
-                        x2 = center[1] + 1
+                        x1 = center[1] - 0.5
+                        x2 = center[1] + 0.5
 
                     lines.add(((x1, x2), (y1, y2)))
     print("Number of lines: ", len(lines))
