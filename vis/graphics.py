@@ -129,6 +129,21 @@ def get_coast(surface_array, verbose=False):
     return lines
 
 
+def plot_avg_temps(avg_temps, temp_unit, model_name, verbose=False):
+    '''plot the average temperature'''
+    fig, ax = plt.subplots(1, 1)
+    plt.plot(list(range(len(avg_temps))), avg_temps)
+    plt.title("Average temperature")
+    plt.xlabel("Timestep")
+    plt.ylabel("Temperatures ({})".format(temp_unit))
+    ax.ticklabel_format(useOffset=False)
+    
+    if verbose:
+        print("Saving average temp plot at pycli/models/{}/avg_temps.png ...".format(model_name))
+    plt.savefig(os.path.join(PYCLI_ROOT, "models/{}/avg_temps.png".format(model_name)),
+                dpi=800)
+
+
 if __name__ == "__main__":
 
     
@@ -151,10 +166,11 @@ if __name__ == "__main__":
     prefs_file = os.path.join(PYCLI_ROOT, "models/{}/prefs.json".format(model_name))
     temp_file = os.path.join(PYCLI_ROOT, "models/{}/out/temp_f.txt".format(model_name))
     surface_file = os.path.join(PYCLI_ROOT, "models/{}/surface.txt".format(model_name))
-
+    avg_file = os.path.join(PYCLI_ROOT, "models/{}/out/avg_temp.txt".format(model_name))
     # parse the temperature, surface, and preference files
     temps_array = np.loadtxt(temp_file)
     surface_array = np.loadtxt(surface_file)
+    avg_temps = np.loadtxt(avg_file)
    
     prefs = None
     with open(prefs_file) as json_file:
@@ -168,5 +184,5 @@ if __name__ == "__main__":
     plot_map(temps_array, prefs["colors"], model_name, coastlines, verbose) 
 
     # plot graph of temperatures over time
-    #plot_avg_temps(avg_temps, verbose)
+    plot_avg_temps(avg_temps, "F", model_name, verbose)
 

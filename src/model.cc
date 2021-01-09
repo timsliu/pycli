@@ -99,7 +99,7 @@ void Model::outputResults() {
     }
 
     // print all of the planets
-    ofstream allTemp(_outputDir + "/allTemp.txt");
+    ofstream allTemp(_outputDir + "/avg_temp.txt");
     for (size_t i = 0; i < _computedPlanets.size(); i++) {
         
         string id;
@@ -116,7 +116,7 @@ void Model::outputResults() {
         tempFile.close();
 
         /* output average temperature at this step */
-        allTemp << "Step: " << i << " Average Temp: " << _computedPlanets[i].getAverageTemp() << endl;
+        allTemp << _computedPlanets[i].getAverageTemp() << endl;
     }
     allTemp.close();
 }

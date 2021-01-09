@@ -7,7 +7,7 @@
 # where <model_name>.py is the name of the PyCli model holding
 # the climate model
 
-
+import json
 import subprocess
 import os
 import sys
@@ -17,7 +17,8 @@ PYCLI_ROOT = os.path.join(os.getcwd(), "..")
 
 if __name__ == "__main__":
 
-    model_name = sys.argv[1]
+    model_name = sys.argv[1]    # parse the model name
+
    
     if model_name.find(".py") != -1:
         print("Argument to run-pycli.py should be model name without .py extension")
@@ -45,6 +46,9 @@ if __name__ == "__main__":
         print("\nPyCli execution halted due to invalid argument/configuration") 
         exit()
 
+    prefs = None
+    with open(os.path.join(PYCLI_ROOT, "models/{}/prefs.json".format(model_name))) as f:
+        prefs = json.load(f)
     
     # 3) update src
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
@@ -65,9 +69,15 @@ if __name__ == "__main__":
     
     os.chdir(os.path.join(PYCLI_ROOT, "vis"))
     # 5) run visualization
+    verbose_mode = ""
+    if prefs["verbose"]:
+        verbose_mode = "verbose"
+    else:
+        verbose_mode = "silent"
     subprocess.run([
         "python3",
         os.path.join(PYCLI_ROOT, "vis/graphics.py"),
+        "-v",
+        verbose_mode,
         model_name,
-        PYCLI_ROOT
     ])
