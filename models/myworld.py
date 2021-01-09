@@ -11,6 +11,7 @@ earth, prefs = pycli.new_model("custom", num_lat_gridlines=80,
 # optional - modify preferences
 prefs.set_pref({"colors": "jet"})
 
+
 # optional - setup starting concentration of CO2 in ppm
 
 # schedule 5 model steps

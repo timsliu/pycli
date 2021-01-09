@@ -202,6 +202,7 @@ each direction based on some probability (v 0.2)
 concentrations without calling methods (v 0.2)
 * Allow input to be either CO2 levels or annual net emissions (v 0.1)
 * Conditional statements based on temperature (v 0.3)
+* Make output temperatures a preference (v 0.1) **Done**
 
 ### Backend climate model
 * Fix convolution wrapping around vertical edge of map (v 0.1) **Done**
@@ -216,8 +217,8 @@ each timestep is independent (v 0.2)
 * Optionally output intermediate temperature files (v 0.2)
 
 ### Visualization suite
-* Remove basemap and build TKinter/matplotlib drawing mechanism (v 0.1)
-* Line chart of average temperature (v 0.1)
+* Remove basemap and build TKinter/matplotlib drawing mechanism (v 0.1) **Done**
+* Line chart of average temperature (v 0.1) **Done**
 * Stitch temperature files into a gif (v 0.3)
 
 

@@ -22,8 +22,16 @@ PYCLI_ROOT = os.path.join(os.getcwd(), "..")
 LAT_MAX = 90
 LON_MAX = 180
 
+def kelvin_to_cel(temps):
+    '''convert temperatures from kelvin to celcius'''
+    return temps - 273.15
 
-def plot_map(temps, color_map, model_name, coastlines, verbose = False):
+def kelvin_to_fah(temps):
+    '''convert temperatures from kelvin to fahrenheit'''
+    return (temps-273.15) * 1.8 + 32
+
+
+def plot_map(temps, color_map, model_name, coastlines, temp_unit, verbose = False):
     '''plot the temperature for each grid point using matplotlib'''
  
     if verbose:
@@ -62,7 +70,7 @@ def plot_map(temps, color_map, model_name, coastlines, verbose = False):
                        borderpad=0)
     
     # add colorbar label 
-    plt.colorbar(label='Average temperature (°F)', cax=axins)
+    plt.colorbar(label='Average temperature ({})'.format(temp_unit), cax=axins)
 
     plt.clim(minimum, maximum)
     
@@ -125,7 +133,8 @@ def get_coast(surface_array, verbose=False):
                         x2 = center[1] + 0.5
 
                     lines.add(((x1, x2), (y1, y2)))
-
+    if verbose:
+        print("Lines in coastline: {}".format(len(lines)))
     return lines
 
 
@@ -152,6 +161,7 @@ if __name__ == "__main__":
     # create parser
     parser = argparse.ArgumentParser(description="Generate visualizations for PyCli")
     parser.add_argument("model_name", type=str, help='name of the model')
+    parser.add_argument("-t", type=str, default="C", help='temperature units')
     parser.add_argument("-v", type=str, default="silent", help="run in verbose mode")
 
     # parse arguments
@@ -171,6 +181,14 @@ if __name__ == "__main__":
     temps_array = np.loadtxt(temp_file)
     surface_array = np.loadtxt(surface_file)
     avg_temps = np.loadtxt(avg_file)
+
+    # convert temperature arrays
+    if args.t == "C":
+        temps_array = kelvin_to_cel(temps_array)
+        avg_temps = kelvin_to_cel(avg_temps)
+    if args.t == "F":
+        temps_array = kelvin_to_fah(temps_array)
+        avg_temps = kelvin_to_fah(avg_temps)
    
     prefs = None
     with open(prefs_file) as json_file:
@@ -181,8 +199,8 @@ if __name__ == "__main__":
     coastlines = get_coast(surface_array, verbose=verbose)
     
     # plot the temperature heatmap
-    plot_map(temps_array, prefs["colors"], model_name, coastlines, verbose) 
+    plot_map(temps_array, prefs["colors"], model_name, coastlines, prefs["temp_unit"], verbose) 
 
     # plot graph of temperatures over time
-    plot_avg_temps(avg_temps, "F", model_name, verbose)
+    plot_avg_temps(avg_temps, prefs["temp_unit"], model_name, verbose)
 

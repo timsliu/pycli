@@ -8,7 +8,7 @@ import pycli
 earth, prefs = pycli.new_model("large")
 
 # optional - modify preferences
-prefs.set_pref({"verbose": True, "colors": "jet"})
+prefs.set_pref({"verbose": True, "colors": "jet", "temp_unit": "F"})
 
 # optional - setup starting concentration of CO2
 earth.set_atmosphere("CO2", 0.0004)

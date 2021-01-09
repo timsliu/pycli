@@ -9,18 +9,20 @@ import os
 import json
 
 # default preference dictionary 
-DEFAULT = {"backend_model": "simple",
+DEFAULT = {"backend_model": "serial",
            "save_intermeds": True,
-           "colors": "RdBu_r",
            "verbose": True,
-           "atmospere_type": "concentration"}
+           "temp_unit": "C",
+           "atmos_type": "concentration",
+           "colors": "RdBu_r"}
 
 
 # list of allowed preferences
-ALLOWED = {"backend_model": ["simple"],                    # backend climate model
+ALLOWED = {"backend_model": ["serial"],                    # backend climate model
          "save_intermeds": [True, False],                  # save intermediate temps
          "verbose": [True, False],                         # verbose mode
          "atmos_type": ["concentration", "emission"],      # what atmosphere values specify
+         "temp_unit": ["F", "C", "K"],                     # output temperature type
          "colors":                                         # color schemes 
             ['Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
             'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
