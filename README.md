@@ -192,8 +192,41 @@ This directory contains the installation of the `basemap` library used for
 generating temperature maps. This folder also has the visualization suite
 responsible for parsing temperature files and generating temperature maps.
 
+## Planned features and TODO
+
+### Python Frontend
+
+* Improved random surface generation using random "islands" that grow in 
+each direction based on some probability (v 0.2)
+* Use Python operator overloading to allow setting atmospheric gas
+concentrations without calling methods (v 0.2)
+* Allow input to be either CO2 levels or annual net emissions (v 0.1)
+* Conditional statements based on temperature (v 0.3)
+* Make output temperatures a preference (v 0.1) **Done**
+
+### Backend climate model
+* Fix convolution wrapping around vertical edge of map (v 0.1) **Done**
+* Update convolution so that grid cells over the poles are adjacent (v 0.1) **Done** 
+* Add accelerated convolution and average temp calculation so accelerated
+model can be used (v 0.2)
+* Add tilt to the planet (v 0.4)
+* Make temperature at each timestep influenced by previous timestep - currently
+each timestep is independent (v 0.2)
+* Change surfaces so that ice can melt and water can freeze depending on temperature (v 0.3)
+* Spawn additional threads to output temperature files in parallel with calculations (v 0.2)
+* Optionally output intermediate temperature files (v 0.2)
+
+### Visualization suite
+* Remove basemap and build TKinter/matplotlib drawing mechanism (v 0.1) **Done**
+* Line chart of average temperature (v 0.1) **Done**
+* Stitch temperature files into a gif (v 0.3)
+
+
+### Additional features
+* OSX compatibility (there are no plans to make PyCli Windows compatible) (v 0.1)
 
 ## Contributors and Contact
 PyCli is an open source project created by Kalhan Koul, Timothy Liu, and
 Jack Melchert at Stanford. This project originated from a [CS343D: Domain Specific
-Programming Models and Compilers](https://cs343d.github.io/)  course assignment.
+Programming Models and Compilers](https://cs343d.github.io/)  course assignment
+and is currently maintained and updated by Timothy Liu.

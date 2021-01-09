@@ -37,9 +37,10 @@ class Model:
         # update the atmosphere for the current timestep
         self.atmosphere.update_atmosphere(gas, value, self.current_step)
 
-    def get_atmosphere(self, element, step = None):
-        '''return the atmosphere - not implemented''' 
-        # TODO
+    def get_atmosphere(self):
+        '''return a dictionary with the concentration of gases in the atmosphere
+        at the latest step''' 
+        return self.atmosphere.get_atmosphere() 
 
     def model_step(self):
         '''increment counter tracking the step index'''
@@ -52,7 +53,7 @@ class Model:
     def write_config(self):
         '''write the configuration files surface.txt and atmosphere.txt out''' 
         # write the defined surface or use a preset surface 
-        if self.preset_surface == "":
+        if self.preset_surface is None:
             self.surface.write_to_file()
         else:
             self.surface.copy_preset(self.preset_surface)

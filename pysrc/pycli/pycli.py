@@ -38,13 +38,13 @@ def new_model(name = None, num_lat_gridlines = None, num_lon_gridlines = None, i
     elif name == "large":
         model = Model(num_lat_gridlines = 1000, num_lon_gridlines = 1000)
     
-    # large earth - predefined map 
-    elif name == "earth_big":
-        model = Model(preset_surface = "earth_big")
-    
     # small earth - predefined map 
     elif name == "earth":
         model = Model(preset_surface = "earth")
+    
+    # large earth - predefined map 
+    elif name == "earth_big":
+        model = Model(preset_surface = "earth_big")
 
     # custom user defined map and atmosphere
     elif name == "custom":
@@ -64,8 +64,7 @@ def new_model(name = None, num_lat_gridlines = None, num_lon_gridlines = None, i
                 model = Model(num_lat_gridlines=num_lat_gridlines,
                               num_lon_gridlines=num_lon_gridlines, init_atmos=init_atmos)
     else:
-        print("Model name not in allowed list: ", ALLOWED_NAMES)
-        raise NotImplementedError
+        raise ValueError("Model name not in allowed list: {}".format(str(ALLOWED_NAMES)))
 
     # return the model and the model and a preference instance
     return model, Preferences()

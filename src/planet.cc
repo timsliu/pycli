@@ -82,7 +82,7 @@ void Planet::printPlanet(size_t step, ofstream& outFile) {
 
     for (size_t i = 0; i < _latCells; i++) {
         for (size_t j = 0; j < _longCells; j++) {
-            outFile << " " << setprecision(3) << 1.8 * (_temperature[i][j] - 273) + 32 << " ";
+            outFile << " " << setprecision(3) <<  _temperature[i][j] << " ";
         }
         outFile << endl;
     }

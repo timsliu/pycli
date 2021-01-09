@@ -9,16 +9,20 @@ import os
 import json
 
 # default preference dictionary 
-DEFAULT = {"backend_model": "simple",
+DEFAULT = {"backend_model": "serial",
            "save_intermeds": True,
-           "colors": "RdBu_r",
-           "verbose": True}
+           "verbose": True,
+           "temp_unit": "C",
+           "atmos_type": "concentration",
+           "colors": "RdBu_r"}
 
 
 # list of allowed preferences
-ALLOWED = {"backend_model": ["simple", "accel"],           # backend climate model
+ALLOWED = {"backend_model": ["serial"],                    # backend climate model
          "save_intermeds": [True, False],                  # save intermediate temps
          "verbose": [True, False],                         # verbose mode
+         "atmos_type": ["concentration", "emission"],      # what atmosphere values specify
+         "temp_unit": ["F", "C", "K"],                     # output temperature type
          "colors":                                         # color schemes 
             ['Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
             'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
@@ -75,13 +79,13 @@ class Preferences:
         for key in pref_dic.keys():
             # preference is invalid
             if key not in ALLOWED.keys():
-                print("Preference: '{}' not in allowed preferences".format(key))
-                print("List of allowed preferences: ", ALLOWED.keys())
+                print("List of allowed preferences: ", list(ALLOWED.keys()))
+                raise ValueError("Preference: '{}' not in allowed preferences".format(key))
             else:
                 # setting not an allowed value for the preference
                 if pref_dic[key] not in ALLOWED[key]:
-                    print("Setting {} not compatible for preference '{}'")
-                    print("List of allowed settings for preference '{}': ".format(key), ALLOWED[key])
+                    print("List of allowed settings for preference '{}':\n {}".format(key, ALLOWED[key]))
+                    raise ValueError("Setting '{}' not compatible for preference '{}'".format(pref_dic[key], key))
                 # valid key value preference 
                 else:
                     good_prefs[key] = pref_dic[key]
@@ -90,7 +94,7 @@ class Preferences:
 
     def write_preferences(self):
         '''save all preferences to a json file'''
-        # find the name of the model - TODO check this works
+        # find the name of the model
         model_name = sys.argv[0][0:sys.argv[0].find(".")]
 
         # write to json file

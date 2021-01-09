@@ -7,7 +7,7 @@
 # where <model_name>.py is the name of the PyCli model holding
 # the climate model
 
-
+import json
 import subprocess
 import os
 import sys
@@ -17,45 +17,75 @@ PYCLI_ROOT = os.path.join(os.getcwd(), "..")
 
 if __name__ == "__main__":
 
-    model_name = sys.argv[1]
+    model_name = sys.argv[1]    # parse the model name
+
+    if model_name.find(".py") != -1:
+        print("Argument to run-pycli.py should be model name without .py extension")
+        exit()
+
+    # model input and output paths
     model_out = os.path.join(PYCLI_ROOT, "models/{}/out".format(model_name))
     model_in = os.path.join(PYCLI_ROOT, "models/{}".format(model_name))
   
-    # make sure there is the needed in and out files
+    # 1) make sure there is the needed in and out files
     for path in [model_in, model_out]:
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
 
-    # update src
+
+    os.chdir(os.path.join(PYCLI_ROOT, "models"))
+    # 2) compile the model and generate surface and atmosphere files
+    try:
+        subprocess.run([
+            "python3",
+            model_name + ".py",
+        ], check=True)
+
+    except subprocess.CalledProcessError:
+        print("\nPyCli execution halted due to invalid argument/configuration") 
+        exit()
+
+    # open preference file
+    prefs = None
+    with open(os.path.join(PYCLI_ROOT, "models/{}/prefs.json".format(model_name))) as f:
+        prefs = json.load(f)
+    
+    verbose_mode = ""
+    if prefs["verbose"]:
+        verbose_mode = "verbose"
+    else:
+        verbose_mode = "silent"
+    
+    # 3) update src
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
     subprocess.run([
         "make",
         "-j4"
     ])
-
-    os.chdir(os.path.join(PYCLI_ROOT, "models"))
-    # 1) compile the model and generate surface and text
-    subprocess.run([
-        "python3",
-        model_name + ".py",
-    ])
-
-    # 2) run the C++ climate model
+    
+    # 4) run the C++ climate model
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
+    if prefs["verbose"]: 
+        verbose_str = "-v" 
+    else:
+        verbose_str = ""
     subprocess.run([
         "./../bin/pycli", 
-        model_name, 
-        "-v",
+        model_name,
+        verbose_str,
         "-m",
-        "serial"
+        prefs["backend_model"]
     ])
-    os.chdir(PYCLI_ROOT)
-
-    # 3) run visualization
+    
+    os.chdir(os.path.join(PYCLI_ROOT, "vis"))
+    # 5) run visualization
     subprocess.run([
         "python3",
-        os.path.join(PYCLI_ROOT, "pyvisual/visualization_bm.py"),
+        os.path.join(PYCLI_ROOT, "vis/graphics.py"),
+        "-v",                      # verbose mode
+        verbose_mode,
+        "-t",                      # temperature unit
+        prefs["temp_unit"],
         model_name,
-        PYCLI_ROOT
     ])

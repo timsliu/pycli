@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
     struct testType test0 = {"convUniform", 
                              "convolve a uniform grid", 
                              &convUniform};
+
     struct testType test1 = {"linearKernel",
                              "Check linear kernel has correct size and normalizes to 1", 
                              &linearKernel};
@@ -28,8 +29,16 @@ int main(int argc, char *argv[]) {
                              "Sum of the area of strips should equal area of a sphere",
                              &areaStripSumEqual};
 
+    struct testType test4 = {"convVerticalEdge",
+                             "Chceck convolution across left right edge is correct",
+                             &convVerticalEdge};
+
+    struct testType test5 = {"convOverPoles",
+                             "Chceck convolution across the upper/lower edge is correct",
+                             &convOverPoles};
+
     /* assemble testType structs into single vector */
-    vector<testType> allTests = {test0, test1, test2, test3};
+    vector<testType> allTests = {test0, test1, test2, test3, test4, test5};
     
     int success = allTests.size();       // counter for number of successful tests
     cout << endl;
@@ -49,7 +58,7 @@ int main(int argc, char *argv[]) {
     }
 
     cout << "******************* Test Results *******************" << endl;
-    cout << "Total Tests: " << allTests.size() << "    " << "Successful Tests: " << success << endl;
+    cout << "Successful Tests: " << success <<  "    " << "Total Tests: " << allTests.size() << endl;
     cout << "****************************************************" << endl;
 
     return 0;

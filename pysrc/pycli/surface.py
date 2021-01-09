@@ -1,6 +1,7 @@
 import sys
 import os
 import shutil
+import random
 
 # this assumes script is being run from run-cli.py in models directory
 PYCLI_ROOT = os.path.join(os.getcwd(), "..")
@@ -12,6 +13,11 @@ class Surface:
     set to a surface type (land, sea, or ice)'''
 
     def __init__(self, num_lat_gridlines, num_lon_gridlines):
+
+        if num_lat_gridlines % 2 != 0 or num_lon_gridlines % 2 != 0\
+            or num_lat_gridlines < 0 or num_lon_gridlines < 0:
+            raise ValueError("Num_late_gridlines/num_lon_gridlines must be even positive integers!")
+        
         self.num_lat_grid = num_lat_gridlines
         self.num_lon_grid = num_lon_gridlines
         
@@ -43,15 +49,15 @@ class Surface:
         shutil.copyfile(src, dst)
         
 
-    # TODO
-    def gen_random_surface(self):
+    # TODO - update to generate more realistic surfaces
+    def gen_random_surface(self, seed=0):
         '''randomly generate a surface
         inputs: seed (int) - random seed for surface; same seed generates same
                 surface'''
 
-        for i in range(self.surface.num_lat_grid):
-            for j in range(self.surface.num_lon_grid):
-                if i <= self.surface.num_lat_grid * 0.1 or i >= self.surface.num_lat_grid * 0.9:
-                    self.surface.set_grid_cell_type(i, j, 2)
+        for i in range(self.num_lat_grid):
+            for j in range(self.num_lon_grid):
+                if i <= self.num_lat_grid * 0.1 or i >= self.num_lat_grid * 0.9:
+                    self.set_grid_cell_type(i, j, 2)
                 else:
-                    self.surface.set_grid_cell_type(i, j, random.randint(0,2))
+                    self.set_grid_cell_type(i, j, random.randint(0,2))
