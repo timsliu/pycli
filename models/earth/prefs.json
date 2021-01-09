@@ -1,1 +1,1 @@
-{"backend_model": "serial", "colors": "RdBu_r", "temp_unit": "C", "verbose": true, "atmos_type": "concentration", "save_intermeds": true}
+{"backend_model": "serial", "save_intermeds": true, "verbose": true, "temp_unit": "C", "atmos_type": "concentration", "colors": "RdBu_r"}

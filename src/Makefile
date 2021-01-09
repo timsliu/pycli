@@ -6,7 +6,7 @@
 OBJS = planet.o model.o parser.o utils.o
 TEST_OBJS = test/unit_test.o test/conv_test.o test/omp_test.o test/util_test.o test/test.o utils.o
 CXX = g++
-CXXFLAGS = -std=c++11 -fopenmp -g -Wall -Werror -O3
+CXXFLAGS = -std=c++11 -Xpreprocessor -fopenmp -g -Wall -Werror -O3
 
 ##### Dependencies #####
 
