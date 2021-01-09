@@ -6,7 +6,9 @@
 OBJS = planet.o model.o parser.o utils.o
 TEST_OBJS = test/unit_test.o test/conv_test.o test/omp_test.o test/util_test.o test/test.o utils.o
 CXX = g++
-CXXFLAGS = -std=c++11 -Xpreprocessor -fopenmp -g -Wall -Werror -O3
+#CXXFLAGS = -std=c++11 -Xpreprocessor -fopenmp -g -Wall -Werror -O3
+CXXFLAGS = -std=c++14 -Wall -Werror -Xpreprocessor -fopenmp
+LDFLAGS = -lomp
 
 ##### Dependencies #####
 
@@ -35,7 +37,7 @@ test/test.o: test/test.cc
 
 # build pycli - does not run model
 pycli: $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	mv *.o ../bin
 	mv $@ ../bin
 
@@ -67,8 +69,7 @@ omp: omp_test.cc
 clean:
 	rm -rf *.o
 	rm -rf test/*.o
-	cd ../bin
-	rm -f !"README.md"
-	cd -
+	rm -rf ../bin/*.o
+	rm -rf ../bin/pycli
 
 .PHONY: all clean
