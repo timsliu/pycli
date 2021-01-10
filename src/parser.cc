@@ -13,14 +13,16 @@ void printHelp() {
     cout << "\nExpecting arguments: " << endl;
     cout << "<model_dir> path relative to MODEL_IN with atmosphere and surface files" << endl;
     cout << "            this arg will be appended to MODEL_OUT and filled with output files" << endl;
-    cout << "-v optional verbose flag; default false" << endl;
-    cout << "-m <model_name> optional flag specifying model: serial (default), accel" << endl;
+    cout << "-v (optional) verbose flag; default false" << endl;
+    cout << "-e (optional) atmosphere is emissions; default atmos is concentration" << endl;
+    cout << "-m <model_name>(optional) flag specifying model; serial (default), accel" << endl;
 }
 
 int main(int argc, char *argv[]) {
     cout << "Welcome to PyCli!" << endl;
 
     bool verbose = false;
+    bool emission = false;
     string modelType = "serial";
 
     string inputDir;
@@ -31,8 +33,9 @@ int main(int argc, char *argv[]) {
 
     vector<string> allArgs(argv, argv + argc);
     try {
-        verbose = false;
-        modelType = "serial";
+        verbose = false;                /* default verbose value */
+        emission = false;    /* default atmosphere specification */
+        modelType = "serial";           /* default model */
 
         inputDir = MODEL_IN + allArgs[1];
         outputDir = MODEL_OUT + allArgs[1] + "/out";
@@ -45,6 +48,9 @@ int main(int argc, char *argv[]) {
             }
             if (allArgs[i] == "-m") {
                 modelType = allArgs[i + 1];
+            }
+            if (allArgs[i] == "-e") {
+                emission = true;
             }
         }
     } 
@@ -91,13 +97,23 @@ int main(int argc, char *argv[]) {
             map<string, double> atmoStep;
             int parseIndex = 0;
             string gas;
-            double concentration;
+            double quantity;
 
             while (!iss.eof()) {
                 if (parseIndex % 2 == 0) {
                     iss >> gas;
                 } else {
-                    iss >> concentration;
+                    iss >> quantity;
+                    /* convert from emission level to concentration */
+                    double concentration = quantity;
+                    if (atmosList.size() > 0 and emission) {
+                        /* conversion for CO2 */ 
+                        if (gas.compare("CO2") == 0) {
+                            concentration = quantity * CO2_EMIT2CONC * CO2_ATMOS + atmosList.back()[gas];
+                        }
+                    }
+                    /* insert gas and concentration */
+                    cout << concentration;
                     atmoStep.insert(pair<string, double>(gas, concentration));
                 }
                 parseIndex++;

@@ -1,1 +1,1 @@
-{"save_intermeds": true, "verbose": false, "backend_model": "simple", "colors": "jet"}
+{"backend_model": "serial", "save_intermeds": true, "verbose": false, "temp_unit": "C", "atmos_type": "concentration", "colors": "jet"}

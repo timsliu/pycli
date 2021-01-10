@@ -66,14 +66,24 @@ if __name__ == "__main__":
     
     # 4) run the C++ climate model
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
+   
+    # map verbose preference to flag
     if prefs["verbose"]: 
         verbose_str = "-v" 
     else:
         verbose_str = ""
+   
+    # map atmos type preference to flag
+    if prefs["atmos_type"] == "emission":
+        atmos_str = "-e"
+    else:
+        atmos_str = ""
+
     subprocess.run([
         "./../bin/pycli", 
         model_name,
         verbose_str,
+        atmos_str,
         "-m",
         prefs["backend_model"]
     ])

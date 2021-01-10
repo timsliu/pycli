@@ -223,7 +223,7 @@ each timestep is independent (v 0.2)
 
 
 ### Additional features
-* OSX compatibility (there are no plans to make PyCli Windows compatible) (v 0.1)
+* OSX compatibility (there are no plans to make PyCli Windows compatible) (v 0.1) **Done**
 
 ## Contributors and Contact
 PyCli is an open source project created by Kalhan Koul, Timothy Liu, and
