@@ -1,14 +1,26 @@
 # makefile for pycli
 #
 
+### Environment setup ###
+OS = LINUX
+
 ##### Variables #####
 
 OBJS = planet.o model.o parser.o utils.o
 TEST_OBJS = test/unit_test.o test/conv_test.o test/omp_test.o test/util_test.o test/test.o utils.o
 CXX = g++
-#CXXFLAGS = -std=c++11 -Xpreprocessor -fopenmp -g -Wall -Werror -O3
-CXXFLAGS = -std=c++14 -Wall -Werror -Xpreprocessor -fopenmp
-LDFLAGS = -lomp
+
+# compile and linkder flags for macOS
+ifeq ($(OS), macOS)
+	CXXFLAGS = -std=c++14 -Wall -Werror -Xpreprocessor -fopenmp
+    LDFLAGS = -lomp
+endif
+
+# compile and linker flags for Linux operating systems
+ifeq ($(OS), LINUX)
+	CXXFLAGS = -std=c++14 -fopenmp -g -Wall -Werror -O3
+    LDFLAGS = 
+endif
 
 ##### Dependencies #####
 
@@ -37,7 +49,7 @@ test/test.o: test/test.cc
 
 # build pycli - does not run model
 pycli: $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $^ -o $@ #$(LDFLAGS)
 	mv *.o ../bin
 	mv $@ ../bin
 
