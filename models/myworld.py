@@ -12,8 +12,8 @@ earth, prefs = pycli.new_model("custom",
 
 # optional - modify preferences
 prefs.set_pref({"colors": "jet",            # color spectrum
-                "atmos_type": "emission"    # specify CO2 emissions 
-               })
+                "atmos_type": "emission",    # specify CO2 emissions 
+               "verbose" : False})
 
 
 # optional - setup starting concentration of CO2 in ppm

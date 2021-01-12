@@ -69,7 +69,7 @@ public:
 
    void calcRadIn();
 
-   void printPlanet(size_t step, std::ofstream& outFile);
+   void printPlanet(std::ofstream& outFile);
 
    float getAverageTemp() { return _averageTemp; }
 

@@ -28,14 +28,16 @@ if __name__ == "__main__":
     model_in = os.path.join(PYCLI_ROOT, "models/{}".format(model_name))
   
     # 1) make sure there is the needed in and out files
+    print("\n**** Cleaning output path ****\n")
+
     for path in [model_in, model_out]:
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
 
-
-    os.chdir(os.path.join(PYCLI_ROOT, "models"))
     # 2) compile the model and generate surface and atmosphere files
+    print("\n**** Generating model description ****\n")
+    os.chdir(os.path.join(PYCLI_ROOT, "models"))
     try:
         subprocess.run([
             "python3",
@@ -58,6 +60,7 @@ if __name__ == "__main__":
         verbose_mode = "silent"
     
     # 3) update src
+    print("\n**** Compiling PyCli backend source ****\n")
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
     subprocess.run([
         "make",
@@ -65,6 +68,7 @@ if __name__ == "__main__":
     ])
     
     # 4) run the C++ climate model
+    print("\n**** Starting backend climate model ****\n")
     os.chdir(os.path.join(PYCLI_ROOT, "src"))
    
     # map verbose preference to flag
@@ -88,8 +92,10 @@ if __name__ == "__main__":
         prefs["backend_model"]
     ])
     
-    os.chdir(os.path.join(PYCLI_ROOT, "vis"))
     # 5) run visualization
+    os.chdir(os.path.join(PYCLI_ROOT, "vis"))
+    print("\n**** Running visualization suite ****\n")
+    
     subprocess.run([
         "python3",
         os.path.join(PYCLI_ROOT, "vis/graphics.py"),
@@ -99,3 +105,6 @@ if __name__ == "__main__":
         prefs["temp_unit"],
         model_name,
     ])
+
+    print("\n**** PyCli finished - exiting...  ****\n")
+

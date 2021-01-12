@@ -19,7 +19,6 @@ void printHelp() {
 }
 
 int main(int argc, char *argv[]) {
-    cout << "Welcome to PyCli!" << endl;
 
     bool verbose = false;
     bool emission = false;
@@ -113,7 +112,6 @@ int main(int argc, char *argv[]) {
                         }
                     }
                     /* insert gas and concentration */
-                    cout << concentration;
                     atmoStep.insert(pair<string, double>(gas, concentration));
                 }
                 parseIndex++;

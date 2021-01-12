@@ -77,8 +77,7 @@ double Planet::calcFluxAntideri(double x) {
     return termOne - termTwo;
 }
 
-void Planet::printPlanet(size_t step, ofstream& outFile) {
-    cout << "Temperatures at timestep: " << step << endl;
+void Planet::printPlanet(ofstream& outFile) {
 
     for (size_t i = 0; i < _latCells; i++) {
         for (size_t j = 0; j < _longCells; j++) {

@@ -155,9 +155,6 @@ def plot_avg_temps(avg_temps, temp_unit, model_name, verbose=False):
 
 if __name__ == "__main__":
 
-    
-    print("Starting PyCli visualization suite...")
-   
     # create parser
     parser = argparse.ArgumentParser(description="Generate visualizations for PyCli")
     parser.add_argument("model_name", type=str, help='name of the model')

@@ -56,10 +56,6 @@ Model::Model(size_t steps, Planet planetStart, vector<map<string, double>> atmos
 
 void Model::simClimate() {
 
-    if (_verbose) {
-        cout << "Starting climate sim" << endl;
-    }
-    
     auto start = chrono::system_clock::now();
     for (size_t i = 0; i < _steps; i++ ) {
         // set the atmosphere of the planet and calculate temperatures
@@ -72,7 +68,10 @@ void Model::simClimate() {
         Planet lastPlanet = Planet(_currentPlanet);
         _computedPlanets.push_back(lastPlanet);
         _currentStep++;
-
+        if (_verbose) {
+            cout << "Step " << _currentStep << " of "; 
+            cout << _steps << " calculated" << endl;
+        }
     }
     auto end = chrono::system_clock::now();
     
@@ -112,11 +111,15 @@ void Model::outputResults() {
 
         /* output file with all temperatures */
         ofstream tempFile(_outputDir + "/temp_" + id + ".txt");
-        _computedPlanets[i].printPlanet(i, tempFile);
+        _computedPlanets[i].printPlanet(tempFile);
         tempFile.close();
 
         /* output average temperature at this step */
         allTemp << _computedPlanets[i].getAverageTemp() << endl;
+
+        if (_verbose) {
+            cout << "Temperatures at step: " << i << " saved " << endl;
+        }
     }
     allTemp.close();
 }
@@ -133,7 +136,7 @@ void Model::outputResults() {
 
 SerialModel::SerialModel(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     Model(steps, planetStart, atmos, verbose, outputDir) {
-    cout << "Creating Serial Model" << endl;
+    cout << "Serial climate model instantiated" << endl;
 }
 
 
@@ -207,7 +210,7 @@ void SerialModel::calcAverageTemp() {
 
 AccelModel::AccelModel(size_t steps, Planet planetStart, vector<map<string, double>> atmos, bool verbose, string outputDir): 
     Model(steps, planetStart, atmos, verbose, outputDir) {
-    cout << "Creating Accel Model" << endl;
+    cout << "Accelerated climate model instantiated" << endl;
 }
 
 /*
