@@ -4,18 +4,21 @@ import pycli
 earth, prefs = pycli.new_model("earth")
 
 # optional - modify preferences
+prefs.set_pref({"colors": "jet"})         # color for charts
 
 # optional - setup starting concentration of CO2 in ppm
 # if not defined in initialization
-earth.set_atmosphere("CO2", 0.00028)
+CO2_level = 0.00028
+earth.set_atmosphere("CO2", CO2_level)
 
 # schedule 5 model steps
 for i in range(5):
     # increment model step 
     earth.model_step()
-  
+ 
+    CO2_level += 0.00001
     # annual CO2 emissions in gigatons
-    earth.set_atmosphere("CO2", 0.0003)
+    earth.set_atmosphere("CO2", CO2_level)
 
 # write out the configuration for the planet and the configurations
 earth.write_config()
