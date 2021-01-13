@@ -14,6 +14,8 @@ and ocean currents. This project is not meant to compete with the climate
 models designed by national institutes. Rather, it is purely an educational
 tool designed for people interested in climate change and scientific computing.
 
+![Alt text](images/earth.png?raw=true "Earth temperature map")
+
 ## Supported Modeling Features
 PyCli uses a discretized grid to represent the earth and to simulate
 temperatures. Currently, the model allows users to specify:
@@ -136,7 +138,7 @@ at each step will be placed in model's folder.
 ## Folder Organization
 This section briefly describes the contents of each of the subfolders in the
 PyCli repo. Some of the subfolders have a `README.md` with more details about
-the subfolders function.
+the subfolder's function.
 
 ### src
 The `src` directory contains the C++ backend for running the climate model.
@@ -157,9 +159,6 @@ generated configuration files, launch the C++ backend, and finally use the
 visualization suite to create graphs and maps. The README in this folder
 has more information on how to write models in PyCli.
 
-### bin
-The `bin` directory contains compiled binary files.
-
 ### pysrc
 This directory contains the PyCli library for the PyCli front end. The front
 end is implemented as a series of method calls for users to create a new
@@ -172,11 +171,13 @@ This directory contains typeset documents describing how the C++ climate
 model backend works. Users interested in the science and mathematics behind
 the model should read this document.
 
-
 ### vis
 This directory contains the visualization suite for creating plots and temperature
 maps. Users interested in changing or adding output plots should modify files in
 this folder.
+
+### bin
+The `bin` directory contains compiled binary files.
 
 ### spectrum
 The `spectrum` directory includes several Python programs that were used to
@@ -185,8 +186,11 @@ the backend climate model. The file `pycli.pdf` in the `tex` folder has more
 details on these calculations.
 
 ### images
-Images used in this `README.md` file are stored in the `images` directory.
+Images used for README files are stored in the `images` directory.
 
+### docs
+Documentation, release notes, and planned changes are detailed in the 
+`docs` folder.
 
 
 ## Contributors, Contact, and License
