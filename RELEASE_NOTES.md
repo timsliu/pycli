@@ -2,9 +2,11 @@
 
 ## Description
 This page describes the different changes and updates in each version of PyCli.
-The naming scheme for each release is x.y.z where x is incremented on major
-rewrites, y is incremented for signficant new features, and z is incremented
-for minor feature changes, bug fixes, or modifications.
+The naming scheme for each release is `x.y.z` where:
+
+* `x` is incremented on major rewrites
+* `y` is incremented for signficant new features
+* `z` is incremented for minor feature changes, bug fixes, or modifications
 
 ## Releases
 
