@@ -20,8 +20,10 @@ temperatures. Currently, the model allows users to specify:
 
 1. The surface of the planet (land, sea, or ice)
 2. The model resolution, defined by the size of the grid
-3. The composition of the atmosphere at each simulation step. The CO2 level is
-currently the main driver of temperature changes between steps.
+3. The amount of CO2 in the atmosphere at each simulation step. 
+The CO2 level is the main driver of temperature changes between steps. Users
+can specify either the concentration (in ppm) or the amount of CO2 emitted
+(in gigatons).
 
 ## Environment
 
@@ -41,6 +43,7 @@ C++:
 ```
 C++14
 OpenMP
+gcc or clang compiler
 ```
 
 OS and other:
@@ -81,7 +84,6 @@ pip3 install matplotlib
 pip3 install numpy
 pip3 install mpl_toolkits
 pip3 install argparse
-
 ```
 
 To install OpenMP on macOS, use Homebrew:
@@ -120,40 +122,40 @@ python3 run-pycli.py earth
 Note that the model name should not have `.py` at the end - only include
 The name of the model. The `run-pycli.py` script will run the PyCli
 model interpreter, the climate simulation backend, and the visualization
-suite. The output should look like:
-
-
-![Alt text](images/run-pycli_out.png?raw=true "Output from running run-pycli.py")
-
+suite.
 
 The script will create a directory with the name of the model in
 the `<models>` folder and place a `surface.txt` and `atmosphere.txt`
 file in the directory. These files describe the surface of the planet and
 the atmosphere at each simulation step. After the simulation is run, a map
-of the final temperatures will be placed in models folder.
+of the final temperatures and a chart of the average temperature
+at each step will be placed in model's folder.
 
-![Alt text](images/earth_big.png?raw=true "Earth Big temperature map")
+![Alt text](images/earth.png?raw=true "Earth temperature map")
 
 ## Folder Organization
 This section briefly describes the contents of each of the subfolders in the
-PyCli repo. Each section has a `README.md` with more details about the subfolders
-function.
+PyCli repo. Some of the subfolders have a `README.md` with more details about
+the subfolders function.
 
 ### src
 The `src` directory contains the C++ backend for running the climate model.
-This folder also contains the `Makefile` for compiling the model. Users wishing
-to modify the climate model should make changes in this directory.
+This folder also contains the `Makefile` for compiling the model and some
+testing infrastructure. Users wishing to modify the climate model should
+make changes in this directory.
 
 ### models
 This directory contains PyCli models. All PyCli models should be written and
-saved in this directory. Each time a PyCli model is run, a new subfolder will
-be generated holding the atmosphere and surface configuration files. The final
-temperature map will also be dumped into this directory.
+saved in this directory with a `.py` extension. Each time a PyCli model is 
+run, a new subfolder will be generated holding the atmosphere and surface
+configuration files. The final temperature map will then be placed in a
+model's newly created subfolder.
 
 This directory also holds the `run-pycli.py` script. This script is run to
 invoke the entire PyCli stack. The script will run the PyCli front end to
 generated configuration files, launch the C++ backend, and finally use the
-visualization suite to create graphs and maps.
+visualization suite to create graphs and maps. The README in this folder
+has more information on how to write models in PyCli.
 
 ### bin
 The `bin` directory contains compiled binary files.
@@ -165,19 +167,29 @@ model, set the surface, and specify the atmosphere at each step. The Python
 front end is also responsible for generating the model configuration files used
 by the C++ climate model.
 
-Users wishing to learn more about writing models in PyCli should read the
-`README` in this folder.
-
 ### tex
 This directory contains typeset documents describing how the C++ climate
 model backend works. Users interested in the science and mathematics behind
 the model should read this document.
 
 
-### pyvisual
-This directory contains the installation of the `basemap` library used for
-generating temperature maps. This folder also has the visualization suite
-responsible for parsing temperature files and generating temperature maps.
+### vis
+This directory contains the visualization suite for creating plots and temperature
+maps. Users interested in changing or adding output plots should modify files in
+this folder.
+
+### spectrum
+The `spectrum` directory includes several Python programs that were used to
+calculate physical constants related to atmospheric infrared absorption for
+the backend climate model. The file `pycli.pdf` in the `tex` folder has more
+details on these calculations.
+
+### research
+This directory contains several papers and textbook chapters that were referenced
+to create the backend climate change model.
+
+## images
+Images used in this `README.md` file are stored in the `images` directory.
 
 ## Planned features
 
@@ -202,10 +214,12 @@ each timestep is independent (v 0.2)
 ### Visualization suite
 * Stitch temperature files into a gif (v 0.3)
 
-### Additional features
 
-## Contributors and Contact
+## Contributors, Contact, and License
 PyCli is an open source project created by Kalhan Koul, Timothy Liu, and
-Jack Melchert at Stanford. This project originated from a [CS343D: Domain Specific
-Programming Models and Compilers](https://cs343d.github.io/)  course assignment
-and is currently maintained and updated by Timothy Liu.
+Jack Melchert at Stanford and distributed under the MIT License. 
+This project originated from a [CS343D: Domain Specific
+Programming Models and Compilers](https://cs343d.github.io/) course assignment
+and is currently maintained and updated by Timothy Liu. The developers of 
+PyCli would like to thank Professor Paul Asimow from Caltech for his
+helpful insights on the radiative transfer model used in the backend.
