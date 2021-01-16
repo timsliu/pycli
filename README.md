@@ -222,3 +222,8 @@ suggestions is to use the [PyCli Google Group](https://groups.google.com/g/pycli
 ## [License](#license)
 PyCli-DSL is distributed under the MIT open source license. For the full
 license contents, please see `license.txt`.
+
+
+
+##
+<span style="color:LightGray">Copyright 2021 Timothy Liu</span>
