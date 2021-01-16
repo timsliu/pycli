@@ -1,18 +1,50 @@
 # Writing Models in PyCli
 
-A **model** in PyCli refers to two separate topics. A PyCli model is the 
+A **model** in PyCli refers to two separate ideas. A PyCli model is the 
 description of a climate simulation written in Python, using the
 PyCli Python library (examples of which are in this directory). 
 The PyCli library is a domain specific language (DSL) embedded in Python, designed 
 to make it easy for users to specify a climate. Most users will only use the
 PyCli model Python interface. The **backend climate model** refers to the C++ implemented 
 in the `src` directory that simulates the globe's climate and calculates temperatures. 
-change model. The Python model is specifies inputs to the backend climate model.
+The Python model is specifies inputs to the backend climate model.
 
 This document describes how to create a PyCli climate model in
 Python. To understand how the backend climate model computes temperatures at
 each point, please refer to `tex/pycli.pdf` which describes the science and
 math used to calculate temperatures.
+
+### Example
+Below is the example model `earth.py` saved in the `pycli/models` directory.
+Later sections will explain what each part does.
+
+```python
+import pycli
+
+# generate a planet and preference object
+earth, prefs = pycli.new_model("earth")
+
+# optional - modify preferences
+prefs.set_pref({"colors": "jet"})         # color for charts
+
+# optional - setup starting concentration of CO2 in ppm
+# if not defined in initialization
+CO2_level = 0.00028
+earth.set_atmosphere("CO2", CO2_level)
+
+# schedule 5 model steps
+for i in range(5):
+    # increment model step 
+    earth.model_step()
+ 
+    CO2_level += 0.00001
+    # annual CO2 emissions in gigatons
+    earth.set_atmosphere("CO2", CO2_level)
+
+# write out the configuration for the planet and the configurations
+earth.write_config()
+prefs.write_preferences()
+```
 
 There are three main steps to building a PyCli model:
 1. Initialization and preferences
@@ -20,24 +52,24 @@ There are three main steps to building a PyCli model:
 3. Output config files
 
 ### Initialization and preferences
-The start of a PyCli model requires a call to `pycli.new_model`
+The start of a PyCli model requires a call to `pycli.new_model()`
 
 ```
 earth, prefs = pycli.new_model("earth")
 ```
 
 Allowed arguments to `new_model`:
-* Empty - creates a default 100x100 randomly made planet
-* "small" - randomly generated 16x4 planet
-* "large" - randomly generated 1000x1000 planet
+* Empty - creates a default 100x100 randomly generated surface
+* "small" - randomly generated 16x4 surface
+* "large" - randomly generated 1000x1000 surface
 * "earth" - 90x180 planet shaped like Earth with no ice
 * "earth_big" - 900x1800 planet shaped like Earth
 * "custom" - custom model; requires num_lat_gridlines and num_lon_gridlines to
              be specified
 
-This method returns two objects. The first return is a planet object. Method
+This method returns two objects. The first return is a `planet object`. Method
 calls to the planet object will be used to specify the atmosphere. The
-prefs object holds the model and visualization preferences.
+`prefs` object holds the model and visualization preferences.
 
 Preferences can be modified by passing a dictionary to the `prefs.set_pref()`
 method:
