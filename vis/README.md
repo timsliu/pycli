@@ -9,3 +9,7 @@ coastlines are drawn in by detecting boundaries between land squares and
 ocean squares. Each line is then separately plotted on the temperature map.
 Since each coastline edge is plotted by a separate call to `plt.plot`, the
 coastline plotter is prohibitively slow for large maps with many coasts.
+
+
+##
+Copyright 20201 Timothy Liu

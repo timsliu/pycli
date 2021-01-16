@@ -30,3 +30,8 @@ hasn't been tested yet.
 ### I need help installing PyCli. Where can I get help?
 You can post questions about PyCli on the [PyCli Google Group](https://groups.google.com/g/pycli-dsl). Anything from installation questions to feature suggestions
 can go there.
+
+
+##
+Copyright 2021 Timothy Liu
+

@@ -10,3 +10,7 @@ want to learn how to write your own model.
 * todo - planned updates and revisions.
 * release-notes - history of past releases.
 * faq - frequently asked questions.
+
+
+##
+Copyright 2021 Timothy Liu

@@ -14,3 +14,7 @@ The `images` directory contains images of the absorption spectrum for several
 greenhouse gases. These raw values of the curves were extracted from the
 images using the online WebPlotDigitizer tool. The `.txt` files in this
 directory are the raw data points extractecd from the graphs.
+
+
+##
+Copyright 20201 Timothy Liu

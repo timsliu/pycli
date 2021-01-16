@@ -24,3 +24,7 @@ each timestep is independent (v 0.2)
 
 ### Miscellaneous
 * Fork release main and dev-main branches
+
+
+##
+Copyright 2021 Timothy Liu

@@ -111,4 +111,6 @@ A PyCli model must conclude with two method calls (order does not matter). The
 methods `earth.write_config()` and `prefs.write_preferences()` write out the 
 settings to configuration files read by the backend climate model.
 
+##
+Copyright 2021 Timothy Liu
 

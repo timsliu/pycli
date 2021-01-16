@@ -23,3 +23,7 @@ model steps, and the planet is not tilted.
 * A map of the final temperatures and
 a plot of the average temperature at each step is saved.
 * Makefile updated to detect OS; compatible with macOS and Ubuntu
+
+
+##
+Copyright 2021 Timothy Liu

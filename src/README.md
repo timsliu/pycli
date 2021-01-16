@@ -13,3 +13,7 @@ class
 * `planet.cc` - class representing a planet, including surface and atmosphere
 * `test` - test bench for unit testing
 * `utils.cc` - additional utilities used across multiple files
+
+
+##
+Copyright 20201 Timothy Liu
