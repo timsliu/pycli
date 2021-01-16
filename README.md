@@ -72,7 +72,8 @@ Windows machine, but it may run on the Windows Subsystem for Linux.
 
 ## [Installation](#installation)
 
-To install PyCli, first clone the repository using the terminal:
+The installation instructions require the user to have some familiarity
+with using the terminal.To install PyCli, first clone the repository using the terminal:
 
 ```
 git clone https://github.com/timsliu/pycli.git

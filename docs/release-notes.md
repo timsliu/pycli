@@ -10,7 +10,7 @@ The naming scheme for each release is `x.y.z` where:
 
 ## Releases
 
-#### v0.1.0 - 01/18/21
+#### v0.1.0 - 01/16/21
 
 First public release of PyCli. 
 
@@ -23,6 +23,7 @@ model steps, and the planet is not tilted.
 * A map of the final temperatures and
 a plot of the average temperature at each step is saved.
 * Makefile updated to detect OS; compatible with macOS and Ubuntu
+* Added docs and READMEs to subdirectories
 
 
 ##
