@@ -226,4 +226,4 @@ license contents, please see `license.txt`.
 
 
 ##
-<span style="color:LightGray">Copyright 2021 Timothy Liu</span>
+<span style="color:gray">Copyright 2021 Timothy Liu</span>
