@@ -20,6 +20,12 @@ tool designed for people interested in climate change and scientific computing.
 ## Table of Contents
 
 1. [Supported Model Features](#supported-model-features)
+2. [Environment](#environment)
+3. [Installation](#installation)
+4. [Running your first model](#running-first-model)
+5. [Folder organization](#folder-organization)
+6. [Contributors and Contact](#contributors-and-contact)
+7. [License](#license)
 
 ## [Supported Model Features](#supported-model-features)
 
@@ -33,7 +39,7 @@ The CO2 level is the main driver of temperature changes between steps. Users
 can specify either the concentration (in ppm) or the amount of CO2 emitted 
 annually (in gigatons).
 
-## Environment
+## [Environment](#environment)
 
 PyCli was has the following system requirements and dependencies:
 
@@ -64,7 +70,7 @@ PyCli was tested on machines running macOS 10.15 Catalina and Ubuntu 14 but
 should run on similar operating systems. PyCli has not been tested on a 
 Windows machine, but it may run on the Windows Subsystem for Linux.
 
-## Installation
+## [Installation](#installation)
 
 To install PyCli, first clone the repository using the terminal:
 
@@ -107,7 +113,7 @@ sudo apt-get install libomp-dev
 ```
 
 
-## Running your first model
+## [Running your First Model](#running-first-model)
 
 First, make sure you've completed all the steps in the Installation section.
 Climate models written in PyCli should be saved in the `pycli/models` subdirectory.
@@ -141,7 +147,7 @@ at each step will be placed in model's folder.
 
 ![Alt text](images/earth.png?raw=true "Earth temperature map")
 
-## Folder Organization
+## [Folder Organization](#folder-organization)
 This section briefly describes the contents of each of the subfolders in the
 PyCli repo. Some of the subfolders have a `README.md` with more details about
 the subfolder's function.
@@ -200,12 +206,8 @@ Documentation, release notes, and planned changes are detailed in the
 folder's contents, but the bulk of the documentation is in the `docs` 
 folder.
 
-## License
-PyCli-DSL is distributed under the MIT open source license. For the full
-license contents, please see `license.txt`.
 
-
-## Contributors and Contact
+## [Contributors and Contact](#contributors-and-contact)
 PyCli is an open source project created by Kalhan Koul, Timothy Liu, and
 Jack Melchert at Stanford.  This project originated from a [CS343D: Domain Specific
 Programming Models and Compilers](https://cs343d.github.io/) course assignment
@@ -216,3 +218,7 @@ model.
 
 The best way to contact the PyCli-DSL team with questions or feature
 suggestions is to use the [PyCli Google Group](https://groups.google.com/g/pycli-dsl).
+
+## [License](#license)
+PyCli-DSL is distributed under the MIT open source license. For the full
+license contents, please see `license.txt`.
