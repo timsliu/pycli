@@ -38,7 +38,7 @@ for i in range(5):
     earth.model_step()
  
     CO2_level += 0.00001
-    # annual CO2 emissions in gigatons
+    # set CO2 level in ppm
     earth.set_atmosphere("CO2", CO2_level)
 
 # write out the configuration for the planet and the configurations

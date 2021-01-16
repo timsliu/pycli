@@ -8,7 +8,7 @@ prefs.set_pref({"colors": "jet"})         # color for charts
 
 # optional - setup starting concentration of CO2 in ppm
 # if not defined in initialization
-CO2_level = 0.00028
+CO2_level = 0.00036
 earth.set_atmosphere("CO2", CO2_level)
 
 # schedule 5 model steps
@@ -17,7 +17,7 @@ for i in range(5):
     earth.model_step()
  
     CO2_level += 0.00001
-    # annual CO2 emissions in gigatons
+    # set CO2 level in ppm
     earth.set_atmosphere("CO2", CO2_level)
 
 # write out the configuration for the planet and the configurations
